@@ -1,0 +1,13 @@
+
+
+library(Matrix)
+
+source("fit_1d_density.R")
+source("active_set_newton.R")
+source("active_set_newton_largep.R")
+source("numerical_integration_helper.R")
+
+options(digit=20)
+
+ntrials = 100
+

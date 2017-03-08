@@ -1,0 +1,15 @@
+
+
+## INPUT:
+##   Y -- of length nI
+##  phi -- of same length as Y
+##  M -- number of grid points to use for numerical integration
+##  true_density -- function that takes in a vector of numbers as input and outputs a
+##                  a vector of density values
+##
+##  offset -- will work with (Y - offset) instead of Y, offset should be mean of Y
+## 
+##
+##
+## OUTPUT:
+##   

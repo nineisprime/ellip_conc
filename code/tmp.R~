@@ -1,0 +1,20 @@
+
+nI = length(phi)
+
+grad_ypart = rep(0, nI)
+grad_ypart[1] = I[1] 
+
+for (i in 1:(nI-1)){
+    if (nI == 1) break
+    
+    ixs = (I[i]+1):I[i+1]
+    
+    y_lvec = rep(YI_sorted[i], length(ixs))
+    y_rvec = rep(YI_sorted[i+1], length(ixs))
+    ygap = YI_sorted[i+1] - YI_sorted[i]
+    
+    grad_ypart[i] = grad_ypart[i] + sum( (y_rvec - Y_sorted[ixs])/ygap )
+    grad_ypart[i+1] = grad_ypart[i+1] + sum( (Y_sorted[ixs] - y_lvec)/ygap )
+    
+}
+grad_ypart = grad_ypart/n

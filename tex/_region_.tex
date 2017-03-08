@@ -1,0 +1,65 @@
+\message{ !name(elliptical.tex)}\documentclass[12pt]{article}
+\textwidth 16.5cm
+\textheight 22.5cm
+\oddsidemargin 0pt
+\topmargin -1cm
+%\textwidth 17cm
+%\textheight 24.5cm
+%\oddsidemargin 0pt
+%\topmargin -2cm
+
+%\renewcommand{\baselinestretch}{0.98}
+
+%\setlength{\parindent}{.3in}
+%\setlength{\parskip}{.05in}
+
+\usepackage{latexsym,amsmath,amssymb,amsfonts,amsthm,bbm,mathrsfs,stmaryrd,color,breakcites,dsfont}
+\usepackage{natbib}
+\usepackage[ruled, vlined]{algorithm2e}
+\usepackage{dsfont,url}
+\usepackage{enumerate}
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue,breaklinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{psfrag}
+\usepackage{caption}
+\usepackage{comment}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{assumption}{A\!\!}
+\renewcommand{\baselinestretch}{1.25}
+
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\sargmin}{sargmin}
+\DeclareMathOperator*{\sargmax}{sargmax}
+
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\begin{document}
+
+\message{ !name(elliptical.tex) !offset(622) }
+
+\begin{corollary}
+There exists a universal constant $C > 0$ such that 
+\[
+H_{[]}( \epsilon, \mathcal{F}([a,b],-\infty, B), d_H, [a,b]) \leq C \frac{ e^{B/4} (b-a)^{1/4}}{\epsilon^{1/2}} 
+\]
+\end{corollary}
+
+\message{ !name(elliptical.tex) !offset(647) }
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,195 @@
+
+\documentclass{article}
+\usepackage{minx_math}
+
+\title{Miscellaneous Notes for Elliptical Log-Concave Density}
+
+\begin{document}
+\maketitle
+
+\section{Envelope Search}
+
+\textbf{Problem:} Let $h(r) = r^{p-1} g(r) c_p$ be a density where $g(r)$ is log-concave and decreasing. Suppose also that the second moment is $p$. 
+\begin{align*}
+\int r^{p-1} g(r) c_p dr &= 1 \\
+\int r^2 r^{p-1} g(r) c_p dr & = p
+\end{align*}
+Let $\mathcal{H}$ be the set of all such densities. Then, we want to have an exponentially decaying envelope
+
+\[
+\sup_{h \in \mathcal{H}} h(r) \leq \exp( - a_p r + b_p )
+\]
+
+for scalar $a_p, b_p$ dependent on $p$.
+
+\subsection{Thoughts and Examples}
+
+One possibly useful fact. If $f(x)$ is an isotropic log-concave density, then there exists absolute constants $a,b$ such that $f(x) \leq \exp( - a x + b)$. 
+
+Therefore, if $f( \frac{x}{\sigma} ) \frac{1}{\sigma}$ has variance $\sigma^2$ and can be bounded by $\exp( - \frac{a}{\sigma} x + b - \log \sigma)$. \\
+
+
+
+
+One example to keep in mind is if $g(r) = M > 0$ is uniform on $[0, r_0]$ and $0$ elsewhere. It is easy to solve for $r_0$:
+
+\begin{align*}
+\int_0^{r_0} r^{p-1} M c_p dr = \frac{r_0^p}{p} M c_p = 1
+\end{align*}
+
+\[
+\int_0^{r_0} r^{p+1} M c_p dr = \frac{r_0^{p+2}}{p+2} M c_p = p 
+\]
+
+\begin{align*}
+\frac{r_0^{p+2}}{p+2} M c_p = \frac{r_0^p}{p} M c_p \frac{p}{p+2} r_0^2 = \frac{p}{p+2} r_0^2 = p
+\end{align*}
+
+Therefore, $r_0 = \sqrt{p+2}$. This density has vanishing variance and its maximum value explodes. The maximum value is $h(r_0) = r_0^{p-1} M c_p = \frac{p}{r_0} \frac{r_0^{p-1}}{p} M c_p = \frac{p}{\sqrt{p+2}}$. 
+
+To compute the variance, we first find the mean.
+\begin{align*}
+\int_0^{r_0} r^p M c_p dr = \frac{r_0^{p+1}}{p+1} M c_p = \frac{p}{p+1} \sqrt{p+2} 
+\end{align*}
+\[
+\textrm{variance: } \E Y^2 - (\E Y)^2 = p^2 - \left(\frac{p}{p+1} \right)^2 (p+2) = \frac{p}{(p+2)^2}
+\]
+
+
+\textbf{Two points bound.} Let $M = \log g(0)$. Let $r_0 > 0$ and let $M' = \log g(r_0)$. Define $\Delta = M - M' \geq 0$. 
+
+Then, we have the following upper and lower bound on $g$:
+
+\begin{align*}
+\log g(r) \geq \left\{ \begin{array}{cc} M - \Delta \frac{r}{r_0}   & r \leq r_0 \\
+                             -\infty & r \geq r_0 \end{array} \right\}
+\end{align*}
+
+\begin{align*}
+\log g(r) \leq \left\{ \begin{array}{cc} M & r \leq r_0 \\
+                         M - \Delta \frac{r}{r_0} & r \geq r_0 
+                      \end{array} \right\}
+\end{align*}
+
+So then, we have that
+\begin{align*}
+1 &= \int_0^\infty r^{p-1} g(r) c_p dr \\
+ &\geq  \int_0^{r_0} r^{p-1} \exp\left( M - \Delta \frac{r}{r_0} \right) c_p dr \\
+\end{align*}
+\subsection{Change of Variables}
+
+Recall that the density we are interested in is:
+\[
+h(r) = r^{p-1} g(r) c_p
+\]
+
+Satisfying the two conditions that
+\begin{align*}
+\int_0^\infty r^{p-1} g(r) c_p dr &= 1 \\
+\int_0^\infty r^{p+1} g(r) c_p dr &= p 
+\end{align*}
+
+Let us perform a change of variables: $s = \frac{r}{\sqrt{p}}$ and thus $r = s \sqrt{p}$. 
+
+Then, the two integral equations become:
+\begin{align*}
+c_p \sqrt{p}^p \int_0^\infty s^{p-1} g(\sqrt{p}(s)) ds &= 1 \\
+c_p \sqrt{p}^{p+2} \int_0^\infty s^{p+1} g(\sqrt{p}(s)) ds &= p 
+\end{align*}
+
+With some cancelation and with the replacement of $\tilde{g}(s) = c_p \sqrt{p}^p g(\sqrt{p}(s))$, we have that
+
+\begin{align*}
+\int_0^\infty s^{p-1} \tilde{g}(s) ds &= 1 \\
+\int_0^\infty s^{p+1} \tilde{g}(s) ds &= 1
+\end{align*}
+
+Note that $\tilde{g}(s)$ is log-concave and decreasing. 
+
+\textbf{An Observation}
+
+Let $r_0$ be arbitrary. Then we have that
+
+\begin{align*}
+\int_0^{r_0} s^{p-1} (1 - s^2) \tilde{g}(s) ds + \int_{r_0}^\infty s^{p-1} (1 - s^2) \tilde{g}(s) ds = 0
+\end{align*}
+
+If $r_0 \leq 1$, then the first term is positive, which implies that the second term is negative.
+If $r_0 \geq 1$, then the second term is negative, which implies that the first term is positive.
+
+Thus, for any $r_0$, we have that the first term is positive and the second term is negative. 
+
+\subsection{Hinge Example}
+
+
+The analysis of this example provides some useful calculations.
+
+Let $g(r)$ be of the form:
+\[
+g(r) = \left\{ \begin{array}{ll}
+       e^{m_0} & r \leq r_0 \sqrt{p} \\
+    e^{m_0 - a(r - r_0\sqrt{p})} & r \geq r_0 \sqrt{p} 
+          \end{array} \right.
+\]
+
+$g$ is thus parametrized by three parameters: $m_0, a, r_0$.
+
+We want $g(r)$ to satisfy two integral conditions:
+
+\begin{align*}
+\int_0^\infty r^{p-1} g(r) c_p dr &= 1 \\
+\int_0^\infty r^{p+1} g(r) c_p dr &= p 
+\end{align*}
+
+The first integral equation breaks down into two halves:
+\begin{align*}
+\int_0^{r_0 \sqrt{p}} r^{p-1} e^{m_0} c_p dr + \int_{r_0 \sqrt{p}}^\infty r^{p-1} e^{m_0} e^{-a ( r - r_0 \sqrt{p} )} c_p dr = 1
+\end{align*}
+
+We apply a change of variables: $s = \frac{r}{\sqrt{p}}$ and $r = s\sqrt{p}$. 
+
+\begin{align*}
+e^{m_0} c_p \sqrt{p}^p \left\{
+   \int_0^{r_0} s^{p-1} ds + \int_{r_0}^\infty s^{p-1} e^{- a \sqrt{p}(s - r_0)}  ds  \right\} = 1
+\end{align*}
+Likewise, we have that second equation as well:
+\begin{align*}
+e^{m_0} c_p \sqrt{p}^{p+2} \left\{
+   \int_0^{r_0} s^{p+1} ds + \int_{r_0}^\infty s^{p+1} e^{- a \sqrt{p}(s - r_0)}  ds  \right\} = p
+\end{align*}
+
+We will simplify by letting $\bar{a} = a \sqrt{p}$. Then, we have:
+
+\begin{align*}
+e^{m_0} c_p \sqrt{p}^p \left\{
+   \int_0^{r_0} s^{p-1} ds + \int_{r_0}^\infty s^{p-1} e^{- \bar{a} (s - r_0)}  ds  \right\} &= 1 \\
+e^{m_0} c_p \sqrt{p}^p \left\{
+   \int_0^{r_0} s^{p+1} ds + \int_{r_0}^\infty s^{p+1} e^{- \bar{a} (s - r_0)}  ds  \right\} &= 1
+\end{align*}
+
+Setting the two equation equal to each other:
+\begin{align*}
+\int_0^{r_0} s^{p-1} ds - \int_0^{r_0} s^{p+1} ds + 
+        \int_{r_0}^\infty s^{p-1} e^{-\bar{a}(s - r_0)} ds - 
+        \int_{r_0}^{\infty} s^{p+1} e^{- \bar{a} (s - r_0)} ds &= 0 \\
+\left( \frac{r_0^p}{p} - \frac{r_0^{p+2}}{p+2} \right) + 
+        \int_{r_0}^\infty s^{p-1} e^{-\bar{a}(s - r_0)} ds - 
+        \int_{r_0}^{\infty} s^{p+1} e^{- \bar{a} (s - r_0)} ds &= 0 \\
+\end{align*}
+
+We know that for all plausible $r_0$, it must be that $\frac{r_0^P}{p} - \frac{r_0^{p+2}}{p+2} \geq 0$. Thus, 
+to solve for the maximum value of $r_0$, we set $\frac{r_0^p}{p} = \frac{r_0^{p+2}}{p+2}$, yielding
+$\sqrt{1 + \frac{2}{p}}$. 
+
+Now we turn our attention to $\bar{a}$. At $r_0 = 1$, we have that
+
+\begin{align*}
+\int_{1}^\infty s^{p-1}(1 - s^2) e^{- \bar{a}(s - 1)} &= \frac{1}{p+2} - \frac{1}{p} \\
+\int_{1}^\infty s^{p-1}(1 - s^2) e^{- \bar{a} s} ds &= e^{- \bar{a}} \left( \frac{1}{p+2} - \frac{1}{p} \right) \\
+\int_{1}^\infty s^{p-1}  e^{- \bar{a} s} - s^{p+1} e^{ - \bar{a}s} ds &= e^{- \bar{a}} \left( \frac{1}{p+2} - \frac{1}{p} \right) \\
+\end{align*}
+
+
+
+
+\end{document}

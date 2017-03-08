@@ -1,0 +1,64 @@
+
+
+
+p = 16000
+
+##k_ls = seq(5, 400, 2)
+k_ls = seq(4/sqrt(p), 0.5, 0.005)
+envels = rep(0, length(k_ls))
+
+prev_mult = 1
+
+for (ii in 1:length(k_ls)) {
+
+    k = k_ls[ii]
+    loc = sqrt(p) + k
+
+    hi = prev_mult
+    lo = 0
+
+    while (TRUE){
+
+        rt = p*(1 - ((hi - lo)/2 + lo))
+
+        #print(paste(hi, lo))
+        
+        x1 = pgamma(loc, shape=p, rate=sqrt(rt) )
+        x2 = pgamma(loc, shape=p+2, rate=sqrt(rt) )
+
+        if (x1 == 0 && x2 == 0)
+            val =  ( (rt)/((p+1)*p))
+        else {
+            val = (x1/x2)* ( (rt)/((p+1)*p))
+        }
+        
+        #print(val)
+        #print(1/p)
+        
+        if (val/(1/p) - 1 > 1e-6){
+            lo = (hi - lo)/2 + lo
+        } else if (val/(1/p) - 1 < -1e-6){
+            hi = (hi - lo)/2 + lo
+        } else {
+            prev_mult = (hi - lo)/2 + lo
+            break
+        }
+        
+    }
+
+    print((hi-lo)/2 + lo)
+    envel = dgamma(loc, shape=p, rate=sqrt(rt))/pgamma(loc, shape=p, rate=sqrt(rt)) 
+    envels[ii] = envel
+
+}
+
+pdf(paste0(p, ".pdf"))
+plot(k_ls, log(envels), type="l")
+dev.off()
+
+pdf(paste0(p, "b.pdf"))
+plot(k_ls, 1/envels, type="l")
+dev.off()
+## if val > 1/p, then loc should be more to the left
+## if val < 1/p, then loc should be more to the right
+

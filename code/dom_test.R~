@@ -1,0 +1,11 @@
+## Experiments to explore the stochastic dominance question
+##
+## If F >= G, is F* >= G* ?
+##
+
+## We take G to be uniform[-1, 1]
+
+n = 100
+x = c(rep(-1, 1/4 * n), rep(-0.02, 1/2 * n), rep(1, 1/4 * n))
+
+res = logConDens(x, smoothed=FALSE)

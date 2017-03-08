@@ -1,0 +1,84 @@
+
+\documentclass{article}
+\usepackage{minx_math}
+
+\title{Miscellaneous Notes for Elliptical Log-Concave Density}
+
+\begin{document}
+\maketitle
+
+\section{Envelope Search}
+
+\textbf{Problem:} Let $h(r) = r^{p-1} g(r) c_p$ be a density where $g(r)$ is log-concave and decreasing. Suppose also that the second moment is $p$. 
+\begin{align*}
+\int r^{p-1} g(r) c_p dr &= 1 \\
+\int r^2 r^{p-1} g(r) c_p dr & = p
+\end{align*}
+Let $\mathcal{H}$ be the set of all such densities. Then, we want to have an exponentially decaying envelope
+
+\[
+\sup_{h \in \mathcal{H}} h(r) \leq \exp( - a_p r + b_p )
+\]
+
+for scalar $a_p, b_p$ dependent on $p$.
+
+\subsection{Thoughts and Examples}
+
+One possibly useful fact. If $f(x)$ is an isotropic log-concave density, then there exists absolute constants $a,b$ such that $f(x) \leq \exp( - a x + b)$. 
+
+Therefore, if $f( \frac{x}{\sigma} ) \frac{1}{\sigma}$ has variance $\sigma^2$ and can be bounded by $\exp( - \frac{a}{\sigma} x + b - \log \sigma)$. \\
+
+
+
+
+One example to keep in mind is if $g(r) = M > 0$ is uniform on $[0, r_0]$ and $0$ elsewhere. It is easy to solve for $r_0$:
+
+\begin{align*}
+\int_0^{r_0} r^{p-1} M c_p dr = \frac{r_0^p}{p} M c_p = 1
+\end{align*}
+
+\[
+\int_0^{r_0} r^{p+1} M c_p dr = \frac{r_0^{p+2}}{p+2} M c_p = p 
+\]
+
+\begin{align*}
+\frac{r_0^{p+2}}{p+2} M c_p = \frac{r_0^p}{p} M c_p \frac{p}{p+2} r_0^2 = \frac{p}{p+2} r_0^2 = p
+\end{align*}
+
+Therefore, $r_0 = \sqrt{p+2}$. This density has vanishing variance and its maximum value explodes. The maximum value is $h(r_0) = r_0^{p-1} M c_p = \frac{p}{r_0} \frac{r_0^{p-1}}{p} M c_p = \frac{p}{\sqrt{p+2}}$. 
+
+To compute the variance, we first find the mean.
+\begin{align*}
+\int_0^{r_0} r^p M c_p dr = \frac{r_0^{p+1}}{p+1} M c_p = \frac{p}{p+1} \sqrt{p+2} 
+\end{align*}
+\[
+\textrm{variance: } \E Y^2 - (\E Y)^2 = p^2 - \left(\frac{p}{p+1} \right)^2 (p+2) = \frac{p}{(p+2)^2}
+\]
+
+
+Two points bound. Let $M = \log g(0)$. Let $r_0 > 0$ and let $M' = \log g(r_0)$. Define $\Delta = M - M' \geq 0$. 
+
+Then, we have the following upper and lower bound on $g$:
+
+\begin{align*}
+\log g(r) \geq \left\{ \begin{array}{cc} M - \Delta \frac{r}{r_0}   & r \leq r_0 \\
+                             -\infty & r \geq r_0 \end{array} \right\}
+\end{align*}
+
+\begin{align*}
+\log g(r) \leq \left\{ \begin{array}{cc} M & r \leq r_0 \\
+                         M - \Delta \frac{r}{r_0} & r \geq r_0 
+                      \end{array} \right\}
+\end{align*}
+
+So then, we have that
+\begin{align*}
+1 &= \int_0^\infty r^{p-1} g(r) c_p dr \\
+ &\geq  \int_0^{r_0} r^{p-1} \exp\left( M - \Delta \frac{r}{r_0} \right) c_p dr \\
+\end{align*}
+
+
+
+
+
+\end{document}

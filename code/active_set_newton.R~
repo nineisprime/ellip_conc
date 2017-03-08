@@ -1,0 +1,395 @@
+
+## Main function:
+## active_set_newton
+##
+## Helper functions:
+## rep2,  make_kepler_wts,  numerical_integration_helper
+##
+##
+
+## INPUT:
+## Y -- (n--vector) of positive samples
+## A -- (vector) of indices of active constraints
+## M -- scalar, number of grid points to perform numerical integration
+##
+## OUTPUT:
+## phi -- ( length(I)-vector ) of function values
+##
+
+active_set_newton <- function(Y, A, p, M=400000, init_phi=NULL, diagnostic=FALSE){
+
+    n = length(Y)
+    I = setdiff(1:n, A)
+    nI = length(I)
+
+    Y_sorted = sort(Y)
+    
+    eps = 1e-5
+    YI_sorted = Y_sorted[I]
+
+    ## precompute grad_ypart
+    grad_ypart = rep(0, nI)
+    grad_ypart[1] = I[1] 
+    
+    for (i in 1:(nI-1)){
+        if (nI == 1) break
+        
+        ixs = (I[i]+1):I[i+1]
+        
+        y_lvec = rep(YI_sorted[i], length(ixs))
+        y_rvec = rep(YI_sorted[i+1], length(ixs))
+        ygap = YI_sorted[i+1] - YI_sorted[i]
+        
+        grad_ypart[i] = grad_ypart[i] + sum( (y_rvec - Y_sorted[ixs])/ygap )
+        grad_ypart[i+1] = grad_ypart[i+1] + sum( (Y_sorted[ixs] - y_lvec)/ygap )
+        
+    }
+    grad_ypart = grad_ypart/n
+    ##
+
+    if (is.null(init_phi)){
+        phi = - (p-1) * log(YI_sorted/sqrt(p))
+    } else {
+        phi = init_phi
+    }
+
+    ## precompute quantities needed for numerical integration
+    if (nI > 1){
+        num_int_res = numerical_integration_helper(YI_sorted, M, eps)
+        evalpts = num_int_res$evalpts
+        bdpts = num_int_res$bdpts
+        y_rvec = num_int_res$y_rvec
+        y_lvec = num_int_res$y_lvec
+        gap_vec = num_int_res$gap_vec
+        ind_vec2 = num_int_res$ind_vec2
+        kepler_global_wts = num_int_res$kepler_global_wts
+        kepler_ls = num_int_res$kepler_ls
+        ixs_ls = num_int_res$ixs_ls
+    }
+
+    
+    safety = 1
+    stepsize = 1
+    while (TRUE && safety < 2000) {
+        safety = safety + 1
+        stopifnot(safety < 1000)
+        
+        ## compute function evaluations
+        ## fnpts[i] is function evaluated at evalpts[i]
+        if (nI > 1){
+            phi_lvec = rep2(ind_vec2, phi[1:(nI-1)])
+            phi_rvec = rep2(ind_vec2, phi[2:nI])
+            
+            fnpts =  exp(
+                ((y_rvec-evalpts)*phi_lvec + (evalpts-y_lvec)*phi_rvec )/gap_vec +
+                (p-1)*log(evalpts/sqrt(p)) )    
+
+            stopifnot( y_rvec - evalpts >= 0)
+            stopifnot( evalpts - y_lvec >= 0)
+            stopifnot( y_rvec - y_lvec == gap_vec)
+            ##plot(fnpts)
+            
+            stopifnot(fnpts >= 0)
+        }
+        
+        ## compute gradient and Hessian
+        grad = grad_ypart
+        Hdiag = rep(0, nI)
+        Hdiag_off = rep(0, nI-1)
+
+        fn_int = exp(phi[1] + p*log(min(YI_sorted)/sqrt(p)) - (1/2)*log(p))
+        
+        
+        grad[1] = grad[1] - fn_int
+        Hdiag[1] = Hdiag[1] - fn_int
+        
+        
+        for (i in 1:(nI-1)){
+            if (nI == 1) break
+            
+            ixs = ixs_ls[[i]]
+
+            v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 
+            v1 = (y_rvec[ixs] - evalpts[ixs])/gap_vec[ixs]
+
+            fn_int = fn_int + sum(kepler_ls[[i]] * fnpts[ixs])
+
+            grad[i] = grad[i] - sum(v1 * kepler_ls[[i]] * fnpts[ixs])
+            grad[i+1] = grad[i+1] - sum(v2 * kepler_ls[[i]] * fnpts[ixs])
+
+            Hdiag[i] = Hdiag[i] - sum(v1^2 * kepler_ls[[i]] * fnpts[ixs])
+            Hdiag[i+1] = Hdiag[i+1] - sum(v2^2 * kepler_ls[[i]] * fnpts[ixs])
+
+            Hdiag_off[i] = Hdiag_off[i] - sum(v1*v2 * kepler_ls[[i]] * fnpts[ixs])
+        }
+
+
+        if (nI > 1){
+            H = bandSparse(nI, k=-1:1, diag=list(Hdiag_off, Hdiag, Hdiag_off))
+        } else{
+            H = Hdiag[1]
+        }
+
+        
+        ## test for convergence
+        if (sqrt(sum(grad^2)) < 1e-6)
+            break
+
+        
+        ##
+        phi_step = -solve(H, grad, sparse=TRUE)
+        ##phi_step[phi_step > 300] = (phi_step[phi_step > 300])^(1/3)
+        ##phi_step[phi_step < -300] = -(-phi_step[phi_step < -300])^(1/3)
+
+
+        ## diagnostics
+        if (diagnostic){
+            print(safety)
+            print(fn_int)
+            if (nI > 1)
+                plot(fnpts[seq(1, length(fnpts), by=100)])
+            
+            print("phi_step")
+            print(phi_step)
+            print("phi")
+            print(phi)
+            print("grad")
+            print(grad)
+            print("stepsize")
+            print(stepsize)
+            print("")
+        }
+        
+        
+        
+        ## debug
+        if (any(abs(phi_step) > 500)){
+            phi_step = 100*grad
+        }
+        
+        old_obj = sum(grad_ypart*phi) - fn_int
+        new_obj = -Inf
+
+        ## backtracking line search
+        sigma = 0.01
+        step_beta = 0.8
+        stopifnot( sum(phi_step*grad) >= 0 )
+        armijo_safety = 1
+        while (new_obj - old_obj < sigma*stepsize * sum(phi_step*grad) - 1e-7){
+            if (new_obj > -Inf)
+                stepsize = step_beta * stepsize
+
+            phi_cand = phi + stepsize*phi_step
+
+            ## recompute new_obj
+            if (nI > 1){
+                phi_cand_lvec = rep2(ind_vec2, phi_cand[1:(nI-1)])
+                phi_cand_rvec = rep2(ind_vec2, phi_cand[2:nI])
+                
+                fnpts_cand =  exp(
+                    ((y_rvec-evalpts)*phi_cand_lvec +
+                     (evalpts-y_lvec)*phi_cand_rvec )/gap_vec +
+                    (p-1)*log(evalpts/sqrt(p)))
+
+                fn_int_cand = sum(fnpts_cand * kepler_global_wts) +
+                    exp(phi_cand[1] + p * log(min(YI_sorted)/sqrt(p)) - (1/2)*log(p))
+            } else {
+                fn_int_cand = exp(phi_cand[1] + p * log(min(YI_sorted)/sqrt(p)) - (1/2)*log(p))
+            }
+            new_obj = sum(grad_ypart*phi_cand) - fn_int_cand
+
+            armijo_safety = armijo_safety + 1
+            ##if (armijo_safety > 100)
+            ##    break
+            stopifnot(armijo_safety < 100)
+            
+        }
+
+            
+        ## update phi
+        phi = phi_cand
+
+        ## alternative convergence criterion
+        ##if (new_obj - old_obj < 1e-10)
+        ##   break
+    }
+
+    return(phi)
+}
+
+
+
+## Helper functions
+##
+## INPUT:
+## ix_vec -- (n-vector) of non-negative integer
+## val_vec -- (n-vector) of values
+##
+## OUTPUT:
+## a vector of the form:
+## [val_vec[1], val_vec[1], ...   #repeated ix_vec[1] times
+##  val_vec[2], val_vec[2], ...   #repeated ix_vec[2] times
+## ...
+
+
+rep2 <- function(ix_vec, val_vec){
+
+    stopifnot(length(ix_vec) == length(val_vec))
+    
+    if (length(ix_vec) == 1){
+        return(rep(val_vec, ix_vec))
+    }
+    
+    tmp = rbind(ix_vec, val_vec)
+    out_vec = sapply( split(tmp, rep(1:ncol(tmp), each=nrow(tmp))), 
+        FUN=function(x){rep(x[2], x[1])})
+    out_vec = as.array(unlist(out_vec))
+
+    return(out_vec)
+
+}
+
+
+## INPUT:
+## bdpts -- (m--vector) of boundary points
+##
+## OUTPUT:
+## kepler_wts -- (2m-1 vector) of kepler weights
+##
+## 1/6 * (delta1, 4*delta1, delta1+delta2, 4*delta2, delta2+delta3 ...)
+##
+## For Kepler numerical integration, which approximates
+## int_a^b f(x)dx as (b-a)/6 * (f(a) + 4f( (a+b)/2 ) + f(b) )
+
+make_kepler_wts <- function(bdpts) {
+    m = length(bdpts)
+    stopifnot(m > 1)
+    
+    kepler_gaps = bdpts[2:m] - bdpts[1:(m-1)]
+
+    if (m == 2){
+        kepler_wts = c(kepler_gaps, 4*kepler_gaps, kepler_gaps)
+    } else {
+        
+        vec1 = 4*kepler_gaps
+        vec2 = kepler_gaps[1: (length(kepler_gaps)-1) ] +
+            kepler_gaps[2: (length(kepler_gaps)) ]
+        
+        tmp = rbind(vec1, c(vec2,0))
+        dim(tmp) = NULL
+
+        kepler_wts = c(kepler_gaps[1], tmp[1:(length(tmp)-1)],
+            kepler_gaps[length(kepler_gaps)])/6
+    }
+
+    stopifnot(length(kepler_wts) == (2*m - 1))    
+    return(kepler_wts)
+}
+
+
+## INPUT:
+##   Y -- (nI--vector) must be sorted in increasing order
+##   M -- scalar, num of boundary grid points to use
+##
+## OUTPUT:
+##   evalpts -- (2(M + nI)-1 vector) of points on the x-axis
+##   bdpts -- (M + nI vector) of boundary points
+##   ind_vec2 -- (nI-1 vector) of how many evalpts is in (Y_i, Y_{i+1}]
+##                except first interval, which is [Y_1, Y_2]
+##   y_rvec -- (2(M+nI)-1 vector)
+##   y_lvec -- (2(M+nI)-1 vector)
+##   gap_vec -- (2(M+nI)-1 vector)
+##   kepler_global_wts -- (2(M+nI)-1 vector)
+##   kepler_ls -- list of kepler weights for each [Y_i, Y_{i+1}]
+##   ixs_ls -- list of indices of evalpts in each [Y_i, Y_{i+1}]
+##
+## sum(ind_vec2) == length(evalpts)
+
+
+numerical_integration_helper <- function(Y, M, eps){
+
+    nI = length(Y)
+    
+    grid_width = (max(Y)-eps - min(Y))/(M-1)
+    grid = seq(min(Y), max(Y)-eps, length.out=M)
+
+    evalpts = c(grid, Y[2:nI])
+    evalpts = sort(evalpts)
+    
+    nn = length(evalpts)
+    midpts = (evalpts[2:nn] + evalpts[1:(nn-1)])/2
+    bdpts = evalpts
+    evalpts = sort(c(midpts, evalpts))
+
+    
+    ind_vec = floor( (Y[2:nI] - min(Y))/grid_width) + 1
+    ## ind_vec2[i] is number of evaluation points in the (Y_{i-1}, Y_i]
+    ## interval, right-inclusive
+    ## there are (nI-1) such intervals, ind_vec2 has length (nI-1)
+    if (nI > 2){
+        ind_vec2 = c(ind_vec[1], ind_vec[2:(nI-1)] - ind_vec[1:(nI-2)] ) + 1
+    } else {
+        ind_vec2 = c(ind_vec[1]) + 1
+    }
+
+    ind_vec2 = ind_vec2*2           #count midpoints
+    ind_vec2[1] = ind_vec2[1] - 1   #over counted for first cell
+    
+    ## y_rvec repeats each Y_i by ind_vec2[i] times
+    y_rvec = rep2(ind_vec2, Y[2:nI])
+    y_lvec = rep2(ind_vec2, Y[1:(nI-1)])
+    gap_vec = rep2(ind_vec2, Y[2:nI] - Y[1:(nI-1)])
+
+
+    ## precompute kepler_global_wts
+    ## assumption: more than 2 boundary points globally
+    kepler_global_wts = make_kepler_wts(bdpts)
+    stopifnot(length(kepler_global_wts) == length(evalpts))
+    
+    ## precompute kepler_ls and ixs
+    kepler_ls = list(0)
+    ixs_ls = list(0)
+
+    ix1 = 1
+    bd_ix1 = 1
+    
+    for (i in 1:(nI-1)){
+        if (i==1) {
+            ixs = ix1:(ix1 + ind_vec2[i]-1)
+            ix1 = ind_vec2[i] 
+        } else {
+            ixs = ix1:(ix1 + ind_vec2[i])
+            ix1 = ix1 + ind_vec2[i]
+        }
+        ixs_ls[[i]] = ixs
+
+
+        if (i==1){
+            bd_ixs = bd_ix1:(bd_ix1 + (ind_vec2[i]-1)/2)
+            bd_ix1 = bd_ix1 + (ind_vec2[i]-1)/2
+        } else {
+            bd_ixs = bd_ix1:(bd_ix1 + ind_vec2[i]/2)
+            bd_ix1 = bd_ix1 + ind_vec2[i]/2
+        }
+
+        stopifnot(length(bd_ixs) == (length(ixs)+1)/2)
+        
+        cur_bdpts = bdpts[bd_ixs]
+        
+        kepler_wts = make_kepler_wts(cur_bdpts)
+        kepler_ls[[i]] = kepler_wts
+
+        stopifnot(kepler_wts >= 0)
+        stopifnot(length(kepler_wts)==length(ixs))
+    }
+
+    return(list(evalpts = evalpts,
+                bdpts = bdpts,
+                ind_vec2 = ind_vec2,
+                y_lvec = y_lvec,
+                y_rvec = y_rvec,
+                gap_vec = gap_vec,
+                kepler_global_wts = kepler_global_wts,
+                kepler_ls = kepler_ls,
+                ixs_ls = ixs_ls))
+}

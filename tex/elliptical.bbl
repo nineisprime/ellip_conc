@@ -1,0 +1,33 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bobkov(2003)]{bobkov2003spectral}
+Sergey~G Bobkov.
+\newblock Spectral gap and concentration for some spherically symmetric
+  probability measures.
+\newblock In \emph{Geometric aspects of functional analysis}, pages 37--43.
+  Springer, 2003.
+
+\bibitem[Kim et~al.(2016{\natexlab{a}})Kim, Guntuboyina, and
+  Samworth]{kim2016adaptation}
+Arlene~KH Kim, Adityanand Guntuboyina, and Richard~J Samworth.
+\newblock Adaptation in log-concave density estimation.
+\newblock \emph{arXiv preprint arXiv:1609.00861}, 2016{\natexlab{a}}.
+
+\bibitem[Kim et~al.(2016{\natexlab{b}})Kim, Samworth, et~al.]{kim2016global}
+Arlene~KH Kim, Richard~J Samworth, et~al.
+\newblock Global rates of convergence in log-concave density estimation.
+\newblock \emph{The Annals of Statistics}, 44\penalty0 (6):\penalty0
+  2756--2779, 2016{\natexlab{b}}.
+
+\bibitem[Lov{\'a}sz and Vempala(2007)]{lovasz2007geometry}
+L{\'a}szl{\'o} Lov{\'a}sz and Santosh Vempala.
+\newblock The geometry of logconcave functions and sampling algorithms.
+\newblock \emph{Random Structures \& Algorithms}, 30\penalty0 (3):\penalty0
+  307--358, 2007.
+
+\end{thebibliography}
