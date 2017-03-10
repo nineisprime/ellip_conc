@@ -55,7 +55,7 @@ active_set_newton <- function(Y, A, p, M=400000, init_phi=NULL, diagnostic=FALSE
 
     ## precompute quantities needed for numerical integration
     if (nI > 1){
-        num_int_res = numerical_integration_helper(YI_sorted, M, eps)
+        num_int_res = numerical_integration_helper(YI_sorted, M)
         evalpts = num_int_res$evalpts
         bdpts = num_int_res$bdpts
         y_rvec = num_int_res$y_rvec

@@ -10,7 +10,7 @@ x_2p_minus_1_e_xsquared <- function(Y, p) {
             (p-1)*log(p-1) + (p-1) - (1/2)*log(2*pi*(p-1))
     }
 
-    return(tmp)
+    return(exp(tmp))
 }
 
 

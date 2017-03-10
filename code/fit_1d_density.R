@@ -2,6 +2,10 @@
 ## main function: fit_1d_density
 ## helper functions:
 ## expand_phi, compute_gradient_phi
+##
+## workhorse:
+##    active_set_newton
+##    active_set_newton_largep
 
 
 ##
@@ -14,12 +18,12 @@
 ##
 
 
-
-fit_1d_density <- function(Y, p) {
+fit_1d_density <- function(Y, p, M=500000) {
 
     print("Starting ...")
     
-    eps = 1e-5
+    eps = 5e-5
+    eps2 = 5e-4
     
     Y = sort(Y)
     n = length(Y)
@@ -52,7 +56,7 @@ fit_1d_density <- function(Y, p) {
     
     
     ## precompute quantities needed for numerical integration
-    num_int_res = numerical_integration_helper(Y, M=400000, eps)
+    num_int_res = numerical_integration_helper(Y, M)
     evalpts = num_int_res$evalpts
     bdpts = num_int_res$bdpts
     y_rvec = num_int_res$y_rvec
@@ -63,25 +67,36 @@ fit_1d_density <- function(Y, p) {
     kepler_ls = num_int_res$kepler_ls
     ixs_ls = num_int_res$ixs_ls
          
-    A = 1:(n-1)
+    A = 2:(n-1)
 
-    if (p < 100){
-        phi = active_set_newton(Y, A, p)
+    print("First run ...")
+
+    ptm = proc.time()
+    if (p < 200){
+        phi = active_set_newton(Y, A, p, M=M)
     } else {
-        phi = active_set_newton_largep(Y, A, p)
+        phi = active_set_newton_largep(Y, A, p, M=M)
 
     }
     phi = expand_phi(phi, Y, A)
 
+    print(proc.time() - ptm)
+    ##ptm = proc.time()
     
-    if (p < 100) {
+    if (p < 200) {
         grad = compute_gradient_phi(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
             gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
     } else {
         grad = compute_gradient_phi_largep(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
             gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
     }
-     
+
+    ##print(proc.time() - ptm)
+    
+    slack = V %*% phi
+    stopifnot(slack[A] > -eps2)
+
+    
     safety = 1
     while (TRUE){
         safety = safety + 1
@@ -92,7 +107,6 @@ fit_1d_density <- function(Y, p) {
         I = setdiff(1:n, A)
 
         if (length(I) > 1){
-            
             stopifnot(abs(dual_vec[I[1:(length(I)-1)]]) < eps)
         }
         
@@ -109,61 +123,69 @@ fit_1d_density <- function(Y, p) {
         I = setdiff(1:n, A)
 
         ##print(I)
-        if (p < 100){
-            phi_prime = active_set_newton(Y, A, p, init_phi=phi[I])
+        ##ptm = proc.time()
+        if (p < 200){
+            phi_prime = active_set_newton(Y, A, p, M=M, init_phi=phi[I])
         } else {
-            phi_prime = active_set_newton_largep(Y, A, p)
+            phi_prime = active_set_newton_largep(Y, A, p, M=M, init_phi=phi[I])
         }
-
+        ##print(proc.time() - ptm)
         print("Checkpoint")
         
         phi_prime = expand_phi(phi_prime, Y, A)
 
-        ##diagnostic
-        tmp = V %*% phi_prime
-        tmp2 = V %*% phi
-        stopifnot(tmp[A] > -eps)
-        stopifnot(tmp2[A] > -eps)
+        slack_prime = V %*% phi_prime
         
+        ##diagnostic
+        ## for any i in A, V_i * phi_prime should be 0
+        stopifnot(slack_prime[A] > -eps2)
+        
+        ## remove knots until phi_prime satisfy all constraints
         safety2 = 1
-        while ( any(V %*% phi_prime > eps) ){
+        while ( any(slack_prime > eps2) ){
             safety2 = safety2 + 1
             stopifnot(safety2 < 200)
             
-            slack_prime = V %*% phi_prime
-            slack = V %*% phi
+            slack_violate = slack[slack_prime > eps2]
+            slack_prime_violate = slack_prime[slack_prime > eps2]
 
-            slack = slack[slack_prime > eps]
-            slack_prime = slack_prime[slack_prime > eps]
-
-            t_coef = max(-slack_prime/(slack - slack_prime))
+            t_coef = max(-slack_prime_violate/(slack_violate - slack_prime_violate))
             
             phi = t_coef*phi + (1-t_coef)*phi_prime
 
-            A_new = which(V %*% phi > -eps)
+            slack = V %*% phi
+            
+            A_new = which(slack > -eps2)
+
             ## diagnostics
+            ## by removing knot, the active set should be larger
             stopifnot( all(A %in% A_new) )
             stopifnot(length(A_new) > length(A))
+            
             rm_knot_ix = setdiff(A_new, A)
             print(paste("  remove knot: ", rm_knot_ix))
 
             A = A_new
-
             
             I = setdiff(1:n, A)
-            if (p < 100){
-                phi_prime = active_set_newton(Y, A, p, init_phi=phi[I])
+            if (p < 200){
+                phi_prime = active_set_newton(Y, A, p, M=M, init_phi=phi[I])
             } else {
-                phi_prime = active_set_newton_largep(Y, A, p, init_phi=phi[I])
+                phi_prime = active_set_newton_largep(Y, A, p, M=M, init_phi=phi[I])
             }
-
+            
             phi_prime = expand_phi(phi_prime, Y, A)
+            slack_prime = V %*% phi_prime
+            
         }
 
     
         phi = phi_prime
-        A = which(V %*% phi > -eps)
-        if (p < 100){
+        slack = slack_prime
+        
+        A = which(slack > -eps2)
+        
+        if (p < 200){
             grad = compute_gradient_phi(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
                 gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
         } else {
@@ -186,22 +208,20 @@ fit_1d_density <- function(Y, p) {
 
 compute_gradient_phi <- function(phi, y_lvec, y_rvec, gap_vec, kepler_ls, ind_vec2,
                                  evalpts, ixs_ls, p){
-    nI = length(phi)
         
     n = length(phi)
-    Cp = 2*pi^{p/2} / gamma(p/2)
 
-    phi_lvec = rep2(ind_vec2, phi[1:(nI-1)])
-    phi_rvec = rep2(ind_vec2, phi[2:nI])
+    phi_lvec = rep2(ind_vec2, phi[1:(n-1)])
+    phi_rvec = rep2(ind_vec2, phi[2:n])
     
     fnpts =  exp(
         ((y_rvec-evalpts)*phi_lvec + (evalpts-y_lvec)*phi_rvec )/gap_vec +
         (p-1)*log(evalpts/sqrt(p)) )
 
-    grad = rep(1/nI, nI)
+    grad = rep(1/n, n)
     grad[1] = grad[1] - exp(phi[1] + p*log(y_lvec[1]/sqrt(p)) - (1/2)*log(p))
 
-    for (i in 1:(nI-1)){
+    for (i in 1:(n-1)){
         ixs = ixs_ls[[i]]
 
         v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 
@@ -218,34 +238,18 @@ compute_gradient_phi <- function(phi, y_lvec, y_rvec, gap_vec, kepler_ls, ind_ve
 ## Same as before but for p large
 compute_gradient_phi_largep <- function(phi, y_lvec, y_rvec, gap_vec, kepler_ls, ind_vec2,
                                  evalpts, ixs_ls, p){
-    nI = length(phi)        
+  
     n = length(phi)
 
-    phi_lvec = rep2(ind_vec2, phi[1:(nI-1)])
-    phi_rvec = rep2(ind_vec2, phi[2:nI])
+    phi_lvec = rep2(ind_vec2, phi[1:(n-1)])
+    phi_rvec = rep2(ind_vec2, phi[2:n])
     
-    fnpts =  exp(
-        ((y_rvec-evalpts)*phi_lvec + (evalpts-y_lvec)*phi_rvec )/gap_vec +
-        ((p-1)/sqrt(p)) * (evalpts - sqrt(p)) -
-        ((p-1)/p) * (evalpts - sqrt(p))^2 * 1/2 +
-        ((p-1)/p^(3/2)) * (evalpts - sqrt(p))^3 * 1/3 -
-        ((p-1)/p^2) * (evalpts - sqrt(p))^4 * 1/4 +
-        ((p-1)/p^(5/2)) * (evalpts - sqrt(p))^5 * 1/5 -
-        ((p-1)/p^3) * (evalpts - sqrt(p))^6 * 1/6 +
-        ((p-1)/p^(7/2)) * (evalpts - sqrt(p))^7 * 1/7 )
+    fnpts = hx_eval(phi_lvec, phi_rvec, evalpts, y_lvec, y_rvec, gap_vec, p)
 
-    grad = rep(1/nI, nI)
-    grad[1] = grad[1] - exp(phi[1] +
-            sqrt(p)*(y_lvec[1] - sqrt(p)) -
-            (y_lvec[1] - sqrt(p))^2 * 1/2 +
-            (1/sqrt(p)) * (y_lvec[1] - sqrt(p))^3 * 1/3 -
-            (1/p) * (y_lvec[1] - sqrt(p))^4 * 1/4 +
-            (1/p^(3/2)) * (y_lvec[1] - sqrt(p))^5 * 1/5 -
-            (1/p^2) * (y_lvec[1] - sqrt(p))^6 * 1/6 +
-            (1/p^(5/2)) * (y_lvec[1] - sqrt(p))^7 * 1/7 -
-            log(sqrt(p)))
+    grad = rep(1/n, n)
+    grad[1] = grad[1] - hx1_int(phi[1], y_lvec[1], p)
 
-    for (i in 1:(nI-1)){
+    for (i in 1:(n-1)){
         ixs = ixs_ls[[i]]
 
         v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 

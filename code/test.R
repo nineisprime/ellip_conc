@@ -4,11 +4,12 @@ source("fit_1d_density.R")
 source("active_set_newton.R")
 source("active_set_newton_largep.R")
 source("numerical_integration_helper.R")
+source("helper.R")
 
 options(digits=20)
 
 n = 300
-p = 50
+p = 1e12
 
 ##X = rgamma(n, shape=k/2, scale=1/sqrt(k/2))
 X = rgamma(n, shape=p, scale=1)
@@ -16,8 +17,7 @@ Y = sqrt(X)
 Y = sort(Y)
 
 
-
-phi = fit_1d_density(Y, p)
+phi = fit_1d_density(Y, p, M=50000)
 
 hat_density = exp(phi +
     (p-1)/sqrt(p) * (Y - sqrt(p)) -
@@ -30,7 +30,6 @@ plot(Y, hat_density, type="l")
 
 
 ##true_density = dgamma(X, shape=p, scale=1)
-
 true_density = function(Y){
     tmp = (2*p - 1)*log(Y) - Y^2 + log(2) -
         (p-1)*log(p-1) + (p-1) - (1/2)*log(2*pi*(p-1))
@@ -41,7 +40,7 @@ true_density = function(Y){
 
 lines(Y, true_density(Y), lty=3, col="red")
 
-hell = compute_hellinger(Y, phi, p, M=300000, true_density, offset=sqrt(p),
+hell = compute_hellinger_ellip(Y, phi, p, M=300000, true_density, offset=sqrt(p),
     boundary=3)
 
 

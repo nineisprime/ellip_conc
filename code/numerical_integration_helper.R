@@ -33,7 +33,7 @@
 
 
 
-numerical_integration_helper <- function(Y, M, eps){
+numerical_integration_helper <- function(Y, M){
 
     Y = sort(Y)
     nI = length(Y)

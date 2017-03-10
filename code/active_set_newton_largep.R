@@ -16,7 +16,7 @@
 ## phi -- ( length(I)-vector ) of function values
 ##
 
-active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnostic=FALSE){
+active_set_newton_largep <- function(Y, A, p, M=500000, init_phi=NULL, diagnostic=FALSE){
 
     n = length(Y)
     I = setdiff(1:n, A)
@@ -46,16 +46,19 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
     }
     grad_ypart = grad_ypart/n
     ##
-
+    
+    
     if (is.null(init_phi)){
         phi = - ((p-1)/sqrt(p)) * (YI_sorted - sqrt(p))
+        ##phi = - ((p-1)/p) * (YI_sorted - sqrt(p))  ## sqrt(p) mod
     } else {
         phi = init_phi
+        ##phi = init_phi / sqrt(p)  ## sqrt(p) mod
     }
 
     ## precompute quantities needed for numerical integration
     if (nI > 1){
-        num_int_res = numerical_integration_helper(YI_sorted, M, eps)
+        num_int_res = numerical_integration_helper(YI_sorted, M)
         evalpts = num_int_res$evalpts
         bdpts = num_int_res$bdpts
         y_rvec = num_int_res$y_rvec
@@ -72,7 +75,7 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
     stepsize = 1
     while (TRUE && safety < 2000) {
         safety = safety + 1
-        stopifnot(safety < 1000)
+        stopifnot(safety < 2000)
         
         ## compute function evaluations
         ## fnpts[i] is function evaluated at evalpts[i]
@@ -80,15 +83,8 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
             phi_lvec = rep2(ind_vec2, phi[1:(nI-1)])
             phi_rvec = rep2(ind_vec2, phi[2:nI])
 
-            fnpts =  exp(
-                ((y_rvec-evalpts)*phi_lvec + (evalpts-y_lvec)*phi_rvec )/gap_vec +
-                ((p-1)/sqrt(p)) * (evalpts - sqrt(p)) -
-                ((p-1)/p) * (evalpts - sqrt(p))^2 * 1/2 +
-                ((p-1)/p^(3/2)) * (evalpts - sqrt(p))^3 * 1/3 -
-                ((p-1)/p^2) * (evalpts - sqrt(p))^4 * 1/4 +
-                ((p-1)/p^(5/2)) * (evalpts - sqrt(p))^5 * 1/5 -
-                ((p-1)/p^3) * (evalpts - sqrt(p))^6 * 1/6 +
-                ((p-1)/p^(7/2)) * (evalpts - sqrt(p))^7 * 1/7)
+            
+            fnpts =  hx_eval(phi_lvec, phi_rvec, evalpts, y_lvec, y_rvec, gap_vec, p)
 
             stopifnot( y_rvec - evalpts >= 0)
             stopifnot( evalpts - y_lvec >= 0)
@@ -103,22 +99,11 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
         Hdiag = rep(0, nI)
         Hdiag_off = rep(0, nI-1)
 
-        fn_int = exp(phi[1] +
-                sqrt(p)*(min(YI_sorted) - sqrt(p)) -
-                (min(YI_sorted) - sqrt(p))^2 * 1/2 +
-                (1/sqrt(p)) * (min(YI_sorted) - sqrt(p))^3 * 1/3 -
-            (1/p) * (min(YI_sorted) - sqrt(p))^4 * 1/4 +
-            (1/p^(3/2)) * (min(YI_sorted) - sqrt(p))^5 * 1/5 -
-            (1/p^2) * (min(YI_sorted) - sqrt(p))^6 * 1/6 +
-            (1/p^(5/2)) * (min(YI_sorted) - sqrt(p))^7 * 1/7 -
-            log(sqrt(p)))
+        fn_int = hx1_int(phi[1], min(YI_sorted), p)
         
         grad[1] = grad[1] - fn_int
                 
-                            
         Hdiag[1] = Hdiag[1] - fn_int
-        
-
         
         for (i in 1:(nI-1)){
             if (nI == 1) break
@@ -138,17 +123,17 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
 
             Hdiag_off[i] = Hdiag_off[i] - sum(v1*v2 * kepler_ls[[i]] * fnpts[ixs])
         }
-
-
+        
         if (nI > 1){
             H = bandSparse(nI, k=-1:1, diag=list(Hdiag_off, Hdiag, Hdiag_off))
         } else{
             H = Hdiag[1]
         }
-
+        
+        
         
         ## test for convergence
-        if (sqrt(sum(grad^2)) < 1e-7)
+        if (sqrt(sum(grad^2)) < eps)
             break
 
         
@@ -157,14 +142,18 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
         ##phi_step[phi_step > 300] = (phi_step[phi_step > 300])^(1/3)
         ##phi_step[phi_step < -300] = -(-phi_step[phi_step < -300])^(1/3)
 
+        ##phi_step = phi_step/sqrt(p) ## sqrt(p) modification
+        
 
         ## diagnostics
         if (diagnostic){
             print(safety)
             print(fn_int)
-            if (nI > 1)
-                plot(fnpts[seq(1, length(fnpts), by=100)])
-            
+            if (nI > 1){
+                plotixs = seq(1, length(fnpts), by=100)
+                
+                plot(evalpts[plotixs], fnpts[plotixs])
+            }
             print("phi_step")
             print(phi_step)
             print("phi")
@@ -182,16 +171,17 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
         if (any(abs(phi_step) > 500)){
             phi_step = 100*grad
         }
-        
-        old_obj = sum(grad_ypart*phi) - fn_int
+
+        old_obj = sum(grad_ypart*phi) - fn_int ## square root p mod
+        ##old_obj = sqrt(p)*sum(grad_ypart*phi) - fn_int ## square root p mod
         new_obj = -Inf
 
         ## backtracking line search
         sigma = 0.02
-        step_beta = 0.9
+        step_beta = 0.8
         stopifnot( sum(phi_step*grad) >= 0 )
         armijo_safety = 1
-        while (new_obj - old_obj < sigma * stepsize * sum(phi_step*grad) - 1e-7){
+        while (new_obj - old_obj < sigma * stepsize * sum(phi_step*grad) - eps){
             if (new_obj > -Inf)
                 stepsize = step_beta * stepsize
 
@@ -202,41 +192,19 @@ active_set_newton_largep <- function(Y, A, p, M=800000, init_phi=NULL, diagnosti
                 phi_cand_lvec = rep2(ind_vec2, phi_cand[1:(nI-1)])
                 phi_cand_rvec = rep2(ind_vec2, phi_cand[2:nI])
                 
-                fnpts_cand =  exp(
-                    ((y_rvec-evalpts)*phi_cand_lvec +
-                     (evalpts-y_lvec)*phi_cand_rvec )/gap_vec +
-                    ((p-1)/sqrt(p)) * (evalpts - sqrt(p)) -
-                    ((p-1)/p) * (evalpts - sqrt(p))^2 * 1/2 +
-                    ((p-1)/p^(3/2)) * (evalpts - sqrt(p))^3 * 1/3 -
-                    ((p-1)/p^2) * (evalpts - sqrt(p))^4 * 1/4 +
-                    ((p-1)/p^(5/2)) * (evalpts - sqrt(p))^5 * 1/5 -
-                    ((p-1)/p^3) * (evalpts - sqrt(p))^6 * 1/6 +
-                    ((p-1)/p^(7/2)) * (evalpts - sqrt(p))^7 * 1/7)
+                fnpts_cand = hx_eval(phi_cand_lvec, phi_cand_rvec,
+                    evalpts, y_lvec, y_rvec, gap_vec, p)
 
                 fn_int_cand = sum(fnpts_cand * kepler_global_wts) +
-                    exp(phi_cand[1] +
-                        sqrt(p)*(min(YI_sorted) - sqrt(p)) -
-                        (min(YI_sorted) - sqrt(p))^2 * 1/2 +
-                        (1/sqrt(p)) * (min(YI_sorted) - sqrt(p))^3 * 1/3 -
-                        (1/p) * (min(YI_sorted) - sqrt(p))^4 * 1/4 +
-                        (1/p^(3/2)) * (min(YI_sorted) - sqrt(p))^5 * 1/5 -
-                        (1/p^2) * (min(YI_sorted) - sqrt(p))^6 * 1/6 +
-                        (1/p^(5/2)) * (min(YI_sorted) - sqrt(p))^7 * 1/7 -
-                        log(sqrt(p)))
+                    hx1_int(phi[1], min(YI_sorted), p)
                         
                 
             } else {
-                fn_int_cand =  exp(phi_cand[1] +
-                    sqrt(p)*(min(YI_sorted) - sqrt(p)) -
-                    (min(YI_sorted) - sqrt(p))^2 * 1/2 +
-                    (1/sqrt(p)) * (min(YI_sorted) - sqrt(p))^3 * 1/3 -
-                    (1/p) * (min(YI_sorted) - sqrt(p))^4 * 1/4 +
-                    (1/p^(3/2)) * (min(YI_sorted) - sqrt(p))^5 * 1/5 -
-                    (1/p^2) * (min(YI_sorted) - sqrt(p))^6 * 1/6 +
-                    (1/p^(5/2)) * (min(YI_sorted) - sqrt(p))^7 * 1/7 -
-                    log(sqrt(p)))
+                fn_int_cand = hx1_int(phi[1], min(YI_sorted), p)
+                
             }
-            new_obj = sum(grad_ypart*phi_cand) - fn_int_cand
+            ##new_obj = sqrt(p)*sum(grad_ypart*phi_cand) - fn_int_cand  ## sqrt(p) mod
+            new_obj = sum(grad_ypart*phi_cand) - fn_int_cand 
 
             armijo_safety = armijo_safety + 1
             ##if (armijo_safety > 100)

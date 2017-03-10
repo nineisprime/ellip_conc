@@ -7,19 +7,20 @@ source("active_set_newton.R")
 source("active_set_newton_largep.R")
 source("numerical_integration_helper.R")
 source("hellinger.R")
+source("density_zoo.R")
 
 if (!exists("myname"))
     myname = "A"
 
 continue_run = FALSE
 options(digit=20)
-ntrials = 50
-#p_ls = c(5, 1e3, 1e6, 1e9, 1e12, 1e15)
-p_ls = c(1e15)
+ntrials = 10
+p_ls = c(1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
+#p_ls = c(1e15)
 
 res = matrix(0, ntrials, length(p_ls))
 
-n = 250
+n = 300
 
 if (continue_run){
     load("test_tmp.R")
@@ -28,6 +29,7 @@ if (continue_run){
     source("active_set_newton_largep.R")
     source("numerical_integration_helper.R")
     source("hellinger.R")
+    source("density_zoo.R")
 }
 
 for (ip in 1:length(p_ls)){
@@ -44,11 +46,13 @@ for (ip in 1:length(p_ls)){
         Y = sqrt(X)
         Y = sort(Y)
 
-        phi = fit_1d_density(Y, p)
+        phi = fit_1d_density(Y, p, M=200000)
 
-        true_density = x_2p_minus_1_e_xsquared(Y, p)
+        true_density = function(Y) {
+            x_2p_minus_1_e_xsquared(Y, p)
+        }
 
-        hell = compute_hellinger(Y, phi, p, M=400000, true_density, offset=sqrt(p),
+        hell = compute_hellinger_ellip(Y, phi, p, M=400000, true_density, offset=sqrt(p),
             boundary=2)
 
         res[it, ip] = hell
