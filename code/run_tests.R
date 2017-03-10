@@ -14,15 +14,15 @@ if (!exists("myname"))
 
 continue_run = FALSE
 options(digit=20)
-ntrials = 50
-p_ls = c(1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
+ntrials = 100
+p_ls = c(2, 1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
 #p_ls = c(1e15)
 
 if (!continue_run){
     res = matrix(0, ntrials, length(p_ls))
 }
 
-n = 400
+n = 200
 
 for (ip in 1:length(p_ls)){
     for (it in 1:ntrials) {

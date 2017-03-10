@@ -23,7 +23,7 @@ compute_hellinger_ellip <- function(Y, phi, p, M=400000, true_density, offset, b
     n = length(Y)
 
     ## Y_aug contains Y and the limits of integration
-    Y_aug = c(Y[1] - boundary, Y, Y[n] + boundary)
+    Y_aug = c(max(Y[1] - boundary, 0), Y, Y[n] + boundary)
     phi_aug = c(phi[1], phi, -Inf)
 
     
@@ -77,7 +77,7 @@ compute_hellinger_logconc <- function(Y, phi, M=400000, true_density, boundary =
     n = length(Y)
 
     ## Y_aug contains Y and the limits of integration
-    Y_aug = c(Y[1] - boundary, Y, Y[n] + boundary)
+    Y_aug = c(max(Y[1] - boundary, 0), Y, Y[n] + boundary)
     phi_aug = c(-1e100, phi, -Inf)
 
     
