@@ -8,11 +8,12 @@ source("active_set_newton_largep.R")
 source("numerical_integration_helper.R")
 source("hellinger.R")
 source("density_zoo.R")
+source("helper.R")
 
 if (!exists("myname"))
     myname = "A"
 
-continue_run = FALSE
+continue_run = TRUE
 options(digit=20)
 ntrials = 100
 p_ls = c(1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
