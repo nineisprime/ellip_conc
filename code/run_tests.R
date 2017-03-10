@@ -12,25 +12,17 @@ source("density_zoo.R")
 if (!exists("myname"))
     myname = "A"
 
-continue_run = FALSE
+continue_run = TRUE
 options(digit=20)
-ntrials = 10
-p_ls = c(1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
+ntrials = 50
+p_ls = c(1, 1e2, 1e4, 1e6, 1e8, 1e10, 1e12)
 #p_ls = c(1e15)
 
-res = matrix(0, ntrials, length(p_ls))
+if (!continue_run){
+    res = matrix(0, ntrials, length(p_ls))
+}
 
 n = 300
-
-if (continue_run){
-    load("test_tmp.R")
-    source("fit_1d_density.R")
-    source("active_set_newton.R")
-    source("active_set_newton_largep.R")
-    source("numerical_integration_helper.R")
-    source("hellinger.R")
-    source("density_zoo.R")
-}
 
 for (ip in 1:length(p_ls)){
     for (it in 1:ntrials) {
