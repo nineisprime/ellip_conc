@@ -45,24 +45,20 @@
 \newenvironment{remark}[1][Remark]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
+
+\title{Notes on Estimation of an Elliptically-symmetric Log-concave Density}
+
+
 \begin{document}
 
-\section{To Do}
+\maketitle
+\tableofcontents
+\newpage
 
-\subsection{Major}
-\begin{enumerate}
-\item Extend proposition~\ref{prop:projection_existence}. It currently describes projections onto elliptical log-concave densities only when $\Sigma$ and $\mu$ are fixed. $\Sigma$ and $\mu$ should be variables to be optimized by the projection.
-\item Derive the rate of convergence of the MLE for spherically symmetric distributions. The steps to accomplish this follow that of KS 2016. 
-\item Strengthen the continuity of log-concave projection result from DSS to account for error of estimating $\Sigma$ and $\mu$. 
-\end{enumerate}
-
-\subsection{Minor}
-\begin{enumerate}
-\item Put the finishing touch on proposition~\ref{prop:projection_existence}. Use DSS 2011 to show existence.
-\item Finish identifiability proof.
-\end{enumerate}
 
 \section{Introduction}
+
+
 
 \subsection{Notation}
 
@@ -109,16 +105,17 @@ Now suppose $(\Sigma, g_p)$ and $(\Sigma', g'_p)$ induce the same density $f$. W
 
 \subsection{Characterizations}
 
+
 Let $X$ follow a centered elliptical distribution. Then, we have that
 
 \[
-X = \Omega^{1/2} \Phi Y
+X = \Sigma^{1/2} \Phi Z
 \]
 
-where $\Phi$ is random vector from $\mathbb{S}^{p-1}$ and $Y$ is a non-negative random variable that follows the density
+where $\Phi$ is random vector from $\mathbb{S}^{p-1}$ and $Z$ is a non-negative random variable that follows the density
 
 \[
-f_Y(y) = c_p y^{p - 1} g_p(y)
+f_Z(r) = c_p r^{p - 1} g_p(r)
 \]
 
 $c_p = 2 \frac{ \pi^{p/2}}{\Gamma(p/2)}$.
@@ -485,13 +482,159 @@ And, $a_t(r) \in \mathbb{R}^T$ is of the form $(0,...,0, \frac{Y_{i_{t+1}} - r}{
 
 %\end{algorithm}
 
+
+\section{Moment Properties}
+
+As described in previous sections, if $X \in \mathbb{R}^p$ follows a spherically-symmetric log-concave density, then the norm of $X$ follows a density of the form $e^{\phi(r)}r^{p-1}$ where $\phi$ is decreasing and concave.
+
+
+We define the following:
+\begin{align}
+  \Phi &\equiv \{ \phi: \mathbb{R}^+ \rightarrow \mathbb{R} \,:\, \textrm{ decreasing, concave} \} \label{defn:Phi} \\
+  \mathcal{H} &\equiv \left\{ h \,:\, h(r) = r^{p-1} e^{\phi(r)}, \, \phi \in \Phi,\, \int h(r) dr = 1,\, \sigma_h = 1 \right\}
+                 \label{defn:H_unit_variance}
+\end{align}
+
+
+For technical reasons made clear later, we will also consider densities of the form $e^{\phi(r)}r^{p-1}$ where $\phi(r) = 0$ for $r \leq a_0$ for some $a_0$ and $\phi$ is decreasing and concave on $[a_0, \infty)$. Accordingly, we define the following:
+
+\begin{align}
+  \Phi_{a_0} &\equiv \{ \phi: [a_0, \infty) \rightarrow \mathbb{R} \,:\, \textrm{ decreasing, concave} \} \label{defn:Phi} \\
+  \mathcal{H}_{a_0} &\equiv \left\{ h \,:\, h(r) = r^{p-1} e^{\phi(r)}, \, \phi \in \Phi_{a_0},\, \int h(r) dr = 1,\, \sigma_h = 1 \right\}
+                 \label{defn:H_unit_variance_a0}
+\end{align}
+
+It is clear that $\mathcal{H}_{a_0} = \mathcal{H}$ for $a_0 = 0$.
+
+\subsection{Bounds on First Moment}
+
+\begin{proposition}
+  For any $a_0 \geq 0$, for any $h \in \mathcal{H}_{a_0}$, we have that $a_0 \leq \mu_h \leq a_0 + c_1 p $ where $c_1$ is some absolute constant.
+\end{proposition}
+
+\begin{proof}
+
+  Let $h \in \mathcal{H}_{a_0}$. It is clear that $\mu_h \geq a_0$ since $h$ is zero on $(-\infty, a_0)$.
+
+  We prove that $\mu_h \leq a_0 + c_1p$ by proving the contrapositive, that if $\mu_h \geq a_0 + c_1 p$ for some absolute constant $c_1$, then $\sigma_h > 1$.
+
+  By lemma~\ref{Lem:MeanConstrainedSupBound}, if $\mu_h \geq a_0 + c_1 p$, then $\| h \|_\infty \leq \frac{16}{c_1}$. Therefore, $\sigma_h \geq \frac{C c_1}{16}$ by lemma~\ref{Lem:VarianceSupRelation}, where $C$ is some universal constant. Taking $c_1 > 16/C$ 
+  yields that $\sigma_h > 1$. The proof is thus complete.
+\end{proof}
+
+
+The next lemma is 
+
+Define
+\[
+  \mathcal{H}_{a_0}^\mu \equiv
+  \left\{ h \,:\, h(r) = r^{p-1} e^{\phi(r)}, \, \phi \in \Phi_{a_0},\, \int h(r) dr = 1,\, \mu_h \geq a_0 + \mu \right\}
+\]
+
+\begin{lemma}
+  \label{Lem:MeanConstrainedSupBound}
+For any $a_0 \geq 0$ and any $r \in [a_0, \infty)$, we have that
+  \[
+    \sup_{h \in \mathcal{H}_{a_0}^\mu } h(r) \leq
+    \min\left\{ 16 \frac{p}{\mu}, \frac{p}{r - a_0} \right\}
+  \]
+  
+\end{lemma}
+
+\begin{proof}
+
+  For any $h \in \mathcal{H}_{a_0}^\mu$, we define $\tilde{h}(r)$ as the location shift $h( r - a_0)$. Note that $\tilde{h}(r)$ has a density of the form $e^{\phi(r)} (r + a_0)^{p+1}$ where $\phi \in \Phi$, i.e., it is decreasing and concave on $[0, \infty)$. We will prove the lemma by proving that $\sup_{h \in \mathcal{H}_{a_0}^\mu} \tilde{h}(r) \leq \min \left\{ 16 \frac{p}{\mu}, \frac{p}{r} \right\}$.
+
+  Fix $r_0 \in [0, \infty)$. We first prove that $\sup_{h \in \mathcal{H}_{a_0}^\mu} \tilde{h}(r_0) \leq \frac{p}{r_0}$.
+
+  Consider an indicator $\phi$ and denote the resulting density
+  $\tilde{h}_{r_0}(r) = \alpha \mathbbm{1}_{r \in [0, r_0]} (r+a_0)^{p-1}$ where
+  $\alpha^{-1} = \int_0^{r_0} (r + a_0)^{p-1} dr = \frac{(r_0 + a_0)^p}{p} - \frac{a_0^p}{p}$.
+
+  Let $\tilde{h}(r) = e^{\phi(r)} (r + a_0)^{p-1}$.
+  Then, we have that
+
+  \begin{align*}
+    \int_0^{r_0} \alpha (r+a_0)^{p-1} dr &= 1
+         \geq \int_0^{r_0} e^{\phi(r)} (r+a_0)^{p-1} dr \\
+      &\geq \int_0^{r_0} e^{\phi(r_0)} (r + a_0)^{p-1} dr
+  \end{align*}
+
+  Thus, $e^{\phi(r_0)} \leq \alpha$ and $\tilde{h}(r_0) \leq \tilde{h}_{r_0}(r_0) = \alpha (r_0 + a_0)^{p-1}$.
+
+  Since
+
+  \begin{align*}
+    & \alpha (a_0 + r_0)^{p-1} \frac{(a_0 + r_0)}{p}  - \alpha \frac{a_0^p}{p} = 1 \\
+    &(\Rightarrow) \quad
+      \alpha (a_0 + r_0)^{p-1} (a_0 + r_0) - \alpha (r_0 + a_0)^{p-1} a_0 \leq p \\
+    &(\Rightarrow) \quad \alpha (a_0 + r_0)^{p-1} \leq \frac{p}{r_0}
+  \end{align*}
+
+  Thus, we have shown that $\tilde{h}(r_0) \leq \frac{p}{r_0}$ as desired.
+
+  %%% BEGIN part 2 of the proof.a
+  Now we move onto the second bound in the inequality. Note that if $r_0 \geq \mu/8$, then $\frac{p}{r_0} \leq 8 \frac{p}{\mu}$ and the second bound is proven. 
+  
+  Therefore, let us fix $r_0 \in [0, \mu/8)$. We will prove that
+  $ \sup_{h \in \mathcal{H}_{a_0}^\mu} \tilde{h}(r_0) \leq \frac{8p}{\mu - 4 r_0} \leq 16 \frac{p}{\mu}$.
+  
+  To this end, fix $M \geq \log 16$, and $m \in (-\infty,M-2]$.  Suppose that $h \in \mathcal{H}_{a_0}^\mu$ satisfies $\log \tilde{h}(r_0) \geq M$ for some $r_0 \in [0 ,p^{1/2}]$. Note that $\log \tilde{h}$ itself is a concave function on $\mathbb{R}^+$ and so $\tilde{h}$ is a log-concave density.
+
+  For $t \in [m,M]$, let $D_t := \{r \in [0,\infty) \,:\, \log \tilde{h}(r) \geq t\}$.  First note that for any $t \in [m,M]$ and $r \in D_m$, we have
+\[
+\log \tilde{h} \biggl(\frac{t-m}{M-m}r_0 + \frac{M-t}{M-m}r\biggr) \geq \frac{(t-m)M}{M-m} + \frac{(M-t)m}{M-m} = t.
+\]
+Hence, writing $\mu$ for Lebesgue measure on $\mathbb{R}$,
+\[
+\mu(D_t) \geq \mu\biggl(\frac{t-m}{M-m}r_0 + \frac{M-t}{M-m}D_m\biggr) = \frac{M-t}{M-m}\mu(D_m).
+\]
+Using Fubini's theorem, we can now compute
+\begin{align*}
+1 &\geq \int_{D_m} \tilde{h}(r) - e^m \, dr \geq \int_{D_m} \int_m^M e^s \mathbbm{1}_{\{\log \tilde{h}(r) \geq s\}} \, ds \, dr \\
+&= \int_m^M e^s \mu(D_s) \, ds \geq \frac{\mu(D_m)}{M-m}\int_m^M (M-s)e^s \, ds = \frac{\mu(D_m)e^M}{M-m}\int_0^{M-m} te^{-t} \, dt \\
+&\geq \frac{\mu(D_m)e^M}{2(M-m)}.
+\end{align*}                
+
+Since $D_m$ is an interval containing $r_0$, we conclude that $\log \tilde{h}(r) \leq m$ whenever $|r-r_0| \geq 2(M-m)e^{-M}$.  Thus
+\[
+\log \tilde{h}(r) \leq M - \frac{|r-r_0|e^M}{2}
+\]
+for $|r-r_0| \geq 4e^{-M}$.  First, suppose that $r_0 - 4e^{-M} > 0$ and using the bound $\tilde{h}(r) \leq p/r$, it now follows that
+\begin{align*}
+\mu \leq \int_0^\infty r h(r) \, dr &\leq \int_0^{r_0 - 4e^{-M}} r \exp\biggl\{M - \frac{(r_0-r)e^M}{2}\biggr\} \, dr + \int_{r_0 - 4e^{-M}}^{r_0 + 4e^{-M}} r \frac{p}{r} \, dr \\
+&\qquad + \int_{r_0 + 4e^{-M}}^\infty r \exp\biggl\{M - \frac{(r-r_0)e^M}{2}\biggr\} \, dr \\
+                                    &\leq 2\int_2^\infty \biggl(r_0 - \frac{2s}{e^M}\biggr) e^{-s} \, ds + 8e^{-M} p + 2\int_2^\infty \biggl(r_0 + \frac{2s}{e^M}\biggr) e^{-s} \, ds \\
+                                    & = 4 r_0 \int_2^\infty e^{-s} ds + 8 e^{-M} p \\
+  &\leq 4 r_0 + 8 e^{-M} p
+\end{align*}
+
+Thus yielding $\mu \leq 4 r_0 + 8 e^{-M} p$. Since $4r_0 \leq \mu/2$ by assumption, we have that $e^M \leq \frac{8p}{\mu - 4 r_0} \leq 16 \frac{p}{\mu}$. 
+
+Now, suppose $r_0 - 4e^{-M} \leq 0$. Then, similarly, we have that
+\begin{align*}
+\mu \leq \int_0^\infty r h(r) \, dr &\leq  \int_0^{r_0 + 4e^{-M}} r \frac{p}{r} \, dr \\
+&\qquad + \int_{r_0 + 4e^{-M}}^\infty r \exp\biggl\{M - \frac{(r-r_0)e^M}{2}\biggr\} \, dr \\
+                                    &\leq 8e^{-M} p + 2\int_2^\infty \biggl(r_0 + \frac{2s}{e^M}\biggr) e^{-s} \, ds \\
+                                    & = 4 r_0 + 2e^{-M} + 8 e^{-M} p \\
+  &\leq 4r_0 + 2 e^{-M}(4p+1)
+\end{align*}
+Similar reasoning yields the desired upper bound on $e^{M}$.
+  
+\end{proof}
+
+
+
 \section{Envelope bounds}
 
-Let $\Phi$ denote the class of decreasing, concave functions $\phi:[0,\infty) \rightarrow [-\infty,\infty)$, let $\mathcal{G} := \{e^\phi:\phi \in \Phi\}$, and let $\mathcal{H}$ denote the class of functions $h:[0,\infty) \rightarrow [0,\infty)$ of the form $h(r) = c_pr^{p-1}g(r)$ for some $g \in \mathcal{G}$, where
+We define the following:
 \begin{align}
-\label{Eq:Moment1} c_p \int_0^\infty r^{p-1}g(r) \, dr &= 1 \\
-\label{Eq:Moment2} c_p \int_0^\infty r^{p+1}g(r) \, dr &= p.
+  \Phi &\equiv \{ \phi: \mathbb{R}^+ \rightarrow \mathbb{R} \,:\, \textrm{ decreasing, concave} \} \label{defn:Phi} \\
+  \mathcal{G} &\equiv \{ e^{\phi} \,:\, \phi \in \Phi \}\\
+  \mathcal{H} &\equiv \left\{ h(r) \,:\, h(r) = c_p r^{p-1} e^{\phi(r)}, \, \phi \in \Phi,\, \int h(r) dr = 1,\, \int r^2 h(r) dr = p \right\}
+                 \label{defn:H_second_moment}
 \end{align}
+
 Thus $\mathcal{H}$ consists of densities of random variables $\|X\|$, where $X$ has a spherically symmetric, log-concave density on $\mathbb{R}^p$, and $\mathbb{E}(\|X\|^2) = p$.
 
 The following result provides crude upper bounds for $\mathcal{H}$.
@@ -575,6 +718,7 @@ The result follows.
 An upper bound on the variance of $Z \sim h \in \mathcal{H}$ is readiy available. 
 
 \begin{lemma} \citet[Lemma 1]{bobkov2003spectral}
+  \label{Lem:VarUpperBoundGeneral}
 Suppose $h$ is a density of the form $r^{p-1} g(r) c_p$ for some log-concave function $g(r)$, suppose $Z \sim h$, then, 
 \[
 \mathrm{Var}(Z) \leq \frac{1}{p} (\mathbb{E} Z)^2 
@@ -658,7 +802,593 @@ If  $1 \leq B | x - \sqrt{p} |$, then $\sup_{\sigma \in [c_0/\sqrt{p}, 1]} H_{\s
 \end{proof}
 
 
-\section{Bracketing Entropy}
+\section{Rate of Convergence}
+
+Let $f_0$ be a spherically symmetric log-concave density and suppose that $X_1, ..., X_n \sim f_0$. Let $\hat{f}$ be the spherically-symmetric log-concave (SSLC) MLE. Since MLE is scale-invariant, we assume without loss of generality that $\textrm{Var}_{f_0} (\| X \|) = 1$.
+
+We aim to show the following:
+\[
+  \mathbb{E} d_H(f_0, \hat{f}_n) \lesssim n^{-4/5}
+\]
+
+Let $h_0$ be the density of $\| X \|$, then we know that $h_0(r) = c_p r^{p-1} e^{\phi(r)}$ where $\phi$ is decreasing and concave. Likewise, we define $\hat{h}_n = c_p r^{p-1} e^{\hat{\phi}(r)}$ where $\hat{f}_n(x) = e^{\hat{\phi}(\| x \|)} $. Let $Z_1,...,Z_n \sim h_0$ and let $\mathbb{H}_n$ denote their empirical distribution. It is straightforward to see that
+\begin{align}
+  \hat{\phi} = \argmax_{\phi \in \Phi,\, \int e^{\phi} r^{p-1} c_p dr = 1} \int \phi(r) d \mathbb{H}_n  \label{eqn:hMLE}
+\end{align}
+
+By a change of variable, it suffices to prove that
+\[
+  \mathbb{E} d_H(h_0, \hat{h}_n) \lesssim n^{-4/5}
+\]
+
+Let $\Phi$ be defined as \ref{defn:Phi} and let
+\begin{align}
+  \mathcal{H} = \left\{ h \,:\, h(r) = c_p r^{p-1} e^{\phi(r)},\, \phi \in \Phi,\, \int h(r) dr = 1 \right \}
+  \label{eqn:H_class}
+\end{align}
+
+
+\subsection{Moment Characterizations of $h_0$}
+
+We first bound the moments of $h_0$ and $\hat{h}_n$.
+
+\begin{proposition}
+  \label{Prop:PopulationMeanBound}
+  Suppose $h_0 \in \mathcal{H}$ and that $\textrm{Var}_{h_0} = 1$, then we have that
+  \[
+    \sqrt{p} \leq \mathbb{E}_{h_0} \leq c_0 p
+  \]
+  for some absolute constant $c_0$.
+\end{proposition}
+It is possible to derive a tight version of this proposition with more work.
+
+\begin{proof}
+
+  By lemma~\ref{Lem:VarUpperBoundGeneral}, we have that $\mathbb{E}_{h_0} \geq \sqrt{p} \sqrt{\textrm{Var}_{h_0}} \geq \sqrt{p}$. 
+
+  Let $\kappa > 0$ be such that $\tilde{h}_{0} = \frac{1}{\kappa} h_0\left( \frac{r}{\kappa} \right)$ has second moment $p$, that is, $\int \tilde{h}_0(r) r^2 dr = p$.
+  By corollary~\ref{Cor:VarLowerBound}, we have that $\textrm{Var}_{\tilde{h}_0} \geq c_0 p^{-1}$. It is also clear that $\mathbb{E}_{\tilde{h}_0} \leq \sqrt{p}$.
+
+  Since $\textrm{Var}_{h_0} = 1$, it must be that $\kappa \geq \sqrt{c_0 p^{-1}}$ and therefore,
+  \[
+    \mathbb{E}_{h_0} = \frac{1}{\kappa} \mathbb{E}_{\tilde{h}_0} \leq \sqrt{\frac{p}{c_0}} \sqrt{p} = \frac{p}{\sqrt{c_0}}
+  \]
+
+\end{proof}
+
+\begin{corollary}
+  \label{Cor:EmpiricalMeanBound}
+  Suppose $h_0 \in \mathcal{H}$ and has variance 1. Let $Z_1,...,Z_n \sim h_0$, then we have that, with probability at least $1 - \frac{1}{n}$,
+  \[
+    \bar{Z} \leq c_0 p
+  \]
+
+  for an absolute constant $c_0$.
+\end{corollary}
+
+This corollary is an easy consequence of Proposition~\ref{Prop:PopulationMeanBound} and Chebyshev inequality. 
+
+
+
+
+\subsection{Differential Entropy of $h_0$}
+
+
+\begin{proposition}
+  \label{prop:loglikelihood_bound}
+Suppose $Z_1,..., Z_n \sim h_0$ where $h_0(r) = \exp^{\phi_0(r)} r^{p-1} c_p$ has variance 1 and $\phi_0 \in \Phi$.
+
+  Then, we have that, with probability at least $1 - 2 e^{-(1/16) \sqrt{n}}$:
+  \[
+    \int \log h_0(r)  d Q_n \geq -2 - \log 2
+  \]
+\end{proposition}
+
+
+\begin{proof}
+
+  
+  By \cite[][Theorem~1.1]{bobkov2011concentration}, we have that, with probability at least $1 - 2e^{-1/16 \sqrt{n}}$,
+  \[
+    \left| \int h_0(r) \log h_0(r) dr - \frac{1}{n} \sum_{i=1}^n \log h_0(Z_i) \right| \leq 1
+  \]
+
+  By lemma~\ref{lem:intrinsic_entropy_bound}, we have that $\int h_0(r) \log h_0(r) dr \geq -1 - \log 2$ . Therefore, we have that, with probability at least $1 - 2 e^{-1/16 \sqrt{n}}$:
+
+  \begin{align*}
+  \int \log h_0(r) d Q_n 
+    &\geq \int h_0(r) \log h_0(r) dr - 1\\
+    &\geq - 2 - \log 2
+  \end{align*}                                                               
+  
+\end{proof}
+
+\begin{lemma}
+  \label{lem:intrinsic_entropy_bound}
+  For any 
+  univariate log-concave density $f(x)$ with variance 1, we have that
+  \[
+    -1 - \log 2 \leq    \int f(x) \log f(x) dx \leq 8 \log 2
+  \]
+\end{lemma}
+
+\begin{proof}
+
+  Since entropy is variant with respect to location shift, let us suppose without loss of generality that $f(x)$ has mean 0.
+
+  
+ By \cite[][Theorem~5.14]{lovasz2007geometry}, $f(x) \leq 2^8$. 
+  
+  Therefore,
+  \begin{align*}
+    \int f(x) \log f(x) dx \leq 8 \log 2
+  \end{align*}
+
+ Let $g(x) = \frac{1}{2} e^{-|x|}$, then $g(x)$ is a density and 
+  \begin{align*}
+    \int f(x) \log f(x) dx &\geq
+                             \int f(x) \log g(x) dx \\
+                           &= \int f(x) ( - |x|) - \log 2 dx \\
+                           &= - \int f(x) |x| dx - \log 2 \\
+                 &\geq - \sqrt{ \int f(x) x^2 dx } - \log 2 \\
+     &= - 1 - \log 2
+  \end{align*}
+
+\end{proof}
+  
+
+\subsection{Moment Preservation of MLE}
+
+
+Let $Z_1,...,Z_n$ be samples with empirical distribution $Q_n$ and assume the following conditions hold on the $Z_i$'s. 
+
+\begin{enumerate}
+\item[A1] $| \bar{Z} - \mathbb{E}_{h_0} | \leq 1$
+\item[A2] There exists two absolute constants $\delta_c, \epsilon_c$ such that for all interval $A$ of length at most $\delta_c$, we have that $Q_n(A) \leq 1 - \epsilon_c$
+\item[A3] There is an absolute constant $c_{ent}$ such that, for some $\phi \in \Phi$ satisfying $\int e^{\phi} r^{p-1} c_p = 1$, we have
+  \[
+    \int \phi(r) + (p-1)\log r + \log c_p dQ_n \geq c_{ent}
+  \]
+\end{enumerate}
+
+
+\begin{proposition}
+\label{Prop:hhatMeanVarianceBound} 
+  Suppose conditions A1-3 hold true. Let $\hat{h}_n = e^{\hat{\phi}(r)} r^{p-1} c_p$ where $\hat{\phi}$ is defined in equation~\ref{eqn:hMLE}. Then, we have that,
+  \[
+    | \mathbb{E}_{\hat{h}_n} - \mathbb{E}_{h_0} | \leq c_\mu
+  \]
+ for some absolute constant $c_\mu$ and that
+  \[
+    \frac{1}{c_\sigma} \leq \textrm{Var}_{\hat{h}_n} \leq c_\sigma
+  \]
+  for absolute constants $c_\sigma > 1$.
+\end{proposition}
+
+\begin{proof}
+
+  By proposition~\ref{Prop:PopulationMeanBound}, we have that $\mathbb{E}_{h_0} \leq c_0 p$. Therefore, by condition A1, we also have that $\bar{Z} \leq \mathbb{E}_{h_0} + 1 \leq (c_0 + 1)p$.
+
+  Combine this bound on $\bar{Z}$ with proposition~\ref{Prop:MLEMeanPreservation} and we have that $| \mathbb{E}_{\hat{h}_n} - \bar{Z} | \leq (c_0 + 1)$.
+
+  Through condition A1 again, we have that $| \mathbb{E}_{\hat{h}_n} - \mathbb{E}_{h_0} | \leq c_0 + 2 $ as desired.
+
+
+ The variance bound is an easy consequences of Proposition~\ref{Prop:MLEVarPreservation}.
+\end{proof}
+
+
+
+\begin{proposition}
+  \label{Prop:MLEMeanPreservation}
+Let $Q_n$ be an empirical distribution with samples $Z_1, ..., Z_n$. Let
+\[
+\phi^* = \argmax_{\phi \in \Phi} \int \phi dQ_n(r) - \int_0^\infty r^{p-1} e^{\phi(r)} c_p dr.
+\]
+
+Then, $h^*(r) = r^{p-1} e^{\phi^*(r)} c_p$ is a density and we have that
+
+\[
+\bar{Z} \left(1 - \frac{1}{p+1} \right) \leq \mathbb{E}[Z_{\phi^*}] \leq \bar{Z}
+\]
+\end{proposition}
+
+\begin{proof}
+For a real number $x$, we define $x_+ = \max(x, 0)$ and $x_- = \min(x, 0)$.
+
+Let $r_0 = \sup_r \phi^*(r) = \phi^*(0)$. We know that $r_0 = Z_i$ for some $i$ because $Q_n$ is an empirical distribution. We also know that the right derivative of $\phi^*$ at $r_0$ is strictly less than zero. Therefore,
+\[
+\mathbb{E} [ (Z_{\phi^*} - r_0)_+ ] = \frac{1}{n} \sum_{i=1}^n (Z_i - r_0)_+
+\]
+
+\begin{align*}
+\mathbb{E} Z_{\phi^*} &= \mathbb{E} [ (Z_{\phi^*} - r_0)_+ ] + \mathbb{E} [ (Z_{\phi^*} - r_0)_- ] + r_0 \\
+     &= \frac{1}{n} \sum_{i=1}^n (Z_i - r_0)_+ +  \mathbb{E} [ (Z_{\phi^*} - r_0)_- ] + r_0 \\
+     &= \frac{1}{n} \sum_{i=1}^n (Z_i - r_0) - \frac{1}{n} \sum_{i=1}^n (Z_i - r_0)_- + \mathbb{E} [ (Z_{\phi^*} - r_0)_- ] + r_0 \\
+     &= \frac{1}{n} \sum_{i=1}^n Z_i + \frac{1}{n} \sum_{i=1}^n (r_0 - Z_i)_+ - \mathbb{E} [ (r_0 - Z_{\phi^*} )_+ ] \\    
+\end{align*}
+
+Now, because $\phi^*(r) = \phi^*(0)$ for all $r \leq r_0$, we have that
+\begin{align*}
+\mathbb{E} [ (r_0 - Z_{\phi^*})_+ ] &= \int_0^{r_0} (r_0 - r) r^{p-1} e^{\phi^*(0)} c_p dr \\
+   &= \frac{r_0^{p+1}}{p} e^{\phi^*(0)} c_p - \frac{r_0^{p+1}}{p+1} e^{\phi^*(0)} c_p \\
+   &= e^{\phi^*(0)} c_p r_0^{p+1} \left( \frac{1}{p} - \frac{1}{p+1} \right)
+\end{align*}
+
+Since $\int_0^{r_0} r^{p-1} e^{\phi^*(0)} c_p dr = \frac{r_0^p}{p} e^{\phi^*(0)} c_p \leq 1$, we have that
+\[
+\mathbb{E} [ (r_0 - Z_{\phi^*})_+ ] \leq \frac{r_0}{p+1} 
+\]
+
+Therefore,
+\[
+\mathbb{E} Z_{\phi^*} \geq \bar{Z} +  \frac{1}{n} \sum_{i=1}^n (r_0 - Z_i)_+ - \frac{r_0}{p+1}
+\]
+
+We will finish the proof by showing that $ \frac{r_0}{p+1} - \frac{1}{n} \sum_{i=1}^n (r_0 - Z_i)_+  \leq \frac{\bar{Z}}{p+1}$.
+
+To see this, note that $\frac{1}{n} \sum_{i=1}^n (r_0 - Z_i)_+ = r_0 - \frac{1}{n} \sum_{i=1}^n \tilde{Z}_i$ where $\tilde{Z}_i = Z_i$ if $Z_i \leq r_0$ and $\tilde{Z}_i = r_0$ if $Z_i > r_0$. It is clear that $r_0 - \frac{1}{n} \sum_{i=1}^n \tilde{Z}_i \geq 0$ and that $\frac{1}{n} \sum_{i=1}^n \tilde{Z}_i \leq \bar{Z}$.
+
+\begin{align*}
+ \frac{r_0}{p+1} - \frac{1}{n} \sum_{i=1}^n (r_0 - Z_i)_+ &= 
+        \frac{r_0 - \frac{1}{n} \sum_{i=1}^n \tilde{Z}_i}{p+1} + \frac{\frac{1}{n} \sum_{i=1}^n \tilde{Z}_i}{p+1} - (r_0 - \frac{1}{n} \sum_{i=1}^n \tilde{Z}_i) \\
+  &\leq  (r_0 - \frac{1}{n} \sum_{i=1}^n \tilde{Z}_i) ( \frac{1}{p+1} - 1) + \frac{\bar{Z}}{p+1} \\
+  &\leq \frac{\bar{Z}}{p+1}
+\end{align*}
+
+
+\end{proof}
+
+
+
+
+\begin{proposition}
+  \label{Prop:MLEVarPreservation}
+Suppose A2 and A3 hold, then there exists absolute constants $c_{\sigma}, C_{\sigma} > 0$ such that
+  \[
+    c_{\sigma}  \leq  \textrm{Var}_{\hat{h}_n}  \leq C_{\sigma} 
+  \]
+
+  Furthermore, we have that
+  \[
+    \sup_r \log \hat{h}_n(r) \leq  \max \left\{- 2 \log \left( \frac{\epsilon_c \delta_c }{10} \right),\,
+      - \frac{c_{ent}}{\epsilon_c} \right\}
+  \]
+  where $\epsilon_c, \delta_c, c_{ent}$ are defined in condition A2, A3.
+\end{proposition}
+
+\begin{proof}
+
+  Let $\hat{h}(r) = e^{\hat{\phi}(r)} r^{p-1} c_p$. We prove the proposition by proving that there exists
+  absolute constants $M_h, m_h$ such that $\hat{h}(r) \leq M_h$ for all $r \in [0, \infty]$ and that $\hat{h}(r) \geq m_h$ for some $r$. The proposition follows then from lemma~\ref{Lem:VarianceSupRelation}.
+
+  By A3 and the fact that $\hat{\phi}$ is the MLE, we have that $\int \Big( \hat{\phi}(r) + (p-1) \log r + \log c_p \Big) d Q_n \geq c_{ent}$. On the other hand, we have that
+  \begin{align*}
+    \int \Big( \hat{\phi}(r) + (p-1) \log r + \log c_p \Big) d Q_n < \int \| \hat{h} \|_\infty  d Q_n = \| \hat{h} \|_\infty
+  \end{align*}
+  Thus,  $\hat{h}(r) \geq c_{ent}$ for some $r$ and we can set $m_h = c_{ent}$.
+
+  
+  Now, let $M = \sup_r \log \hat{h}(r)$ and let $D_t = \{t \,:\, \log \hat{h}(r) \geq t \}$. 
+
+  By \cite[][Lemma~4.1]{dumbgen2011approximation}, we have that $\lambda( D_{-\frac{M}{\epsilon_c}} ) \leq 5 (1 + \frac{1}{\epsilon_c}) M e^{-M} $ where $\lambda(\cdot)$ denotes the Lebesgue measure.
+
+  Suppose now for contradiction that $M > (- 2 \log \left( \frac{\epsilon_c \delta_c }{10} \right)) \vee - \frac{c_{ent}}{\epsilon_c}$.
+
+    Then, we have that
+    \begin{align*}
+      \lambda( D_{- \frac{M}{\epsilon_c}}) &< 5(1+ \frac{1}{\epsilon_c}) e^{- M/2}
+                                             = 5(1+ \frac{1}{\epsilon_c}) \frac{\epsilon_c \delta_c}{10} \\
+                                           &\leq (1 + \epsilon_c) \frac{1}{2} \delta_c \leq \delta_c
+    \end{align*}
+      
+    Therefore, by A2, we have that $Q_n( D_{- \frac{M}{\epsilon_c}}) \leq 1 - \epsilon_c$.
+  
+  \begin{align*}
+    \int \log \hat{h}(r) d Q_n &\leq - \frac{M}{\epsilon_c}( 1 - Q_n(D_{-\frac{M}{\epsilon_c}}) ) + M Q_n(D_{-\frac{M}{\epsilon_c}}) \\
+                               &\leq - \frac{M}{\epsilon_c} + M(1+ \frac{1}{\epsilon_c}) Q_n( D_{-\frac{M}{\epsilon_c}} ) \\
+                               &\leq - \frac{M}{\epsilon_c} + M(1+ \frac{1}{\epsilon_c}) (1 - \epsilon_c) \\
+                               &\leq - \epsilon_c M < c_{ent}
+  \end{align*}
+  
+
+  
+  Therefore, we have that $M \leq (- 2 \log \left( \frac{\epsilon_c \delta_c }{10} \right)) \vee - \frac{c_{ent}}{\epsilon_c}$. We can then set
+  $M_h = \exp \Big( (- 2 \log \left( \frac{\epsilon_c \delta_c }{10} \right)) \vee - \frac{c_{ent}}{\epsilon_c} \Big)$.
+  
+  \end{proof}
+
+  The following lemma is useful; it characterizes the variance of a log-concave density in terms of the density value. 
+
+  \begin{lemma}
+    \label{Lem:VarianceSupRelation}
+    Let $h$ be a univariate log-concave density. Let $C, C'$ be two universal constants.
+    \begin{enumerate}
+    \item If $h(r) \leq M$ for all $r$, then $\sigma_h \geq \frac{C}{M}$.
+    \item If $h(r) \geq M'$ for some $r$, then $\sigma_h \leq \frac{C'}{M'}$
+    \end{enumerate}
+  \end{lemma}
+
+  \begin{proof}
+    Let $h$ be an arbitrary log-concave density in one variable. Suppose first that $h(r) \leq M$ for all $r$.
+
+    Define $f(r) = \sigma_h h( \sigma_h r)$, then $f$ is a log-concave density with unit variance. Hence,
+    \[
+      f(0) = \sigma_h h(0) \leq \sigma_h M
+    \]
+    which gives us $\sigma_h geq \frac{f(0)}{M}$.
+
+    Now suppose that $h(r) \geq M'$ for some $r'$. Then
+    \[
+      f(\frac{r'}{\sigma_h}) = \sigma_h h(r') \geq \sigma_h M'
+    \]
+    which gives us $\sigma_h \leq \frac{ \|f \|_\infty}{M'}$.
+  \end{proof}
+    
+
+
+\subsection{Proof of Rate}
+
+
+\begin{proposition}
+
+  \[
+    \mathbb{E} d_H(h_0, \hat{h}_n) \leq \frac{C}{n^{4/5}}
+  \]
+  
+\end{proposition}
+
+\begin{proof}
+
+Since both $d_H$ and the SSLC-MLE are scale-invariant, we can without loss of generality assume that $\textrm{Var}_{h_0} = 1$.
+  
+We first verify that conditions A1, A2, A3 hold with high probability.
+Condition A1 holds with probability at least $1 - \frac{1}{n}$ by Chebyshev inequality.
+
+Now we move on to the second condition. Note that because $h_0$ has unit variance, $\| h_0 \|_\infty \leq 2^8$ (\cite[][Theorem~5.14]{lovasz2007geometry}). Let $H_0$ denote the CDF and $h_0$ and let $(a, b]$ be an interval of length at most $\frac{1}{2^{10}}$,
+\begin{align*}
+  Q_n(b) - Q_n(a) &= Q_n(b) - H_0(b) + H_0(b) - H_0(a) + (H_0(a) - Q_n(a)) \\
+                  &\leq 2 \| Q_n - H_0 \|_\infty + \| h_0 \|_\infty (b - a) \\
+                  & \leq 2 \| Q_n - H_0 \|_\infty + \frac{1}{4}
+\end{align*}
+
+By DKW inequality, $\| Q_n - H_0 \| \leq \sqrt{ \frac{1}{2n} \log 2 n}$ with probability at least $1 - \frac{1}{n}$. Therefore, for any $n \geq 8$, $\| Q_n - H_0 \| \leq \frac{1}{4}$ with probability at least $1 - \frac{1}{n}$. This proves condition A2 with $\epsilon_c = \frac{1}{4}$ and $\delta_c = \frac{1}{2^{10}}$.
+
+Condition A3 holds with probability at least $1 - 2e^{-\frac{1}{16} \sqrt{n}}$ by proposition~\ref{prop:loglikelihood_bound}. It is clear that, for large enough $n$, that this probability is lower bounded by $1 - \frac{1}{n}$.
+
+Since A1-A3 hold simultaneously with probability at least $1 - \frac{3}{n}$, we have that, with at least that probability, 
+$\hat{h}_n \in \mathcal{H}(h_0, c_\mu, c_{\sigma})$ with some absolute constant $c_\mu, c_\sigma$ by proposition~\ref{Prop:hhatMeanVarianceBound}.
+
+By lemma~\ref{Lem:NonlocalBracketingEntropy}, we have that
+\[
+  \int_0^\delta
+  H^{1/2}_{[]}(\epsilon, \mathcal{H}(h_0, c_\mu, c_\sigma), d_H) d\epsilon \leq C \delta^{3/4}
+\]
+for some universal constant $C$.
+
+Define $\Psi(\delta) = C \delta^{3/4}$ and we have that $\frac{\Psi(\delta)}{\delta^2}$ is non-increasing.
+
+By \cite[][Theorem 10]{kim2016adaptation}, we then have that
+\[
+  P( d_X^2( \hat{h}_n, h_0) >  \delta^2 ) \leq
+  \exp\left( - \frac{n \delta^2}{C^2} \right)
+\]
+for all $\delta \geq \delta_* \equiv C' n^{-2/5}$ for some universal constant $C'$.
+
+Therefore,
+\begin{align*}
+  \mathbb{E} d_H^2(\hat{h}_n, h_0) \leq & \mathbb{E} d_X^2( \hat{h}_n, h_0) \\
+                           \leq & \int_0^{16 \log n}  P\Big( d_X^2(\hat{h}_n, h_0) \geq t \cap
+                             \hat{h}_n \in \mathcal{H}(h_0, c_\mu, c_\sigma) \Big) dt + \\
+                             & 16 \log n P( \hat{h}_n \notin \mathcal{H}(h_0, c_\mu, c_\sigma)) +
+                             \int_{16 \log n}^\infty P\Big( d_X^2(\hat{h}_n, h_0) \geq t \Big) dt
+                             \\
+                           \leq & 
+                             \delta_*^2 +
+                             \int_{\delta^2_*}^{16 \log n}  \exp\left( - \frac{n t^2}{C^2} \right) dt + \frac{24 \log n}{n} +
+                             \int_{16 \log n}^\infty P\Big( \max_{i=1,...,n} \log \frac{\hat{h}_n(X_i)}{h_0(X_i)}  \geq t \Big) dt
+\end{align*}
+
+By lemma~\ref{Lem:ExtremeEventControl} and \ref{Lem:ExtremeEventControl2}, we have that
+
+\begin{align*}
+  \int_{16 \log n}^\infty P\Big( \max_{i=1,...,n} \log \frac{\hat{h}_n(X_i)}{h_0(X_i)}  \geq t \Big) dt
+  &= \int_{16}^\infty  P\Big( \max_{i=1,...,n} \log \frac{\hat{h}_n(X_i)}{h_0(X_i)}  \geq s\log n \Big) ds \\
+  &\leq \int_{16}^\infty C n^{-s} + 2n^{-s \sqrt{n}/48} + n^{- \frac{s}{4} n + n} ds \\
+  &\leq \frac{C}{n}
+\end{align*}
+
+Therefore, we have that $\mathbb{E} d_H^2(\hat{h}_n, h_0) \leq \frac{C}{n^{4/5}}$. This concludes the proof.
+\end{proof}
+
+
+\begin{align}
+  \mathcal{H}(h_0, c_\mu, c_{\sigma}) = \left\{ h,\, \,:\, \int h(r) dr = 1,\, h \textrm{ log-concave},\,
+  |\mathbb{E}_h - \mathbb{E}_{h_0}| \leq c_\mu,\, \frac{1}{c_\sigma} \leq \textrm{Var}_{h} \leq c_\sigma \right\}
+  \label{eqn:moment_bounded_class}
+\end{align}
+
+\begin{lemma}
+  \[
+    \sup_{h \in \mathcal{H}(h_0, c_\mu, c_\sigma)} h(r) \leq \left\{
+      \begin{array}{cc}
+        C_0 c_\sigma  & \textrm{ if $r \in [\mu_0 - c_\mu, \mu_0 + c_\mu]$} \\
+        C_0 c_\sigma \exp( - \frac{a_0}{c_{\sigma}} |r - (\mu_0 - c_\mu)|)  & \textrm{ if $r < \mu_0 - c_\mu$} \\
+        C_0 c_\sigma \exp( - \frac{a_0}{c_{\sigma}} |r - (\mu_0 + c_\mu)|)  & \textrm{ if $r > \mu_0 - c_\mu$}
+      \end{array} \right.
+  \]
+  where $C_0, a_0$ are absolute constants.
+\end{lemma}
+
+\begin{proof}
+
+Let $\mathcal{H}_{\mu, \sigma}$ be the set of univariate log-concave densities with mean $\mu$ and variance $\sigma^2$.
+By \citet[Theorem 2]{kim2016global}, there exists $a_0, C_0$
+such that $\sup_{h \in \mathcal{H}_{\mu, \sigma}} h(x) \leq \frac{C_0}{\sigma} \exp\left( - a_0 \left| \frac{x - \mu}{\sigma} \right| \right)$. 
+
+Therefore,
+\begin{align*}
+  \sup_{h \in \mathcal{H}(h_0, c_\mu, c_\sigma)} h(r) &\leq
+  \sup_{\mu \in [\mu_0 - c_\mu,\, \mu_0 + c_\mu]}
+                                                        \sup_{\sigma \in [\frac{1}{c_\sigma},\, c_\sigma]} \sup_{h \in \mathcal{H}_{\mu, \sigma} } h(r) \\
+    &\leq  \sup_{\mu \in [\mu_0 - c_\mu,\, \mu_0 + c_\mu]}
+      \sup_{\sigma \in [\frac{1}{c_\sigma},\, c_\sigma]}
+      \frac{C_0}{\sigma} \exp\left(
+             - a_0 \left| \frac{x - \mu}{\sigma} \right| \right)
+\end{align*}
+
+The result follows readily. 
+\end{proof}
+
+We can derive the bracketing entropy from the envelope bound.
+\begin{lemma}
+  \label{Lem:NonlocalBracketingEntropy}
+
+  \[
+    H_{[]}( \epsilon, \mathcal{H}(h_0, c_\mu, c_{\sigma}), d_H) \leq \frac{C}{\epsilon^{1/2}}
+  \]
+
+  where $C$ depends only on $c_\mu, c_\sigma$.
+\end{lemma}
+
+\begin{proof}
+Let $\epsilon > 0$ be fixed. Suppose $\epsilon \leq C_0 c_\sigma$.
+  
+  We construct the bracketing by dividing the region $\mathbb{R}^+$ into segments.
+
+  Let $J = \lfloor \mu_0 - c_\mu \rfloor$.
+  \begin{align*}
+    S_0 &= [\mu_0 - c_\mu,\, \mu_0 + c_\mu] \\
+    S^L_j &= [(\mu_0 - c_\mu) - j, (\mu_0 - c_\mu) - (j - 1)] \\
+    S^R_j &= [(\mu_0 + c_\mu) + (j-1), (\mu_0 + c_\mu) + j] 
+  \end{align*}
+
+  where $S^R_j$ is defined for $j=1,...,\infty$ and $S^L_j$ is defined for $j=1,...,J+1$ where $S^L_{J+1} = [0, (\mu_0 - c_\mu) - J]$.
+
+  Let $\mathcal{F}([a,b], -\infty, B)$ be the set of log-concave functions $f$ such that $f$ is supported on $[a,b]$ and that $ \log f(x) \leq B$. On $S^R_j \cup S^L_j$, $h(r) \leq e^{B_j} \equiv C_0 c_\sigma e^{- \frac{a_0}{c_\sigma} (j-1)}$ for any $h \in \mathcal{H}(h_0, c_\mu, c_{\sigma})$. Therefore, any $h \in \mathcal{H}(h_0, c_\mu, c_\sigma)$, when restricted to $S^R_j$, lies in $\mathcal{F}(S^R_j, -\infty, B_j)$; likewise for $S^L_j$. 
+
+  Then, we have that, for any $\epsilon_0, ..., \epsilon_j, ...$ that satisfy $\epsilon_0^2 + \sum_{j=0}^\infty 2 \epsilon_j^2 = \epsilon^2$,
+  \begin{align*}
+    H_{[]}(\epsilon, \mathcal{H}(h_0, c_\mu, c_\sigma), d_H) \leq &
+    H_{[]}(\epsilon_0, \mathcal{F}(S_0, -\infty, B_0), d_H, S_0) + \\ 
+    & \sum_{j=1}^\infty H_{[]}(\epsilon_j, \mathcal{F}(S^R_j, -\infty, B_j), d_H, S^R_j) + \\
+    & \sum_{j=1}^{J+1} H_{[]}(\epsilon_j, \mathcal{F}(S^L_j, -\infty, B_j), d_H, S^L_j)
+  \end{align*}
+
+  Define $\epsilon_j^2 = c' \exp\left( - \frac{a_0}{c_\sigma} \frac{1}{2} (j-1) \right) \epsilon^2$ and $\epsilon_0^2 = c' \epsilon^2$ where $c'$ ensures that $c' + 2c' \sum_{j=1}^\infty \exp\left( - \frac{a_0}{c_\sigma} \frac{1}{2} (j-1) \right)$ sums to 1.  
+  
+  By Corollary~\ref{Cor:SegmentBracket}, for $j=1,...,\infty$,
+  \begin{align*}
+    H_{[]}(\epsilon_j, \mathcal{F}(S^R_j, -\infty, B_j), d_H, S^R_j) &\leq
+                                                                       C (2 C_0 c_\sigma)^{1/4} e^{ - \frac{a_0}{c_\sigma 4} (j-1)} \frac{1}{\epsilon_j^{1/2}} \\
+     &\leq  C (2 (1/c') C_0 c_\sigma)^{1/4} e^{ - \frac{a_0}{c_\sigma 8} (j-1)} \frac{1}{\epsilon^{1/2}}
+  \end{align*}
+  And likewise for $S^L_j$.
+
+  \begin{align*}
+    H_{[]}(\epsilon_j, \mathcal{F}(S_0, -\infty, B_0), d_H, S_0) &\leq
+                                                                   C (2 C_0 c_\sigma)^{1/4}  \frac{1}{\epsilon_0^{1/2}} \\
+     &\leq      C (2 (1/c') C_0 c_\sigma)^{1/4}  \frac{1}{\epsilon^{1/2}}
+  \end{align*}
+
+  The result directly follows. 
+\end{proof}
+
+
+The following lemma controls the probability that $\sup_r \log \hat{h}_n(r) \geq t \log n$ for $t \geq 8$, where $h_0$ has unit variance and $\hat{h}_n$ is the MLE. 
+
+\begin{lemma}
+  \label{Lem:ExtremeEventControl}
+  Let $Z_1, ..., Z_n$ be samples from $h_0 \in \mathcal{H}$ (\ref{eqn:H_class}). Suppose that $h_0$ has unit variance and suppose $n \geq n_0$ for some absolute constant $n_0$ and let $t \geq 8$.
+  
+  Then, with probability at least
+   $1 - 2n^{-t \sqrt{n}/48} - n^{- \frac{t}{4} n + n}$,
+  we have that condition A2, A3 holds with $\epsilon_c = 1/2$, $\delta_c = 20 n^{-t/2}$ and $c_{ent} \geq - \frac{1}{2} t \log n$.
+
+  Furthermore,
+  \[
+    \sup_r \log \hat{h}_n(r) \leq t\log n
+  \]
+  
+\end{lemma}
+
+\begin{proof}
+
+  Let $Q_n$ be the empirical distribution of the samples $Z_1,...,Z_n$.
+  
+  Let $E_{A2}^c$ be the event that there exists an interval $A$ of length at most $20 n^{-t/2}$ such that $Q_n(A) > 1/2$. $E_{A2}$ is then the event that condition A2 holds with $\delta_c = n^{-t/2}$ and $\epsilon_c = 1/2$.
+
+  $E_{A2}^c$ occurs only if at least $n/2 + 1$ sample points fall inside an interval of length $n^{-t/2}$.
+
+  This occurs with probability at most
+
+  \begin{align*}
+    (20 C n^{-t/2} )^{n/2 } {n \choose n/2} & \stackrel{(a)} \leq
+     n^{- \frac{t}{2} (n/2) + n} \\
+    &\leq n^{- \frac{t}{4} n + n}
+  \end{align*}
+  where $C = \sup \{ \| h\|_\infty \,:\, h \textrm{ log-concave density, unit variance} \}$ is an absolute constant. (a) follows by assuming that $n \geq 20 C$.
+
+
+  Let $E_{A3}^c$ be event that
+  $\int \log h_0 dQ_n \leq -(t/2) \log n$.
+
+  \begin{align*}
+    &\int \log h_0 dQ_n \leq -(t/2) \log n \\
+    (\Rightarrow)\,
+  & \int h_0(r) \log h_0(r) dr - \int \log h_0 dQ_n 
+    \geq  \int h_0(r) \log h_0(r) dr + (t/2) \log n \\
+   ( \stackrel{(a)} \Rightarrow)\,
+    & \left| \int h_0(r) \log h_0(r) dr - \int \log h_0 dQ_n
+      \right|
+      \geq (t/2) \log n - (1 + \log 2)
+      \stackrel{(b)} (t/3) \log n
+  \end{align*}
+
+  where (a) follows from lemma~\ref{lem:intrinsic_entropy_bound} and (b) follows from the assumption that $n > 2$.
+  
+  By \cite[][Theorem~1.1]{bobkov2011concentration}, we have that, with probability at least $1 - 2e^{-1/16 s \sqrt{n}}$,
+  \[
+    \left| \int h_0(r) \log h_0(r) dr - \frac{1}{n} \sum_{i=1}^n \log h_0(Z_i) \right| \leq s
+  \]
+
+  By letting  $s = (t/3) \log n$, we have that $E_{A3}$ holds with probability at least $1 -  2e^{-1/48 t \sqrt{n}\log n} = 1 - 2 n^{-t \sqrt{n} / 48}$.
+    
+  By union bound, we then have that $E_{A2}$ and $E_{A3}$ occur simultaneously with probability at least
+  \[
+    1 - 2n^{-t \sqrt{n}/48} - n^{- \frac{t}{4} n + n}
+  \]
+
+  
+  By proposition~\ref{Prop:MLEVarPreservation}, we have that
+  \begin{align*}
+    \sup_r \log \hat{h}_n(r) &\leq
+                               \max \left\{ - 2 \log \left( \frac{\epsilon_c \delta_c}{10}\right),\, - \frac{c_{ent}}{\epsilon_c} \right\} \\
+                             &\leq  \max \left\{ - 2 \log \left( \frac{\delta_c}{20} \right),\, - 2 c_{ent} \right\} \\
+                             &\leq t \log n
+  \end{align*}
+\end{proof}
+
+The next lemma is from \cite{kim2016adaptation} and it controls the probability that $\min_i \log h_0(Z_i) \leq -t \log n$ for $t > 8$. It is a counterpart to lemma~\ref{Lem:ExtremeEventControl}.
+
+\begin{lemma} 
+  \label{Lem:ExtremeEventControl2}
+  Let $h_0$ be a log-concave density with unit variance and suppose $Z_1,...,Z_n \sim h_0$. Then, for any $t \geq 4$, with probability at least $1 - \frac{C}{n^t}$,
+
+  \[
+    \sup_{r \in [Z_{(1)}, Z_{(n)}]} \log h_0(r) \geq t \log n
+  \]
+  
+\end{lemma}
+
+\begin{proof}
+
+  Proof in \cite{kim2016adaptation}. [TODO:give more detail].
+  
+\end{proof}
+
+
+\subsection{Bracketing Entropy}
 
 We start with a proposition from \citet{kim2016adaptation}. Let $\mathcal{F}([a,b], -\infty, B)$ be the set of log-concave functions $f$ such that $f$ is supported on $[a,b]$ and that $ \log f(x) \leq B$. 
 
@@ -672,6 +1402,7 @@ H_{[]}( \epsilon, \mathcal{F}([a,b],-\infty, B), d_H, [a,b]) \leq C( 1 + B^{1/2}
 We can slightly improve the result through a scaling argument.
 
 \begin{corollary}
+  \label{Cor:SegmentBracket}
 There exists a universal constant $C > 0$ such that 
 \[
 H_{[]}( \epsilon, \mathcal{F}([a,b],-\infty, B), d_H, [a,b]) \leq C \frac{ e^{B/4} (b-a)^{1/4}}{\epsilon^{1/2}} 
@@ -698,7 +1429,636 @@ Since this holds true for all $\sigma  > 0$, the corollary follows.
 
 \end{proof}
 
+\newpage
+\section{Adaptation}
 
+\subsection{Adaptive Rate of Convergence}
+
+
+\begin{proposition}
+  Let $S$ be some subset of $\mathbb{R}^+$. 
+  Suppose that $Z_1,...,Z_n \sim h_0$ for some $h_0 = e^{\phi_0(r)} r^{p-1}$ where $\phi_0$ is concave and decreasing on $S$.
+
+  Let $\hat{h}_n$ be the SSLC-MLE estimated from $Z_1,...,Z_n$.
+
+  [TODO:finish]
+  
+\end{proposition}
+  
+
+\subsection{Local Bracketing}
+ 
+
+Define
+\[
+  \mathcal{H}^1 = \left\{ h \,:\, h(r) = e^{\phi(r)} r^{p-1},\, \int h(r) dr = 1,\, \phi \textrm{ affine} \right\}
+\]
+
+Define also the following class of spherically symmetric log-concave densities. 
+\begin{align}
+  \mathcal{H}(h_0, \delta, c_\mu, c_\sigma)& \\
+  =& \left\{ h \,:\, h(r) = e^{\phi(r)} r^{p-1},\, \int \left( \sqrt{h_0} - \sqrt{h} \right)^2 dr \leq \delta^2,\, \right.\\
+  & \left. \frac{1}{c_\sigma} \leq \frac{\sigma_h}{\sigma_0} \leq c_\sigma,\,
+  |\mu_h - \mu_0 | \leq c_\mu \right\}
+\end{align}
+  
+
+\begin{proposition}
+  Let $h_0 = e^{\phi_0(r)} r^{p-1}$ where $\phi_0$ is concave and decreasing and where the support of $h_0$ is any subset of $\mathbb{R}^+$. Let $c_\mu, c_\sigma$ be absolute constants. Let $\nu = \inf \{ d_H(h_0, h_1) \,:\, h_1 \in \mathcal{H}^1 \}$. Then, there exists an absolute constant $\kappa$ such that, for all $\delta + \nu < \kappa$, 
+
+  we have that,
+
+  \[
+    H_{[]}(\epsilon, \mathcal{H}(h_0, \delta, c_\mu, c_\sigma), d_H) \leq
+    C \left( \frac{\delta + \nu}{\epsilon} \right)^{1/2} \log^2 \frac{1}{\delta}
+  \]
+  
+\end{proposition}
+
+\begin{proof}
+
+  Suppose $h \in  \mathcal{H}(h_0, \delta, c_\mu, c_\sigma)$.
+  By triangle inequality, $d_H(h_1, h) \leq d_H(h_0, h) + d_H(h_0, h_1) \leq \delta + \nu$.
+
+  Furthermore, by lemma~\ref{Lem:HellingerMomentBound}, we have that there exists constants $c'_\mu, c'_\sigma$ such that
+  $\frac{1}{c'_\sigma} \leq \frac{\sigma_{h_1}}{\sigma_{h_0}} \leq c'_\sigma$ and $| \mu_{h_1} - \mu_{h_0}| \leq c'_\mu$. 
+
+  Therefore, $\frac{1}{c_\sigma c'_\sigma} \leq \frac{\sigma_h}{\sigma_{h_1}} \leq c_\sigma c'_\sigma$ and $|\mu_h - \mu_{h_1}| \leq c'_\mu + c_\mu$. 
+
+  We have then shown that
+  \[
+    \mathcal{H}(h_0, \delta, c_\mu, c_\sigma) \subset \mathcal{H}(h_1, \delta + \nu, c_\mu + c'_\mu, c_\sigma c'_\sigma)
+  \]
+
+  Since $h_1(r) = r^{p-1} e^{\phi_1(r)}$ where $\phi_1$ is affine, $ \log h - \log h_1$ is concave for any $h \in  \mathcal{H}(h_1, \delta + \nu, c_\mu + c'_\mu, c_\sigma c'_\sigma)$.
+
+  Therefore,
+  \[
+    \mathcal{H}(h_1, \delta + \nu, c_\mu + c'_\mu, c_\sigma c'_\sigma) \subset \mathcal{F}(h_1, \delta + \nu, c_\mu + c'_\mu, c_\sigma c'_\sigma)
+  \]
+  where the RHS is defined in equation~\ref{eqn:local_density_ball_moment}. The result then follow from corollary~\ref{Cor:GeneralLocalBracketingMoment}.
+  
+\end{proof}
+
+\begin{lemma}
+  \label{Lem:HellingerMomentBound}
+  Let $p, q$ be two log-concave densities. There are absolute constants $C, c'_\mu, c'_\sigma$ such that for all $\delta < C$, if $\int (\sqrt{p} - \sqrt{q})^2 dr \leq \delta^2$, then we have that
+
+  \[
+    \frac{1}{c'_\sigma} \leq \frac{\sigma_p}{\sigma_q} \leq c'_\sigma
+    \qquad
+    |\mu_p - \mu_q| \leq c'_\mu
+  \]
+  
+\end{lemma}
+
+\begin{proof}
+
+  [TODO:finish]
+
+\end{proof}
+
+
+\subsection{A General Result on Local Brackets}
+
+
+We prove a general result on the local bracketing entropy of log-concave densities.
+
+Let $h_0(r) = e^{\phi_0(r)}$ be a log-concave density with zero mean and unit variance. We make no assumption on the support of $h_0$. We define
+\begin{align}
+  \tilde{\mathcal{F}}(h_0, \delta, c_1, a_1) = \left\{ e^{\phi} \,:\, \phi - \phi_0 \textrm{ concave},
+    \int e^{\phi_0(r)} \left( e^{\frac{\phi(r) - \phi_0(r)}{2}} - 1 \right)^2 dr \leq \delta^2,\,
+      e^{\phi(r)} \vee e^{\phi_0(r)} \leq c_1 e^{-a_1|r|}  \right\} \label{eqn:local_density_ball_envelope}
+\end{align}
+$\tilde{\mathcal{F}}(h_0, \delta, c_1, a_1)$ is the class of densities $\delta$-close to $h_0$ in the Hellinger sense and also bounded by an envelope of the form $c_1 e^{-a_1|r|}$.
+
+\begin{proposition}
+  \label{Prop:GeneralLocalBracketing}
+  Suppose that $\delta^2 \leq 2^{-18}$. Let $c_1 > 0, a_1 > 0$ be absolute constants. The bracketing entropy of $\tilde{\mathcal{F}}(h_0, \delta, c_1, a_1)$ can be bounded as
+  \[
+    H_{[]}(\epsilon, \tilde{\mathcal{F}}(h_0, \delta, c_1, a_1), d_H) \lesssim \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^{2} \frac{1}{\delta}
+  \]
+  
+\end{proposition}
+When it is clear that $c_1, a_1$ are absolute constants, we write $\tilde{\mathcal{F}}(h_0, \delta)$ in place of $\tilde{\mathcal{F}}(h_0, \delta, c_1, a_1)$.
+
+We can get an immediate corollary from this proposition. Let $h_0 = e^{\phi_0}$ be an arbitrary log-concave density.
+
+Let us define the moment constrained function class
+\begin{align}
+  &\mathcal{F}(h_0, \delta, c_\mu, c_\sigma) \\
+  &= \left\{ e^\phi \,:\, \phi - \phi_0 \textrm{ concave},
+    \int \left( \sqrt{h_0} - \sqrt{h} \right)^2 dr \leq \delta^2,\,
+  \frac{1}{c_\sigma} \leq \frac{\sigma_h}{\sigma_0} \leq c_\sigma,
+  |\mu_h - \mu_0 | \leq c_\mu \right\} \label{eqn:local_density_ball_moment}
+\end{align}
+where $\mu_0, \sigma_0$ denote the mean and standard deviation of $h_0$ respectively.
+
+\begin{corollary}
+  \label{Cor:GeneralLocalBracketingMoment}
+  Let $\delta^2 \leq 2^{-18}$ and let $c_\mu, c_\sigma$ be absolute constants. We have then that
+  \[
+    H_{[]}(\epsilon, \mathcal{F}(h_0, \delta, c_\mu, c_\sigma), d_H) \lesssim
+     \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^2 \frac{1}{\delta}
+  \]
+  
+\end{corollary}
+
+\begin{proof}
+
+  Since $d_H$ is location and scale invariant, we can without loss of generality assume that $\mu_0 = 0$ and $\sigma_0 = 1$.
+
+  If $h \in \mathcal{F}(h_0, \delta, c_\mu, c_\sigma)$, then $|\mu_h| \leq c_\mu$ and $\frac{1}{c_{\sigma}} \leq \sigma_h \leq c_\sigma$. There exists $c_1, a_1$, dependent only on $c_\mu, c_\sigma$, such that, for all $r \in \mathbb{R}$,
+  \[
+    \sup \left\{ h(r) \,:\, h \in \mathcal{H},\, |\mu_h| \leq c_\mu, \frac{1}{c_{\sigma}} \leq \sigma_h \leq c_\sigma \right\}
+    \leq c_1 e^{ - a_1 |r|}
+  \]
+  
+  Since $c_\mu, c_\sigma$ are taken to be absolute constants, $\mathcal{F}(h_0, \delta, c_\mu, c_\sigma) \subset \tilde{\mathcal{F}}(h_0, \delta, c_1, a_1)$ for some absolute constant $c_1, a_1$. An application of proposition~\ref{Prop:GeneralLocalBracketing} immediately yields the corollary.
+\end{proof}
+
+
+Now we turn to the proof of the main proposition. 
+
+\begin{proof} (of proposition~\ref{Prop:GeneralLocalBracketing})\\
+
+  In this proof, we let $C$ be a generic absolute constant whose value may vary from instance to instance.
+  
+  Define $a_L = \inf \{ r \,:\, e^{\phi_0(r)} \geq \delta^2\}$ and $a_R = \sup \{ r \,:\, e^{\phi_0(r)} \geq \delta^2\}$. 
+
+  First, we will bracket the region $[\infty, a_L] \cup [a_R, \infty]$. Recall that we have the envelope $e^{\phi_0(r)} \leq c_1 e^{- a_1 |r|}$.
+  
+  For $k = 1,...,\infty$, define $S_k = [a_L+k, a_L+(k-1)]$ and $S'_K = [a_R + (k-1), a_R]$. Define the set $\mathcal{K} = \{k \,:\, c_1 e^{-a_1(k - a_L)} \wedge c_1 e^{-a_1(k + a_R)} \geq \delta^4 \}$.
+  
+  Define $\epsilon^2_k = \frac{\epsilon^2 }{8 |\mathcal{K}|}$ if $k \in \mathcal{K}$. Note that $\sum_{k \in \mathcal{K}} 2 \epsilon^2_k = \frac{\epsilon^2}{4}$. It is clear that $|\mathcal{K}| \leq C \log \frac{1}{\delta}$. 
+
+  Otherwise, define $\epsilon^2_k = C \epsilon^2 (e^{-a_1(k - a_L)/8} \wedge e^{-a_1(k+a_R)/8})$ where $C$ is a constant chosen such that $\sum_{k=1}^\infty 2\epsilon^2_k = \frac{\epsilon^2}{2}$.
+  
+  
+  From proposition~\label{prop:segment_bracket1}, we have that, for $k \in \mathcal{K}$:
+  \begin{align*}
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S_k)
+    &\leq C \frac{\delta^{1/2}}{\epsilon_k^{1/2}} 
+      \leq C  \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^{1/4} \frac{1}{\delta} \\
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S'_k)
+    &\leq C \frac{\delta^{1/2}}{\epsilon_k^{1/2}} 
+    \leq C \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^{1/4} \frac{1}{\delta}
+  \end{align*}
+
+  For $k \notin \mathcal{K}$:
+  \begin{align*}
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S_k)
+    &\leq C \frac{c_1 e^{-a_1(k - a_L)/4}}{\epsilon_k^{1/2}}
+      \leq C \frac{c_1 e^{-a_1(k - a_L)/8}}{\epsilon^{1/2}}\\
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S'_k)
+    &\leq C \frac{c_1 e^{-a_1(k + a_R)/4}}{\epsilon_k^{1/2}}
+      \leq C \frac{c_1 e^{-a_1(k + a_R)/8}}{\epsilon^{1/2}}
+  \end{align*}
+  
+  
+  and therefore,
+  \begin{align}
+    H_{[]}(\frac{\epsilon}{\sqrt{2}}, \tilde{\mathcal{F}}(f_0, \delta), d_H, [-\infty, a_L] \cup [a_R, \infty] )
+    &\leq  \sum_{k=1}^\infty
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S_k) +
+    H_{[]}(\epsilon_k, \tilde{\mathcal{F}}(f_0, \delta), d_H, S'_k) \\
+    & \leq C \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^{5/4} \frac{1}{\delta}
+  \end{align}
+    
+  Next, we bracket the region $[a_L, a_R]$. Recall from lemma~\ref{lem:log_concave_central_mass} that $a_L \leq -1/9$ and $a_R \geq 1/9$. 
+
+  We divide the region into segments $[a_L, s_1], [s_1, s_2], ..., [s'_2, s'_1], [s'_1, a_R]$ according to the following algorithm:
+  \begin{enumerate}
+  \item Select $s_1$ as the smallest real number such that $(s_1 - a_L) \cdot \sup_{t \in [a_L, s_1]} e^{\phi_0(t)}  \geq C \delta^2 \log \frac{1}{\delta}$ where $C$ is some constant specified later.
+  \item For $j > 1$. Choose $s_j$ as the smallest real number such that either
+    \subitem[a] $\int_{s_{j-1}}^{s_j} e^{\phi_0(t)} dt = 2\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)}dt$ or
+    \subitem[b] $s_j \in [-1/16, 0]$.\\
+    If $s_j \in [-1/16, 0]$, then stop.
+  \end{enumerate}
+
+  On the right side, we do the same:
+    \begin{enumerate}
+  \item Select $s'_1$ as the largest real number such that $(a_R - s'_1) \cdot \sup_{t \in [s'_1, a_R]} e^{\phi_0(t)} \geq C \delta^2 \log \frac{1}{\delta}$ where $C$ is some constant specified later.
+  \item For $j > 1$. Choose $s'_j$ as the largest real number such that either
+    \subitem[a] $\int_{s'_{j-1}}^{s'_j} e^{\phi_0(t)} dt = 2\int_{-\infty}^{s'_{j-1}} e^{\phi_0(t)}dt$ or
+    \subitem[b] $s'_j \in [0, 1/16]$.\\
+    If $s'_j \in [0, 1/16]$, then stop.
+  \end{enumerate}
+
+  We first focus on the left side segmentation. We make the following five claims:
+  \begin{enumerate}
+  \item[(1)]  $s_1 < -1/16$.
+  \item[(2)] $\int_{-\infty}^{s_1} e^{\phi_0(t)}dt \geq \delta^2$
+  \item[(3)] For each $j > 1$, $\int_{s_j}^{\infty} e^{\phi_0(t)} dt > 2^{-10}$.
+  \item[(4)] For each $j > 1$ where $s_j < -1/16$, $(s_j - s_{j-1}) \cdot \sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)} \leq C \log \frac{1}{\delta} \cdot \int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt$.
+  \item[(5)] If $s_j \in [-1/16, 0]$, $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt \geq 2^{-14}$. 
+  \end{enumerate}
+  
+  We also claim that analogous statements hold for the right side segmentation.
+  \begin{enumerate}
+  \item[(1)]  $s'_1 > 1/16$.
+  \item[(2)] $\int_{s'_1}^{\infty} e^{\phi_0(t)}dt \geq \delta^2$.
+  \item[(3)] For each $j > 1$, $\int_{-\infty}^{s'_j} e^{\phi_0(t)} dt > 2^{-10}$.
+  \item[(4)] For each $j > 1$ where $s'_j > 1/16$, $(s'_{j-1} - s'_j) \cdot \sup_{t \in [s'_{j-1}, s'_j]} e^{\phi_0(t)} \leq C \log \frac{1}{\delta} \cdot \int_{s'_{j-1}}^{\infty} e^{\phi_0(t)} dt$.
+  \item[(5)] If $s'_j \in [0, 1/16]$, $\int_{s'_{j-1}}^{\infty} e^{\phi_0(t)} dt \geq 2^{-14}$. 
+  \end{enumerate}
+
+  Before proving these claims, let us see how these claims yield a bracketing on $[a_L, a_R]$.
+
+  Claim (1) and (2) and the fact that $\int_{-\infty}^{s_j} e^{\phi_0(t)}dt$ triples with every iteration show that the algorithm will terminate in at most $C \log \frac{1}{\delta}$ iterations, generating $C \log \frac{1}{\delta}$ segments.
+
+  Define $\tilde{\epsilon}$ such that $\tilde{\epsilon}^2 = \frac{\epsilon^2}{4 L}$ where $L$ is the total number of segments generated by the algorithm. $L \leq C \log \frac{1}{\delta}$ as previously discussed.
+
+  On $[a_L, s_1]$, it is clear that
+  \begin{align*}
+    H_{[]}(\tilde{\epsilon}, \tilde{\mathcal{F}}(f_0, \delta), d_H, [a_L, s_1])
+    &\leq C (s_1 - a_L)^{1/4}
+      \left( \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [a_L, s_1]} e^{\phi(t)} \right)^{1/4}
+      \frac{1}{\tilde{\epsilon}^{1/2}} \\
+    &\leq C (s_1 - a_L)^{1/4}
+      \left(\sup_{t \in [a_L, s_1]} e^{\phi_0(t)} \right)^{1/4} 
+      \left( \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [a_L, s_1]} e^{\phi(t) - \phi_0(t)} \right)^{1/4} 
+      \frac{1}{\tilde{\epsilon}^{1/2}} \\
+    &\leq C \frac{\delta^{1/2}}{\tilde{\epsilon}^{1/2}}  \log^{1/4} \frac{1}{\delta} \cdot \left( \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [a_L, s_1]} e^{\phi(t) - \phi_0(t)} \right)^{1/4}  \\
+    &\stackrel{(a)} \leq C  \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^{1/2} \frac{1}{\delta}
+  \end{align*}
+  where $(a)$ follows because $ \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [a_L, s_1]} e^{\phi(t) - \phi_0(t)} \leq e^{C \delta^2 \log \frac{1}{\delta}} \leq C$ by lemma~\ref{lem:envelope_upper_bound} and also because $\tilde{\epsilon}^2 \geq \frac{\epsilon^2 }{C \log \frac{1}{\delta}}$.
+
+  Suppose now that $j > 1$.
+  On $[s_{j-1}, s_j]$, we have that, by proposition~\ref{prop:segment_bracket2} and lemma~\ref{lem:envelope_upper_bound} and lemma~\ref{lem:envelope_lower_bound} (note that lemma~\ref{lem:envelope_lower_bound} applies because $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt \geq \delta^2$ by claim (2) and $\int_{s_j}^\infty e^{\phi_0(t)} dt \geq 2^{-10} \geq \delta^2$ by claim (3))
+  \begin{align*}
+    H_{[]}(\tilde{\epsilon}, \tilde{\mathcal{F}}(f_0, \delta), d_H, [s_{j-1}, s_j]) \leq &
+                                                                              C \delta^{1/2} \left( \log \frac{1}{\delta}
+                                                                              + \frac{1}{\sqrt{\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt } \wedge 
+                                                                                   \sqrt{\int_{s_j}^{\infty} e^{\phi_0(t)} dt } }\right)^{1/2} \cdot \\
+                                                                                 & (s_j - s_{j-1})^{1/4} \left( \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [a_L, s_1]} e^{\phi(t)} \right)^{1/4} \frac{1}{\tilde{\epsilon}^{1/2}} \\
+    \leq & C \delta^{1/2} \left( \log \frac{1}{\delta}
+                                                                              + \frac{1}{\sqrt{\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt } \wedge 
+                                                                                   \sqrt{\int_{s_j}^{\infty} e^{\phi_0(t)} dt } }\right)^{1/2} \cdot \\
+                                                                                 & (s_j - s_{j-1})^{1/4}  \left(\sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)} \right)^{1/4} 
+      \left( \sup_{\phi \in \tilde{\mathcal{F}}(f_0, \delta) }\sup_{t \in [s_{j-1}, s_j]} e^{\phi(t) - \phi_0(t)} \right)^{1/4} 
+                                                                                   \frac{1}{\tilde{\epsilon}^{1/2}}     \\
+    \stackrel{(a)} \leq & C \delta^{1/2} \log^{3/4} \frac{1}{\delta} \cdot \frac{1}{\tilde{\epsilon}^{1/2}} \\
+    \leq & C \frac{\delta^{1/2}}{\epsilon^{1/2}} \log \frac{1}{\delta} 
+  \end{align*}
+
+  $(a)$ is difficult to deduce and requires further explanation. Let us first suppose that $\log \frac{1}{\delta} \geq \frac{1}{\sqrt{\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)}dt} \wedge \sqrt{\int_{s_j}^\infty e^{\phi_0(t)}dt }}$. Then, $(a)$ follows from the fact that $|s_j - s_{j-1}| \leq C \log \frac{1}{\delta}$ and $e^{\phi_0(t)} \leq c_1$ for all $t$.
+
+  Now let us suppose that $\log \frac{1}{\delta}$ is smaller. By claim (3), $\int_{s_j}^\infty e^{\phi_0(t)} dt > 2^{-10}$. If $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)}dt$ is larger, then the $(a)$ again follows. So, let us suppose that $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt$ is smaller than $2^{-10}$.
+
+  If $j$ is the last iteration, then $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt \geq 2^{-14}$ by claim (5) and $(a)$ follows from the bound on $(s_j - s_{j-1})  \sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)}$ again. 
+
+  
+  If $j$ is not the last iteration, then $\frac{(s_j - s_{j-1}) \sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)} }{\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)}dt } \leq C \log \frac{1}{2}$ by claim (4) and then $(a)$ again follows.
+
+  Therefore, $(a)$ follows in all cases. Thus, we have a bracketing for $[a_L, s_J]$ where $J$ is the terminating iteration for the algorithm on the left side.
+
+  \begin{align*}
+    H_{[]}(\epsilon, \tilde{\mathcal{F}}(f_0, \delta), d_H, [a_L, s_J]) &\leq
+    \sum_{j=1}^J H_{[]}(\tilde{\epsilon}, \tilde{\mathcal{F}}(f_0, \delta), d_H, [s_{j-1}, s_j]) \\
+                                                                &\leq C \frac{\delta^{1/2}}{\epsilon^{1/2}} \log^2 \frac{1}{\delta}
+  \end{align*}
+   
+
+  Using an identical argument, we can get the same bracketing for $[s'_{J'}, a_R]$ where $J'$ is the last iteration of the algorithm on the right side.
+
+  Thus, all that is left is to bracket $[s_J, s'_{J'}$. Since $s_J \geq -1/16$ and $s'_{J'} \leq 1/16$, and that $\int_{-\infty}^{s_J} e^{\phi_0(t)}dt \geq 2^{-10}$ and $\int_{s'_{J'}}^\infty e^{\phi_0(t)} dt \geq 2^{-10}$ by claim (5). We have that
+  \[
+    H_{[]}(\epsilon, \tilde{\mathcal{F}}(f_0, \delta), d_H, [s_J, s'_{J'}]) \leq
+    C \frac{\delta^{1/2} }{\epsilon^{1/2}} \log \frac{1}{\delta}
+  \]
+
+
+  Now, we just have to prove claims (1)-(5).
+
+  For claim (1), we first observe that $(s - a_L)  \sup_{t \in [a_L, s]} e^{\phi_0(t)}$ increases monotonically as $s$ increases. Now, by \cite{lovasz2007geometry}, we have $e^{\phi_0(t)} \geq 2^{-8}$ for all $t \in [-1/9, 1/9]$ and that $a_L < -1/9$. Therefore, for any $s \geq -1/16$, we have that $(s - a_L) \sup_{t \in [a_L, s]} e^{\phi_0(t)} \geq (1/9 - 1/16) 2^{-8} \geq 2^{-13} > \delta^2$. Hence, $s_1 < -1/16$.
+
+  On to claim (2). $\int_{-\infty}^{s_1} e^{\phi_0(t)} dt \geq \int_{a_L}^{s_1} e^{\phi_0(t)} dt$. On $[a_L, s_1]$, $\phi_0$ is between $-2 \log \frac{1}{\delta}$ and $\log c_1$. Therefore, 
+
+  $\int_{a_L}^{s_1} e^{\phi_0(t)} dt$ is, by lemma~\ref{lem:integral_approximation}, at least $|s_1 - a_L| \sup_{t \in [a_L, s_1]} e^{\phi_0(t)} \frac{C}{ \log \frac{1}{\delta}} \geq C \frac{\delta^2}{\log \frac{1}{\delta}}$.
+
+  For claim (3), note that $\int_{s_j}^{\infty} e^{\phi_0(t)} dt \geq \int_0^{\infty} e^{\phi_0(t)} dt \geq 2^{-8} (1/9 + 1/16) \geq 2^{-10}$.
+
+  On to claim (4). Because $j$ is not the terminating iteration, it must be that $2 \int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt = \int_{s_{j-1}}^{s_j} e^{\phi_0(t)} dt$. Hence, we have that
+  \begin{align*}
+    \frac{(s_j - s_{j-1}) \cdot \sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)} }{\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)} dt } \leq
+    \frac{(s_j - s_{j-1}) \cdot \sup_{t \in [s_{j-1}, s_j]} e^{\phi_0(t)} }{2 \int_{s_{j-1}}^{s_j} e^{\phi_0(t)} dt } 
+    \stackrel{(a)} \leq C \log \frac{1}{\delta}
+  \end{align*}
+
+  where $(a)$ follows from lemma~\ref{lem:integral_approximation}.
+
+  For claim (5), observe that because $j$ is the terminating iteration, we have that $\int_{-\infty}^{s_{j-1}} e^{\phi_0(t)}dt \geq \frac{1}{2} \int_{s_{j-1}}^{s_j} e^{\phi_0(t)} dt \geq 2^{-9} (1/9 - 1/16) \geq 2^{-14}$. 
+  
+\end{proof}
+
+\subsubsection{Bound Lemmas}
+
+\begin{lemma}
+  \label{lem:envelope_lower_bound}
+  Let $e^{\phi} \in \tilde{\mathcal{F}}(\phi_0, \delta)$. Let $r$ be arbitrary.
+
+  Suppose that $\int_{-\infty}^r e^{\phi_0(t)} dt \wedge \int_r^{\infty} e^{\phi_0(t)}dt \geq \delta^2$, then, we have that,
+
+  \[
+    \frac{\phi(r) - \phi_0(r)}{2} \geq
+    - \frac{1}{2} \frac{\delta}{\sqrt{ \int_{-\infty}^r e^{\phi_0(t)} dt \wedge \int_r^{\infty} e^{\phi_0(t)}dt }}
+  \]
+\end{lemma}
+
+\begin{proof}
+
+  Let $\psi(r) \equiv \frac{\phi(r) - \phi_0(r)}{2}$. Suppose that $\psi(r) < 0$ or there is nothing to prove.
+
+  Because $\psi$ is concave, $\psi < \psi(r)$ either for $t \in [-\infty, r)$ or for $t \in (r, \infty]$. Suppose it is the former without loss of generality.
+  
+  \begin{align*}
+   \int e^{\phi_0(t)} (e^{\psi(t)} - 1)^2 dt &\leq \delta^2 \\
+    (\Rightarrow) \quad \int_{-\infty}^r e^{\phi_0(t)} (e^{\psi(r)} - 1)^2 dt &\leq \delta^2 \\
+    (\Rightarrow) \quad (e^{\psi(r)} - 1)^2 &\leq
+                                              \frac{\delta^2}{\int_{-\infty}^r e^{\phi_0(t)}dt } \\
+    (\Rightarrow) \quad (1 - e^{\psi(r)}) &\leq  \frac{\delta^2}{\int_{-\infty}^r e^{\phi_0(t)}dt } \\
+    (\Rightarrow) \quad \psi(r) &\geq \log \left(
+    1 -   \frac{\delta^2}{\int_{-\infty}^r e^{\phi_0(t)}dt } \right) \\
+    (\Rightarrow) \quad \psi(r) &\geq \frac{1}{2} \frac{\delta^2}{\int_{-\infty}^r e^{\phi_0(t)}dt }
+  \end{align*}
+  where the last inequality follows from the assumption that $\int_{-\infty}^r e^{\phi_0(t)} dt \geq \delta^2$.
+
+  The identical argument applies if $\psi < \psi(r)$ for $t \in (r, \infty]$. The lemma follows easily.
+  
+  
+\end{proof}
+
+
+\begin{lemma}
+  \label{lem:envelope_upper_bound}
+  Let $e^{\phi} \in \tilde{\mathcal{F}}(\phi_0, \delta)$. Define $a_L = \inf \{ r \,:\, e^{\phi_0(r)} \geq \delta^2\}$ and $a_R = \sup \{ r \,:\, e^{\phi_0(r)} \geq \delta^2\}$. Suppose that $\delta$ is small enough such that $\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \geq 2$ and that $\delta^2 < 2^{-18}$.
+  
+
+  Then, we have that, for any $r \in (a_L, a_R)$:
+  \[
+    \frac{\phi(r) - \phi_0(r)}{2} \leq  C \delta \log \frac{c}{\delta}
+  \]
+  where $C, c$ are absolute constants.
+
+\end{lemma}
+
+\begin{proof}
+
+  As a shorthand, let us write $\psi(r) \equiv \frac{\phi(r) - \phi_0(r)}{2}$. Suppose $\psi(r) > 0$ or there is nothing to prove.
+
+  Define $s_L = \inf \left \{ t \in [a_L, r) \,:\, \psi(t) > \frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right \}$.
+
+  Define also $s_R = \sup \left \{ t \in (r, s_R] \,:\, \psi(t) > \frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right \}$. Note that $\psi(s_L), \psi(s_R) \geq \frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} $.
+
+  Then, we have that
+  \begin{align}
+    \int_{s_L}^{s_R} e^{\phi_0(t)} \left( e^{\psi(t)} - 1 \right)^2 dt &\leq \delta^2 \nonumber \\
+    (\Rightarrow) \quad  \int_{s_L}^{s_R} e^{\phi_0(t)} \psi(t)^2 dt &\leq \delta^2 \nonumber \\
+    (\Rightarrow) \quad  \int_{s_L}^{s_R} e^{\phi_0(t)}
+    \left( \frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right)^2 dt &\leq \delta^2 \nonumber \\
+    (\Rightarrow) \quad \psi(r) &\leq
+                                  \frac{ \delta}{ \sqrt{ \int_{s_L}^{s_R} e^{\phi_0(t)}dt } }
+                                  \frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \label{eqn:upper_bound1}
+  \end{align}
+
+  Now, define 
+ Define $s'_L = \inf \left \{ t \in [a_L, r) \,:\, \psi(t) > -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right \}$.
+
+  Define also $s'_R = \sup \left \{ t \in (r, s_R] \,:\, \psi(t) > -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right \}$.
+
+
+  On $[a_L, s'_L)$ and $(s'_R, a_R]$, $\psi \leq -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}$. Therefore,
+  \begin{align*}
+    \int_{a_L}^{s'_L} e^{\phi_0(t)}
+    \left( e^{ -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} - 1 \right)^2 dt &\leq \delta^2 \\    
+    \left( e^{ -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} - 1 \right)^2
+    \int_{a_L}^{s'_L} e^{\phi_0(t)} dt &\leq \delta^2 \\
+    \left( e^{ -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} - 1 \right)^2  &\leq
+               \frac{\delta^2}{  \int_{a_L}^{s'_L} e^{\phi_0(t)} dt } \\
+    1 -  e^{ -\frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} &\leq
+          \frac{\delta}{ \sqrt{ \int_{a_L}^{s'_L} e^{\phi_0(t)} dt }} \\
+    \frac{\psi(r)}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} &\leq
+                 - \log \left(  \frac{\delta}{ \sqrt{ \int_{a_L}^{s'_L} e^{\phi_0(t)} dt }} \right) \\
+  \end{align*}
+
+  Therefore, we have that
+  \begin{align}
+    \psi(r) \leq   -  \frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \cdot
+    \log \left(1-  \frac{\delta}{ \sqrt{ \int_{a_L}^{s'_L} e^{\phi_0(t)} dt }} \right) \label{eqn:upper_bound2}
+  \end{align}
+  and, by an identical argument, we have that,
+  \begin{align}
+       \psi(r) \leq   -  \frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \cdot
+    \log \left(1-  \frac{\delta}{ \sqrt{ \int_{s'_R}^{a_R} e^{\phi_0(t)} dt }} \right) \label{eqn:upper_bound3}
+  \end{align}
+
+
+  Define $T_1 = \int_{s_L}^{s_R} e^{\phi_0(t)} dt$, $T_2 = \int_{s'_L}^{s_L} e^{\phi_0(t)} dt +  \int_{s'_R}^{s_R} e^{\phi_0(t)} dt$,
+  and $T_3 = \int_{a_L}^{s'_L} e^{\phi_0(t)} dt + \int_{s'_R}^{a_R} e^{\phi_0(t)} dt$.
+
+  Collecting inequalities~\ref{eqn:upper_bound1}, \ref{eqn:upper_bound2}, \ref{eqn:upper_bound3} and using the $T_1, T_2, T_3$ definitions, we have that
+  \begin{align*}
+    \psi(r) &\leq  \frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \cdot \frac{ \delta}{ T_1^{1/2} } \\
+    \psi(r) &\leq - \frac{2^{20} c_1}{a_1} \log  \frac{\sqrt{c_1}}{\delta} \cdot \log \left( 1 - \frac{\delta}{T^{1/2}_3} \right)
+  \end{align*}
+  Note that in the second inequality, if $T^{1/2}_3 \geq 2^{-16}$, then $\frac{\delta}{T^{1/2}_3} \leq 1/2$ and the second inequality becomes $\psi(r) \leq  \frac{2^{20} c_1}{a_1} \log  \frac{\sqrt{c_1}}{\delta} \cdot  \frac{\delta}{T^{1/2}_3} $.
+  
+  
+  We have that $T_1 + T_2 + T_3 \geq 2^{-15}$ by lemma~\ref{lem:log_concave_central_mass}. We claim that $T_2 < 2^{-16}$. Then, either $T_1 \geq 2^{-16}$ or $T_3 \geq 2^{-16}$ and we prove the lemma with $C = 2^{36}
+  \frac{c_1}{a_1} $ and $c = \sqrt{c_1}$.
+  
+
+  Let us then prove the claim. If $|s_L-s'_L| + |s_R - s'_R| = 0$, then there is nothing to prove so let us assume that  $|s_L-s'_L| + |s_R - s'_R| > 0$.
+
+  First note that, we have, by concavity of $\psi$,
+  \begin{align*}
+    |s'_R - s'_L| &\leq |s_R - s_L| \frac{ \psi(r) + \psi(r)
+                    \frac{1}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}}
+                    {\psi(r) - \psi(r)
+                    \frac{1}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} \\
+    &\leq |s_R - s_L| \frac{ 1 + \frac{1}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}}
+      {1 - \frac{1}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}}} \\
+    &\leq |s_R - s_L| \left( 1 + \frac{4}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right)
+  \end{align*}
+  where the last inequality uses the condition that $\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta} \geq 2$.
+  
+  \begin{align*}
+    |s'_R - s'_L| &\leq  |s_R - s_L| \left( 1 + \frac{4}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right)\\
+    |s_R - s_L| + |s'_L - s_L| + |s'_R - s_R| &\leq |s_R - s_L|
+                                                \left( 1 + \frac{4}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \right)\\
+    |s'_L - s_L| + |s'_R - s_R| &\leq |s_R - s_L| \frac{4}{\frac{2^{20} c_1}{a_1} \log \frac{\sqrt{c_1}}{\delta}} \\
+        |s_R - s_L| & \geq (|s'_L - s_L| + |s'_R - s_R|) \frac{2^{20} c_1}{4 a_1} \log \frac{\sqrt{c_1}}{\delta}
+  \end{align*}
+                                   
+  Suppose for the sake of contradiction that $T_2 \geq 2^{-16}$. Then, because $e^{\phi_0(r)} \leq c_1$, we have that
+  \begin{align*}
+    c_1 | s_L - s_L'| + c_1 | s_R - s_R'| &\geq 2^{-16}
+  \end{align*}
+
+  \begin{align*}    
+    |s_L - s_R| &\geq \frac{1}{c_1} 2^{-16} \frac{2^{20} c_1}{4 a_1} \log \frac{\sqrt{c_1}}{\delta} \\
+                &\geq \frac{4}{a_1} \log \frac{\sqrt{c_1}}{\delta}
+  \end{align*}
+
+  Now, $e^{\phi_0(r)} \leq c_1 e^{- a_1 |r|}$ by assumption. Plugging in $\delta^2 = c_1 e^{- a_1 |r|}$ yields that $|a_L|, |a_R| \leq \frac{2}{a_1} \log \frac{\sqrt{c_1}}{\delta}$ and therefore, $|a_L - a_R| \leq frac{4}{a_1} \log \frac{\sqrt{c_1}}{\delta}$
+  Since $|s_L - s_R| \geq |a_L - a_R|$, it must be that $|s_L - s'_L| + |s_R - s'_R| = 0$, which is a contradiction. This proves the claim and hence the lemma.
+  
+\end{proof}
+
+\subsubsection{Technical Lemmas}
+
+\begin{lemma}
+  \label{lem:log_concave_central_mass}
+  Let $f$ be a log-concave density with mean zero and unit variance, let $a_L = \inf \{ r \,:\, f(r) \geq \delta^2\}$ and $a_R = \inf \{ r \,:\, f(r) \geq \delta^2\}$. If $\delta^2 \leq 2^{-10}$, then we have that
+  \[
+    \int_{a_L}^{a_R} f(r) dr \geq 2^{-15}
+  \]
+\end{lemma}
+
+\begin{proof}
+
+  By \citet[][Theorem~5.14(d)]{lovasz2007geometry}, we have that $2^4 \leq f(0) \geq 2^{-7}$ and that $f(r) \geq 2^{-8}$ for all $r \in [-1/9, 1/9]$. By log-concavity, we have then that $a_L \leq -1/9$ and $a_R \geq 1/9$.
+
+  Define $\alpha = \log f(0)$ and $\beta = \log f(a_L)$. It is clear that $4 \log 2 \leq \alpha \geq -7 \log 2$ and $ \beta \geq -10 \log 2$.
+  \begin{align*}
+    \int_{a_L}^0 f(r) dr & \geq |a_L| \int_0^1 e^{(1-\lambda) \alpha + \lambda \beta} d \lambda \\
+                         & \geq |a_L| \int_0^1 e^\alpha e^{- \lambda(\alpha - \beta)} d\lambda \\
+                         &\geq |a_L| e^{\alpha} \frac{1}{\alpha - \beta} ( 1 - e^{-(\alpha - \beta)}) \\
+                         &\geq (1/9) 2^{-7} \frac{1}{\alpha - \beta} ( 1 - e^{-(\alpha - \beta)})
+  \end{align*}
+  If $e^{-(\alpha - \beta)} \geq 1/2$, then $ \frac{1}{\alpha - \beta} ( 1 - e^{-(\alpha - \beta)}) \geq 1/2$. If not, then, by our bound on $\alpha$ and $\beta$, we have $ \frac{1}{\alpha - \beta} ( 1 - e^{-(\alpha - \beta)}) \leq \frac{1}{14 \log 2} \frac{1}{2}$. Either way, we have that
+  $\int_{a_L}^0 f(r) dr \geq 2^{-15}$.
+
+  
+  The same bound holds for $\int_0^{a_R} f(r) dr$. The lemma follows thus.
+  
+\end{proof}
+
+\begin{lemma}
+  \label{lem:integral_approximation}
+
+  Let $e^{\phi_0}$ be a log-concave density. Let $[a,b]$ be an interval and suppose that $e^{\phi_0(t)}$ achieves its maximum in $[a,b]$ at $t^*$. Then, we have that
+  \begin{align*}
+    \int_a^b e^{\phi_0(t)}dt \geq &|a - t^*| e^{\phi_0(t^*)} \cdot \frac{1}{\phi_0(t^*) - \phi_0(a)} \left\{ 1 - e^{-(\phi_0(t^*) - \phi_0(a))} \right\} \\
+    &+ |b - t^*| e^{\phi_0(t^*)} \cdot \frac{1}{\phi_0(t^*) - \phi_0(b)} \left\{ 1 - e^{-(\phi_0(t^*) - \phi_0(b))} \right\}
+  \end{align*}
+
+  And, if $\phi_0(t^*) - \phi_0(b), \phi_0(t^*) - \phi_0(a) \leq \tau$ for some upper bound $\tau > 1$, then
+  \[
+  \int_a^b e^{\phi_0(t)}dt \geq |a - b| e^{\phi_0(t^*)} \frac{1}{4 \tau}
+  \]
+  
+\end{lemma}
+
+\begin{proof}
+  On $[a, t^*]$, $\phi_0(t) \geq \lambda \phi_0(a) + (1 - \lambda) \phi_0(t^*)$ where $\lambda = \frac{t^* - t}{t^* - a}$. 
+
+  Therefore,
+  \begin{align*}
+    \int_a^{t^*} e^{\phi_0(t)} dt &\geq (t^* - a) \int_0^1 e^{ \lambda \phi_0(a) + (1 - \lambda) \phi_0(t^*)} d\lambda \\
+                                  &\geq |a - t^*| e^{\phi_0(t^*)} \cdot \frac{1}{\phi_0(t^*) - \phi_0(a)} \left\{ 1 - e^{-(\phi_0(t^*) - \phi_0(a))} \right\}
+  \end{align*}
+
+  Similar argument applies for $\int_{t^*}^b e^{\phi_0(t)} dt$.
+
+  For the second part of the lemma, note that if $\phi_0(t^*) - \phi_0(a) \leq 1$, then  $\frac{ 1 - e^{-(\phi_0(t^*) - \phi_0(b))}}{\phi_0(t^*) - \phi_0(b)} \geq e^{-1}$. If $\phi_0(t^*) - \phi_0(a) \geq 1$, then $\frac{ 1 - e^{-(\phi_0(t^*) - \phi_0(b))}}{\phi_0(t^*) - \phi_0(b)} \geq e^{-1} \frac{1}{\phi_0(t^*) - \phi_0(b)} \geq e^{-1} \frac{1}{\tau}$.
+  
+\end{proof}
+
+
+\subsubsection{Bracketing Lemmas}
+
+The following two propositions are from \citet{kim2016adaptation}.
+
+
+\begin{proposition}
+  \label{prop:segment_bracket1}
+There exists a universal constant $C > 0$ such that 
+\[
+H_{[]}( \epsilon, \tilde{\mathcal{F}}([a,b],-\infty, B), d_H, [a,b]) \leq C \frac{ e^{B/4} (b-a)^{1/4}}{\epsilon^{1/2}} 
+\]
+\end{proposition}
+
+
+\begin{proposition}
+  \label{prop:segment_bracket2}
+There exists a universal constant $C > 0$ such that 
+\[
+H_{[]}( \epsilon, \tilde{\mathcal{F}}([a,b],B_2,B_1), d_H, [a,b]) \leq C (B_1 - B_2)^{1/2} \frac{ e^{B_1/4} (b-a)^{1/4}}{\epsilon^{1/2}} 
+\]
+\end{proposition}
+
+
+
+
+
+% Let the true density be of the form: $h_0(r) = r^{p-1} e^{b_0}$ for $r \leq r_0$ and $h_0(r) = 0$ otherwise.
+
+% Let us also assume that $\sigma^2_{h_0} = 1$. Simple calculation yields that
+% \begin{align*}
+%   e^{b_0} &= \frac{p}{r_0^p} \\
+%   r_0 &= \sqrt{ \frac{p+2}{p}} (p + 1)\\
+%   \mu_{h_0} &= r_0 \frac{p}{p+1}
+% \end{align*}
+
+
+% Define
+% \begin{align*}
+%   \mathcal{H}(h_0, \delta, c_\mu, c_\sigma) = \Big\{ h \,:\, & h(r) = r^{p-1} e^{\phi(r)},\, \phi \in \Phi, \\
+%                                                          & h << h_0,\, \int (\sqrt{h(r)} - \sqrt{h_0(r)})^2 dr \leq \delta^2, \\
+%                                 &  |\mu_h - \mu_{h_0}| \leq c_\mu,\, \frac{1}{c_\sigma} \leq \sigma^2_h \leq c_\sigma \Big\}
+% \end{align*}
+
+% \begin{proposition}
+
+%   Let $h \in \mathcal{H}(h_0, \delta, c_\mu, c_\sigma)$ and be of the form $h(r) = r^{p-1} e^{\phi(r)}$. Then, we have that, for any $r \in [0, r_0]$,
+%   \begin{align*}
+%     \phi(r) - b_0 &\leq \delta \left( \frac{r_0}{r} \right)^{p/2} \\
+%     \phi(r) - b_0 &\geq \delta \frac{1}{\left( 1 - \left(\frac{r}{r_0}\right)^p \right)^{1/2} }
+%   \end{align*}
+
+%   Furthermore, we have that
+%   \[
+%     e^{ \phi(r) - b_0} \leq e^{- a_1 | r - r_0| + b_1 } \left( \frac{r_0}{r} \right)^p \frac{r}{p}
+%   \]
+%   for some absolute constant $a_1, b_1$.
+  
+% \end{proposition}
+
+% \begin{proof}
+%   \begin{align*}
+%     \int (\sqrt{h(r)} - \sqrt{h_0(r)})^2 dr &\leq \delta^2  \quad (\Rightarrow) \\
+%     \int_0^{r_0} e^{b_0}  r^{p-1} \left( e^{ \frac{\phi(r) - b_0}{2}} - 1 \right)^2 dr &\leq \delta^2 \quad (\Rightarrow) \\
+%     \int_0^{r_0} e^{b_0} r^{p-1} ( \phi(r) - b_0)^2 dr \leq 4 \delta^2 
+%   \end{align*}
+
+%   Fix $r$. Suppose $\phi(r) - b_0 = M$ at $r$. Then, since $\phi(r) - b_0$ is decreasing, we have that
+%   \begin{align*}
+%     \int_0^r e^{b_0} t^{p-1} M^2 dt &\leq \delta^2 \\
+%     M^2 \frac{r^p}{p} e^{b_0} & \leq \delta^2 \\
+%     M^2 &\leq \delta^2 \left( \frac{r_0}{r} \right)^p \\
+%     M & \leq \delta \left( \frac{r_0}{r} \right)^{p/2}
+%   \end{align*}
+
+%   Likewise, suppose $\phi(r) - b_0 = -M$ at $r$. 
+
+%   \begin{align*}
+%     \int_r^{r_0} M^2 t^{p-1} e^{b_0} dt &\leq \delta^2 \\
+%     M^2 e^{b_0} \left( \frac{r_0^p}{p} - \frac{r^p}{p} \right) &\leq \delta^2 \\
+%     M^2 \left( 1 - e^{b_0} \frac{r^p}{p} \right) &\leq \delta^2 \\
+%     M^2 \left( 1 - \left( \frac{r}{r_0} \right)^p \right) &\leq \delta^2 \\
+%     M &\leq \delta \frac{1}{\left( 1 - \left( \frac{r}{r_0} \right)^p \right)^{1/2} }
+%   \end{align*}
+
+%   Lastly, we have that $h(r) = r^{p-1} e^{\phi(r)} \leq e^{- a_1 | r - r_0 | + b_1}$ for some constant $a_1, b_1$. [TODO:reference previous results]
+
+%   \begin{align*}
+%     e^{\phi(r) - b_0} &\leq e^{- a_1 | r - r_0| + b_1} r^{-(p-1)} e^{-b_0} \\
+%                       &\leq e^{-a_1 |r - r_0| + b_1} \left( \frac{r_0}{r} \right)^p \frac{r}{p}
+%   \end{align*}
+  
+% \end{proof}
 
 
 
