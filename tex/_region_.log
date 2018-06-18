@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  28 JUL 2017 11:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  17 AUG 2017 13:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -486,99 +486,236 @@ Package caption Warning: \caption will not be redefined since it's already
 See the caption package documentation for explanation.
 
 Package caption Info: End \AtBeginDocument code.
- !name(elliptical.tex) !offset(455) 
-./_region_.tex:57: Preview: Snippet 1 started.
+ !name(elliptical.tex) !offset(7) 
+./_region_.tex:56: Preview: Snippet 1 started.
 <-><->
       
-l.57   For any $
-                a_0 \geq 0$, for any $h \in \mathcal{H}_{a_0}$, we have that...
-
+l.56 \subsection
+                {Notation}
 Not a real error.
 
-LaTeX Font Info:    Try loading font information for U+lasy on input line 57.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ulasy.fd
-File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-)
-LaTeX Font Info:    Try loading font information for U+msa on input line 57.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 57.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 57.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/jknapltx/ursfs.fd
-File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)
-LaTeX Font Info:    Try loading font information for U+stmry on input line 57.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 Preview: Tightpage -32891 -32891 32891 32891
-./_region_.tex:57: Preview: Snippet 1 ended.(506811+117964x2149116).
+./_region_.tex:56: Preview: Snippet 1 ended.(655359+0x30767216).
 <-><->
       
-l.57   For any $a_0 \geq 0$
-                           , for any $h \in \mathcal{H}_{a_0}$, we have that...
-
+l.56 \subsection{Notation}
+                          
 Not a real error.
 
 [1
 Non-PDF special ignored!{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/upd
-map/pdftex.map}]
-./_region_.tex:57: Preview: Snippet 2 started.
+map/pdftex.map}
+
+]
+./_region_.tex:58: Preview: Snippet 2 started.
 <-><->
       
-l.57   For any $a_0 \geq 0$, for any $
-                                      h \in \mathcal{H}_{a_0}$, we have that...
+l.58 For a vector $
+                   x \in \mathbb{R}^p$, $\| x \|, \|x \|_2$ both denotes the...
 
 Not a real error.
 
-./_region_.tex:57: Preview: Snippet 2 ended.(546132+190781x2670336).
+LaTeX Font Info:    Try loading font information for U+lasy on input line 58.
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 58.
+
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 58.
+
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 58.
+
+(/usr/local/texlive/2016/texmf-dist/tex/latex/jknapltx/ursfs.fd
+File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
+)
+LaTeX Font Info:    Try loading font information for U+stmry on input line 58.
+
+(/usr/local/texlive/2016/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
+./_region_.tex:58: Preview: Snippet 2 ended.(541764+30747x2279936).
 <-><->
       
-l.57 ...\geq 0$, for any $h \in \mathcal{H}_{a_0}$
-                                                  , we have that $a_0 + c_1 ...
+l.58 For a vector $x \in \mathbb{R}^p$
+                                      , $\| x \|, \|x \|_2$ both denotes the...
 
 Not a real error.
 
 [2]
-./_region_.tex:57: Preview: Snippet 3 started.
+./_region_.tex:58: Preview: Snippet 3 started.
 <-><->
       
-l.57 ... $h \in \mathcal{H}_{a_0}$, we have that $
-                                                  a_0 + c_1 \sqrt{p} \leq \m...
+l.58 For a vector $x \in \mathbb{R}^p$, $
+                                         \| x \|, \|x \|_2$ both denotes the...
 
 Not a real error.
 
-./_region_.tex:57: Preview: Snippet 3 ended.(552903+264984x8955878).
+./_region_.tex:58: Preview: Snippet 3 ended.(589824+196608x3104310).
 <-><->
       
-l.57 ...c_1 \sqrt{p} \leq \mu_h \leq a_0 + c_2 p $
-                                                   where $c_1, c_2$ are some...
+l.58 ... $x \in \mathbb{R}^p$, $\| x \|, \|x \|_2$
+                                                   both denotes the $l_2$ no...
 
 Not a real error.
 
 [3]
-./_region_.tex:57: Preview: Snippet 4 started.
+./_region_.tex:58: Preview: Snippet 4 started.
 <-><->
       
-l.57 ...t{p} \leq \mu_h \leq a_0 + c_2 p $ where $
-                                                  c_1, c_2$ are some absolut...
+l.58 ...p$, $\| x \|, \|x \|_2$ both denotes the $
+                                                  l_2$ norm. For a matrix $A...
 
 Not a real error.
 
-./_region_.tex:57: Preview: Snippet 4 ended.(338603+152916x1630384).
+./_region_.tex:58: Preview: Snippet 4 ended.(546132+117964x540674).
 <-><->
       
-l.57 ... \mu_h \leq a_0 + c_2 p $ where $c_1, c_2$
-                                                   are some absolute constant.
+l.58 ...$\| x \|, \|x \|_2$ both denotes the $l_2$
+                                                   norm. For a matrix $A$, $...
+
 Not a real error.
 
-[4]  !name(elliptical.tex) !offset(2001) 
+[4]
+./_region_.tex:58: Preview: Snippet 5 started.
+<-><->
+      
+l.58 ...oth denotes the $l_2$ norm. For a matrix $
+                                                  A$, $\| A \|_2$ denotes th...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 5 ended.(537395+0x577257).
+<-><->
+      
+l.58 ...h denotes the $l_2$ norm. For a matrix $A$
+                                                  , $\| A \|_2$ denotes the ...
+
+Not a real error.
+
+[5]
+./_region_.tex:58: Preview: Snippet 6 started.
+<-><->
+      
+l.58 ...enotes the $l_2$ norm. For a matrix $A$, $
+                                                  \| A \|_2$ denotes the ope...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 6 ended.(589824+196608x1674991).
+<-><->
+      
+l.58 ... $l_2$ norm. For a matrix $A$, $\| A \|_2$
+                                                   denotes the operator norm...
+
+Not a real error.
+
+[6]
+./_region_.tex:58: Preview: Snippet 7 started.
+<-><->
+      
+l.58 ...resent positive definiteness of a matrix $
+                                                  A$ as $A \succ 0$, and sem...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 7 ended.(537395+0x577257).
+<-><->
+      
+l.58 ...sent positive definiteness of a matrix $A$
+                                                   as $A \succ 0$, and semid...
+
+Not a real error.
+
+[7]
+./_region_.tex:58: Preview: Snippet 8 started.
+<-><->
+      
+l.58 ...positive definiteness of a matrix $A$ as $
+                                                  A \succ 0$, and semidefini...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 8 ended.(537395+30747x2010848).
+<-><->
+      
+l.58 ...efiniteness of a matrix $A$ as $A \succ 0$
+                                                  , and semidefiniteness as ...
+
+Not a real error.
+
+[8]
+./_region_.tex:58: Preview: Snippet 9 started.
+<-><->
+      
+l.58 ... as $A \succ 0$, and semidefiniteness as $
+                                                  A \succeq 0$. Given a vect...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 9 ended.(537395+106932x2010848).
+<-><->
+      
+l.58 ... 0$, and semidefiniteness as $A \succeq 0$
+                                                  . Given a vector $x$ and a...
+
+Not a real error.
+
+[9]
+./_region_.tex:58: Preview: Snippet 10 started.
+<-><->
+      
+l.58 ...iteness as $A \succeq 0$. Given a vector $
+                                                  x$ and a matrix $A \succ 0...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 10 ended.(338603+0x437586).
+<-><->
+      
+l.58 ...eness as $A \succeq 0$. Given a vector $x$
+                                                   and a matrix $A \succ 0$,...
+
+Not a real error.
+
+[10]
+./_region_.tex:58: Preview: Snippet 11 started.
+<-><->
+      
+l.58 ...cceq 0$. Given a vector $x$ and a matrix $
+                                                  A \succ 0$, $\| x \|_A = \...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 11 ended.(537395+30747x2010848).
+<-><->
+      
+l.58 ...iven a vector $x$ and a matrix $A \succ 0$
+                                                  , $\| x \|_A = \sqrt{ x^\t...
+
+Not a real error.
+
+[11]
+./_region_.tex:58: Preview: Snippet 12 started.
+<-><->
+      
+l.58 ...n a vector $x$ and a matrix $A \succ 0$, $
+                                                  \| x \|_A = \sqrt{ x^\top ...
+
+Not a real error.
+
+./_region_.tex:58: Preview: Snippet 12 ended.(755700+196608x6028263).
+<-><->
+      
+l.58 ...0$, $\| x \|_A = \sqrt{ x^\top A^{-1} x }$
+                                                   denotes the Mahalanobis d...
+
+Not a real error.
+
+[12]  !name(elliptical.tex) !offset(2353) 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 61.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 61.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 61.
@@ -591,23 +728,25 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 61.
 ### bottom level 
 Here is how much of TeX's memory you used:
  8853 strings out of 493014
- 132601 string characters out of 6133351
- 228881 words of memory out of 5000000
+ 132612 string characters out of 6133351
+ 229881 words of memory out of 5000000
  12256 multiletter control sequences out of 15000+600000
- 10363 words of font info for 43 fonts, out of 8000000 for 9000
+ 10314 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,5n,38p,540b,6453s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,5n,38p,738b,6467s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr6.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
-.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb>
-Output written on _region_.pdf (4 pages, 49066 bytes).
+/cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
+pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
+m10.pfb>
+Output written on _region_.pdf (12 pages, 60227 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 500000)
+ 79 PDF objects out of 1000 (max. 8388607)
+ 56 compressed objects within 1 object stream
+ 1 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

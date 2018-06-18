@@ -16,100 +16,198 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Notation}{3}{subsection.1.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Elliptical Density}{3}{subsection.1.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Identifiability}{3}{subsection.1.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Characterizations}{4}{subsection.1.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Log-Concavity}{4}{section.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Projection Operator}{5}{subsection.2.1}}
-\newlabel{prop:projection_existence}{{3}{6}{}{theorem.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Algorithm}{8}{section.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Piecewise Linear Parametrization}{8}{subsection.3.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Derivatives}{9}{subsubsection.3.1.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Active Set}{10}{subsubsection.3.1.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Optimization over an Active Set}{10}{subsubsection.3.1.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Moment Properties}{11}{section.4}}
-\newlabel{defn:Phi}{{1}{11}{Moment Properties}{equation.4.1}{}}
-\newlabel{defn:H_unit_variance}{{2}{11}{Moment Properties}{equation.4.2}{}}
-\newlabel{defn:Phi}{{3}{11}{Moment Properties}{equation.4.3}{}}
-\newlabel{defn:H_unit_variance_a0}{{4}{11}{Moment Properties}{equation.4.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Bounds on First Moment}{12}{subsection.4.1}}
-\newlabel{Lem:MeanConstrainedSupBound}{{8}{12}{}{theorem.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Envelope bounds}{14}{section.5}}
-\newlabel{defn:Phi}{{5}{14}{Envelope bounds}{equation.5.5}{}}
-\newlabel{defn:H_second_moment}{{7}{14}{Envelope bounds}{equation.5.7}{}}
-\newlabel{Lemma:Crude}{{9}{15}{}{theorem.9}{}}
-\newlabel{Eq:ThreeBounds}{{8}{15}{}{equation.5.8}{}}
-\newlabel{Cor:VarLowerBound}{{10}{16}{}{theorem.10}{}}
-\citation{lovasz2007geometry}
-\citation{bobkov2003spectral}
+\citation{Fisher1922,Fisher1925}
+\citation{rosenblatt1956remarks,WandJones1995}
+\citation{donoho1996density}
+\citation{gu1993smoothing}
+\citation{grenander1956theory}
+\citation{CSS2010}
+\citation{ibragimov1983estimation}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \citation{kim2016global}
-\newlabel{Lem:VarUpperBoundGeneral}{{11}{17}{}{theorem.11}{}}
-\newlabel{Cor:VarUpperBound}{{12}{17}{}{theorem.12}{}}
-\newlabel{Lem:UnivariateMuSigmaEnvelope}{{13}{17}{}{theorem.13}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Rate of Convergence}{19}{section.6}}
-\newlabel{eqn:hMLE}{{9}{19}{Rate of Convergence}{equation.6.9}{}}
-\newlabel{eqn:H_class}{{10}{19}{Rate of Convergence}{equation.6.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Moment Characterizations of $h_0$}{19}{subsection.6.1}}
-\newlabel{Prop:PopulationMeanBound}{{15}{19}{}{theorem.15}{}}
-\citation{bobkov2011concentration}
-\newlabel{Cor:EmpiricalMeanBound}{{16}{20}{}{theorem.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Differential Entropy of $h_0$}{20}{subsection.6.2}}
-\newlabel{prop:loglikelihood_bound}{{17}{20}{}{theorem.17}{}}
-\citation{lovasz2007geometry}
-\newlabel{lem:intrinsic_entropy_bound}{{18}{21}{}{theorem.18}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Moment Preservation of MLE}{21}{subsection.6.3}}
-\newlabel{Prop:hhatMeanVarianceBound}{{19}{22}{}{theorem.19}{}}
-\newlabel{Prop:MLEMeanPreservation}{{20}{22}{}{theorem.20}{}}
-\newlabel{Prop:MLEVarPreservation}{{21}{23}{}{theorem.21}{}}
+\citation{kim2016global}
+\citation{kim2016global}
+\citation{vandegeer2000empirical}
+\citation{kim2016global}
+\newlabel{Eq:fntilde}{{1}{3}{Introduction}{equation.1.1}{}}
+\citation{dumbgen2007active}
+\citation{polonik1995density,polonik1998silhouette,biau2003risk,gao2007entropy}
+\citation{doss2016global,han2016approximation}
+\citation{biau2003risk}
+\citation{liu2011forest}
+\citation{liebscher2016estimation}
+\citation{samworth2012independent}
+\citation{bhattacharya2012adaptive}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces A comparison of the spherically-symmetric log-concave MLE $\mathaccentV {hat}05E{f}_n$ (left) and the ordinary log-concave MLE $\mathaccentV {tilde}07E{f}_n$ (right) based on a sample of size $n=1000$ from a standard bivariate normal distribution. The top plots give the bivariate density estimates, while the bottom ones present the corresponding estimates $e^{\mathaccentV {hat}05E{\phi }_n}$ and $e^{\mathaccentV {tilde}07E{\phi }_n}$ of $e^{\phi _0}$.\relax }}{5}{figure.caption.1}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{Fig:SSLC}{{1}{5}{A comparison of the spherically-symmetric log-concave MLE $\hat {f}_n$ (left) and the ordinary log-concave MLE $\tilde {f}_n$ (right) based on a sample of size $n=1000$ from a standard bivariate normal distribution. The top plots give the bivariate density estimates, while the bottom ones present the corresponding estimates $e^{\hat {\phi }_n}$ and $e^{\tilde {\phi }_n}$ of $e^{\phi _0}$.\relax }{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Spherically symmetric log-concave densities and projections}{6}{section.2}}
+\newlabel{Sec:SSLCProjections}{{2}{6}{Spherically symmetric log-concave densities and projections}{section.2}{}}
+\newlabel{Prop:SSLC}{{1}{6}{}{theorem.1}{}}
+\newlabel{Eq:RpProjection}{{2}{6}{Spherically symmetric log-concave densities and projections}{equation.2.2}{}}
 \citation{dumbgen2011approximation}
-\newlabel{Lem:VarianceSupRelation}{{22}{24}{}{theorem.22}{}}
+\newlabel{Eq:QProjection}{{3}{7}{Spherically symmetric log-concave densities and projections}{equation.2.3}{}}
+\newlabel{Prop:ProjectionExistence}{{2}{7}{}{theorem.2}{}}
+\newlabel{Prop:ProjectionBasicProperties}{{3}{7}{}{theorem.3}{}}
+\citation{dudley2002real}
+\newlabel{Prop:Continuity}{{4}{8}{}{theorem.4}{}}
+\newlabel{Eq:TVConv}{{4}{8}{}{equation.2.4}{}}
+\citation{cule2010theoretical}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Moment preservation properties}{9}{section.3}}
+\newlabel{Sec:Moments}{{3}{9}{Moment preservation properties}{section.3}{}}
+\newlabel{Prop:MLEMeanPreservation}{{5}{9}{}{theorem.5}{}}
+\newlabel{Prop:MLEVarPreservation}{{6}{9}{}{theorem.6}{}}
+\newlabel{Eq:Sup}{{5}{10}{}{equation.3.5}{}}
+\newlabel{Prop:MLEMeanVarPreservation}{{7}{10}{}{theorem.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Worst case and adaptive risk bounds}{10}{section.4}}
+\newlabel{Sec:WorstCase}{{4}{10}{Worst case and adaptive risk bounds}{section.4}{}}
+\newlabel{Thm:WorstCase}{{8}{10}{}{theorem.8}{}}
+\newlabel{Thm:Adaptation}{{9}{10}{}{theorem.9}{}}
+\newlabel{Prop:AdaptiveRateAffine}{{10}{11}{}{theorem.10}{}}
+\citation{dumbgen2007active}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Algorithm}{12}{section.5}}
+\newlabel{Sec:Algorithm}{{5}{12}{Algorithm}{section.5}{}}
+\newlabel{Eq:phibar}{{6}{12}{Algorithm}{equation.5.6}{}}
+\newlabel{Eq:Optimization}{{7}{12}{Algorithm}{equation.5.7}{}}
+\newlabel{Eq:OptimizationFixedA}{{8}{12}{Algorithm}{equation.5.8}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Computing the spherically symmetric log-concave MLE\relax }}{13}{algorithm.1}}
+\newlabel{Alg:ActiveSet}{{1}{13}{Computing the spherically symmetric log-concave MLE\relax }{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Empirical performance}{14}{section.6}}
+\newlabel{Sec:Simulations}{{6}{14}{Empirical performance}{section.6}{}}
+\newlabel{Fig:Gaussian_p}{{2a}{15}{Gaussian; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Gaussian_p}{{a}{15}{Gaussian; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{Fig:Gaussian_n}{{2b}{15}{Gaussian; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Gaussian_n}{{b}{15}{Gaussian; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\newlabel{Fig:Uniform_p}{{2c}{15}{Uniform; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Uniform_p}{{c}{15}{Uniform; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{Fig:Uniform_n}{{2d}{15}{Uniform; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Uniform_n}{{d}{15}{Uniform; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\newlabel{Fig:Exponential_n}{{2e}{15}{Exponential; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Exponential_n}{{e}{15}{Exponential; $p$ varying; $n=3000$.\relax }{figure.caption.2}{}}
+\newlabel{Fig:Exponential_p}{{2f}{15}{Exponential; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\newlabel{sub@Fig:Exponential_p}{{f}{15}{Exponential; $n$ varying; $p=1000$.\relax }{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Simulation studies.\relax }}{15}{figure.caption.2}}
+\citation{cule2010theoretical}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Proofs of main results}{16}{section.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Proofs from Section\nobreakspace  {}\ref  {Sec:SSLCProjections}}{16}{subsection.7.1}}
+\citation{dumbgen2011approximation}
+\citation{billingsley1995probability}
+\newlabel{Eq:L}{{9}{17}{Proofs from Section~\ref {Sec:SSLCProjections}}{equation.7.9}{}}
+\citation{dumbgen2011approximation}
+\newlabel{Eq:DomConv}{{10}{18}{Proofs from Section~\ref {Sec:SSLCProjections}}{equation.7.10}{}}
+\citation{dumbgen2011approximation}
+\citation{rockafellar1997convex}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Proofs from Section\nobreakspace  {}\ref  {Sec:Moments}}{19}{subsection.7.2}}
+\newlabel{Eq:PosPart}{{11}{19}{Proofs from Section~\ref {Sec:Moments}}{equation.7.11}{}}
+\citation{dumbgen2011approximation}
+\newlabel{Eq:NegPart}{{12}{20}{Proofs from Section~\ref {Sec:Moments}}{equation.7.12}{}}
+\newlabel{Eq:muhatlower}{{13}{20}{Proofs from Section~\ref {Sec:Moments}}{equation.7.13}{}}
+\newlabel{Eq:muhatlower2}{{14}{20}{Proofs from Section~\ref {Sec:Moments}}{equation.7.14}{}}
 \citation{lovasz2007geometry}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Proof of Rate}{25}{subsection.6.4}}
-\citation{kim2016adaptation}
-\newlabel{eqn:moment_bounded_class}{{11}{26}{Proof of Rate}{equation.6.11}{}}
-\citation{kim2016global}
-\newlabel{Lem:NonlocalBracketingEntropy}{{25}{27}{}{theorem.25}{}}
-\newlabel{Lem:ExtremeEventControl}{{26}{28}{}{theorem.26}{}}
 \citation{bobkov2011concentration}
-\citation{kim2016adaptation}
-\citation{kim2016adaptation}
-\citation{kim2016adaptation}
-\citation{kim2016adaptation}
-\newlabel{Lem:ExtremeEventControl2}{{27}{30}{}{theorem.27}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Bracketing Entropy}{30}{subsection.6.5}}
-\newlabel{Cor:SegmentBracket}{{29}{30}{}{theorem.29}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Adaptation}{31}{section.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Adaptive Rate of Convergence}{31}{subsection.7.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Local Bracketing}{31}{subsection.7.2}}
-\newlabel{Lem:HellingerMomentBound}{{32}{32}{}{theorem.32}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}A General Result on Local Brackets}{32}{subsection.7.3}}
-\newlabel{eqn:local_density_ball_envelope}{{15}{32}{A General Result on Local Brackets}{equation.7.15}{}}
-\newlabel{Prop:GeneralLocalBracketing}{{33}{32}{}{theorem.33}{}}
-\newlabel{eqn:local_density_ball_moment}{{17}{32}{A General Result on Local Brackets}{equation.7.17}{}}
-\newlabel{Cor:GeneralLocalBracketingMoment}{{34}{33}{}{theorem.34}{}}
-\newlabel{prop:segment_bracket1}{{7.3}{33}{A General Result on Local Brackets}{theorem.34}{}}
+\citation{kim2016adaptationsupp}
+\citation{vandegeer2000empirical}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Proofs from Section\nobreakspace  {}\ref  {Sec:WorstCase}}{22}{subsection.7.3}}
+\citation{han2017isotonic}
+\newlabel{Eq:LongDisplay}{{15}{23}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.15}{}}
+\newlabel{Eq:dx2}{{16}{23}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.16}{}}
+\newlabel{Eq:SecondTerm}{{17}{23}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.17}{}}
+\newlabel{Eqn:TripleJensenPrecursor}{{18}{24}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.18}{}}
+\newlabel{Eqn:Jensen1}{{19}{24}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.19}{}}
+\newlabel{Eq:nustar}{{20}{24}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.20}{}}
+\newlabel{Eq:TripleJensen}{{21}{24}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.21}{}}
+\citation{kim2016adaptationsupp}
+\citation{vandegeer2000empirical}
+\newlabel{Eq:vdg}{{22}{25}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.22}{}}
+\newlabel{Eq:Max}{{23}{25}{Proofs from Section~\ref {Sec:WorstCase}}{equation.7.23}{}}
 \citation{lovasz2007geometry}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.3.1}Bound Lemmas}{37}{subsubsection.7.3.1}}
-\newlabel{lem:envelope_lower_bound}{{35}{37}{}{theorem.35}{}}
-\newlabel{lem:envelope_upper_bound}{{36}{38}{}{theorem.36}{}}
-\newlabel{eqn:upper_bound1}{{20}{39}{Bound Lemmas}{equation.7.20}{}}
-\newlabel{eqn:upper_bound2}{{21}{39}{Bound Lemmas}{equation.7.21}{}}
-\newlabel{eqn:upper_bound3}{{22}{40}{Bound Lemmas}{equation.7.22}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Auxiliary results}{26}{section.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Lemmas used in results in Section\nobreakspace  {}\ref  {Sec:Moments}}{26}{subsection.8.1}}
+\newlabel{Prop:UnitVarianceMeanBound}{{11}{26}{}{theorem.11}{}}
+\citation{dumbgen2011approximation}
+\newlabel{Lem:MeanConstrainedSupBound}{{12}{27}{}{theorem.12}{}}
+\newlabel{Lem:RhoProperties}{{13}{28}{}{theorem.13}{}}
 \citation{lovasz2007geometry}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.3.2}Technical Lemmas}{41}{subsubsection.7.3.2}}
-\newlabel{lem:log_concave_central_mass}{{37}{41}{}{theorem.37}{}}
+\citation{lovasz2007geometry}
+\newlabel{Lem:EvilInequality}{{14}{29}{}{theorem.14}{}}
+\newlabel{Lem:VarianceSupRelation}{{15}{29}{}{theorem.15}{}}
+\citation{lovasz2007geometry}
+\citation{kim2016global}
+\citation{kim2016global}
+\citation{lovasz2007geometry}
+\citation{bobkov2011concentration}
+\newlabel{Lem:DifferentialEntropyBound}{{16}{30}{}{theorem.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Lemmas used in both Theorem\nobreakspace  {}\ref  {Thm:WorstCase} and Proposition\nobreakspace  {}\ref  {Prop:AdaptiveRateAffine}}{30}{subsection.8.2}}
+\newlabel{Sec:BracketExtremeEvent}{{8.2}{30}{Lemmas used in both Theorem~\ref {Thm:WorstCase} and Proposition~\ref {Prop:AdaptiveRateAffine}}{subsection.8.2}{}}
+\newlabel{Prop:NonlocalBracketingEntropy}{{17}{30}{}{theorem.17}{}}
+\newlabel{Lem:ExtremeEventControl}{{18}{30}{}{theorem.18}{}}
+\citation{kim2016adaptationsupp}
+\newlabel{Lem:ExtremeEventControl2}{{19}{31}{}{theorem.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Lemmas used in Proposition\nobreakspace  {}\ref  {Prop:AdaptiveRateAffine}}{31}{subsection.8.3}}
+\newlabel{Sec:LocalBrackets}{{8.3}{31}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{subsection.8.3}{}}
+\newlabel{Prop:LocalBracketing}{{20}{31}{}{theorem.20}{}}
+\citation{lovasz2007geometry}
+\citation{fresen2013multivariate}
+\citation{lovasz2007geometry}
+\citation{fresen2013multivariate}
+\newlabel{Lem:HellingerMomentBound}{{21}{32}{}{theorem.21}{}}
+\newlabel{eqn:local_density_ball}{{25}{32}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.25}{}}
+\newlabel{Prop:GeneralLocalBracketing}{{22}{32}{}{theorem.22}{}}
+\newlabel{Eq:bLaL}{{26}{33}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.26}{}}
+\newlabel{Eq:bL}{{27}{33}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.27}{}}
+\citation{lovasz2007geometry}
+\newlabel{Eq:s0}{{28}{34}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.28}{}}
+\newlabel{Eq:KeyDisplay}{{29}{35}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.29}{}}
+\newlabel{Eq:1/16}{{30}{35}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.30}{}}
+\newlabel{Eq:Jensen}{{31}{35}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.31}{}}
+\newlabel{Lem:EnvelopeLowerBound}{{23}{36}{}{theorem.23}{}}
+\newlabel{Lem:EnvelopeUpperBound}{{24}{36}{}{theorem.24}{}}
+\newlabel{eqn:upper_bound1}{{32}{36}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.32}{}}
+\citation{CSS2010}
+\citation{lovasz2007geometry}
+\citation{lovasz2007geometry}
+\newlabel{eqn:upper_bound2}{{33}{37}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.33}{}}
+\newlabel{Eqn:PsiUpperBound1}{{34}{37}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.34}{}}
+\newlabel{Eqn:PsiUpperBound2}{{35}{37}{Lemmas used in Proposition~\ref {Prop:AdaptiveRateAffine}}{equation.8.35}{}}
+\newlabel{Lem:LogConcaveCentralMass}{{25}{37}{}{theorem.25}{}}
+\newlabel{Eq:Int}{{36}{37}{}{equation.8.36}{}}
 \citation{kim2016adaptation}
-\newlabel{lem:integral_approximation}{{38}{42}{}{theorem.38}{}}
-\bibstyle{plainnat}
+\citation{doss2016global}
+\newlabel{lem:integral_approximation}{{26}{38}{}{theorem.26}{}}
+\newlabel{Prop:SegmentBracket1}{{27}{38}{}{theorem.27}{}}
+\bibstyle{dcu}
 \bibdata{refs}
-\bibcite{bobkov2011concentration}{{1}{2011}{{Bobkov and Madiman}}{{}}}
-\bibcite{bobkov2003spectral}{{2}{2003}{{Bobkov}}{{}}}
-\bibcite{dumbgen2011approximation}{{3}{2011}{{D{\"u}mbgen et~al.}}{{D{\"u}mbgen, Samworth, and Schuhmacher}}}
-\bibcite{kim2016global}{{4}{2016}{{Kim and Samworth}}{{}}}
-\bibcite{kim2016adaptation}{{5}{2016}{{Kim et~al.}}{{Kim, Guntuboyina, and Samworth}}}
-\bibcite{lovasz2007geometry}{{6}{2007}{{Lov{\'a}sz and Vempala}}{{}}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.3.3}Bracketing Lemmas}{43}{subsubsection.7.3.3}}
-\newlabel{prop:segment_bracket1}{{39}{43}{}{theorem.39}{}}
-\newlabel{prop:segment_bracket2}{{40}{43}{}{theorem.40}{}}
+\bibcite{bhattacharya2012adaptive}{{1}{2012}{{Bhattacharya and\ Bickel}}{{}}}
+\bibcite{biau2003risk}{{2}{2003}{{Biau and\ Devroye}}{{}}}
+\bibcite{billingsley1995probability}{{3}{1995}{{Billingsley}}{{}}}
+\bibcite{bobkov2011concentration}{{4}{2011}{{Bobkov and\ Madiman}}{{}}}
+\bibcite{cule2010theoretical}{{5}{2010}{{Cule and\ Samworth}}{{}}}
+\bibcite{CSS2010}{{6}{2010}{{Cule et~al.}}{{Cule, Samworth and\ Stewart}}}
+\bibcite{donoho1996density}{{7}{1996}{{Donoho et~al.}}{{Donoho, Johnstone, Kerkyacharian and\ Picard}}}
+\bibcite{doss2016global}{{8}{2016}{{Doss and\ Wellner}}{{}}}
+\bibcite{dudley2002real}{{9}{2002}{{Dudley}}{{}}}
+\bibcite{dumbgen2007active}{{10}{2007}{{D{\"u}mbgen et~al.}}{{D{\"u}mbgen, H{\"u}sler and\ Rufibach}}}
+\bibcite{dumbgen2011approximation}{{11}{2011}{{D{\"u}mbgen et~al.}}{{D{\"u}mbgen, Samworth and\ Schuhmacher}}}
+\newlabel{Prop:SegmentBracket2}{{28}{39}{}{theorem.28}{}}
+\bibcite{Fisher1922}{{12}{1922}{{Fisher}}{{}}}
+\bibcite{Fisher1925}{{13}{1925}{{Fisher}}{{}}}
+\bibcite{fresen2013multivariate}{{14}{2013}{{Fresen}}{{}}}
+\bibcite{gao2007entropy}{{15}{2007}{{Gao and\ Wellner}}{{}}}
+\bibcite{grenander1956theory}{{16}{1956}{{Grenander}}{{}}}
+\bibcite{gu1993smoothing}{{17}{1993}{{Gu and\ Qiu}}{{}}}
+\bibcite{han2017isotonic}{{18}{2017}{{Han et~al.}}{{Han, Wang, Chatterjee and\ Samworth}}}
+\bibcite{han2016approximation}{{19}{2016}{{Han and\ Wellner}}{{}}}
+\bibcite{ibragimov1983estimation}{{20}{1983}{{Ibragimov and\ Khasminskii}}{{}}}
+\bibcite{kim2016adaptation}{{21}{2017a}{{Kim et~al.}}{{Kim, Guntuboyina and\ Samworth}}}
+\bibcite{kim2016adaptationsupp}{{22}{2017b}{{Kim et~al.}}{{Kim, Guntuboyina and\ Samworth}}}
+\bibcite{kim2016global}{{23}{2016}{{Kim and\ Samworth}}{{}}}
+\bibcite{liebscher2016estimation}{{24}{2016}{{Liebscher and\ Richter}}{{}}}
+\bibcite{liu2011forest}{{25}{2011}{{Liu et~al.}}{{Liu, Xu, Gu, Gupta, Lafferty and\ Wasserman}}}
+\bibcite{lovasz2007geometry}{{26}{2007}{{Lov{\'a}sz and\ Vempala}}{{}}}
+\bibcite{polonik1995density}{{27}{1995}{{Polonik}}{{}}}
+\bibcite{polonik1998silhouette}{{28}{1998}{{Polonik}}{{}}}
+\bibcite{rockafellar1997convex}{{29}{1997}{{Rockafellar}}{{}}}
+\bibcite{rosenblatt1956remarks}{{30}{1956}{{Rosenblatt}}{{}}}
+\bibcite{samworth2012independent}{{31}{2012}{{Samworth and\ Yuan}}{{}}}
+\bibcite{vandegeer2000empirical}{{32}{2000}{{van~de Geer}}{{}}}
+\bibcite{WandJones1995}{{33}{1995}{{Wand and\ Jones}}{{}}}

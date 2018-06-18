@@ -1,46 +1,190 @@
-\begin{thebibliography}{6}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\expandafter\ifx\csname urlstyle\endcsname\relax
-  \providecommand{\doi}[1]{doi: #1}\else
-  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+\begin{thebibliography}{xx}
 
-\bibitem[Bobkov and Madiman(2011)]{bobkov2011concentration}
-Sergey Bobkov and Mokshay Madiman.
+\harvarditem{Bhattacharya \harvardand\ Bickel}{2012}{bhattacharya2012adaptive}
+Bhattacharya, S. \harvardand\ Bickel, P.~J.  \harvardyearleft
+  2012\harvardyearright .
+\newblock Adaptive estimation in elliptical distributions with extensions to
+  high-dimensions, {\em Preprint. Available at
+  \texttt{http://www.science.oregonstate.edu/\textasciitilde{}bhattash/Site/Research.html}}
+  .
+
+\harvarditem{Biau \harvardand\ Devroye}{2003}{biau2003risk}
+Biau, G. \harvardand\ Devroye, L.  \harvardyearleft 2003\harvardyearright .
+\newblock On the risk of estimates for block decreasing densities, {\em J.
+  Mult. Anal.} {\bf 86}:~143--165.
+
+\harvarditem{Billingsley}{1995}{billingsley1995probability}
+Billingsley, P.  \harvardyearleft 1995\harvardyearright .
+\newblock {\em Probability and Measure}, Wiley, New York.
+
+\harvarditem{Bobkov \harvardand\ Madiman}{2011}{bobkov2011concentration}
+Bobkov, S. \harvardand\ Madiman, M.  \harvardyearleft 2011\harvardyearright .
 \newblock Concentration of the information in data with log-concave
-  distributions.
-\newblock \emph{The Annals of Probability}, 39\penalty0 (4):\penalty0
-  1528--1543, 2011.
+  distributions, {\em Ann. Probab.} {\bf 39}(4):~1528--1543.
 
-\bibitem[Bobkov(2003)]{bobkov2003spectral}
-Sergey~G Bobkov.
-\newblock Spectral gap and concentration for some spherically symmetric
-  probability measures.
-\newblock In \emph{Geometric aspects of functional analysis}, pages 37--43.
-  Springer, 2003.
+\harvarditem{Cule \harvardand\ Samworth}{2010}{cule2010theoretical}
+Cule, M. \harvardand\ Samworth, R.  \harvardyearleft 2010\harvardyearright .
+\newblock Theoretical properties of the log-concave maximum likelihood
+  estimator of a multidimensional density, {\em Elect. J. of Statist.} {\bf
+  4}:~254--270.
 
-\bibitem[D{\"u}mbgen et~al.(2011)D{\"u}mbgen, Samworth, and
-  Schuhmacher]{dumbgen2011approximation}
-Lutz D{\"u}mbgen, Richard Samworth, and Dominic Schuhmacher.
+\harvarditem[Cule et~al.]{Cule, Samworth \harvardand\ Stewart}{2010}{CSS2010}
+Cule, M., Samworth, R. \harvardand\ Stewart, M.  \harvardyearleft
+  2010\harvardyearright .
+\newblock Maximum likelihood estimation of a multi-dimensional log-concave
+  density, {\em J. Roy. Statist. Soc., Ser. B (with discussion)} {\bf
+  72}:~545--607.
+
+\harvarditem[Donoho et~al.]{Donoho, Johnstone, Kerkyacharian \harvardand\
+  Picard}{1996}{donoho1996density}
+Donoho, D.~L., Johnstone, I.~M., Kerkyacharian, G. \harvardand\ Picard, D.
+  \harvardyearleft 1996\harvardyearright .
+\newblock Density estimation by wavelet thresholding, {\em Ann. Statist.} {\bf
+  24}:~508--539.
+
+\harvarditem{Doss \harvardand\ Wellner}{2016}{doss2016global}
+Doss, C.~R. \harvardand\ Wellner, J.~A.  \harvardyearleft 2016\harvardyearright
+  .
+\newblock Global rates of convergence of the {MLE}s of log-concave and
+  $s$-concave densities, {\em Ann. Statist.} {\bf 44}:~954--981.
+
+\harvarditem{Dudley}{2002}{dudley2002real}
+Dudley, R.~M.  \harvardyearleft 2002\harvardyearright .
+\newblock {\em Real Analysis and Probability}, Cambridge University Press,
+  Cambridge.
+
+\harvarditem[D{\"u}mbgen et~al.]{D{\"u}mbgen, H{\"u}sler \harvardand\
+  Rufibach}{2007}{dumbgen2007active}
+D{\"u}mbgen, L., H{\"u}sler, A. \harvardand\ Rufibach, K.  \harvardyearleft
+  2007\harvardyearright .
+\newblock Active set and {EM} algorithms for {log-concave} densities based on
+  complete and censored data, {\em Preprint arXiv:0707.4643} .
+
+\harvarditem[D{\"u}mbgen et~al.]{D{\"u}mbgen, Samworth \harvardand\
+  Schuhmacher}{2011}{dumbgen2011approximation}
+D{\"u}mbgen, L., Samworth, R. \harvardand\ Schuhmacher, D.  \harvardyearleft
+  2011\harvardyearright .
 \newblock Approximation by log-concave distributions, with applications to
-  regression.
-\newblock \emph{The Annals of Statistics}, pages 702--730, 2011.
+  regression, {\em Ann. Statist.} {\bf 39}:~702--730.
 
-\bibitem[Kim and Samworth(2016)]{kim2016global}
-Arlene~KH Kim and Richard~J Samworth.
-\newblock Global rates of convergence in log-concave density estimation.
-\newblock \emph{The Annals of Statistics}, 44\penalty0 (6):\penalty0
-  2756--2779, 2016.
+\harvarditem{Fisher}{1922}{Fisher1922}
+Fisher, R.~A.  \harvardyearleft 1922\harvardyearright .
+\newblock On the interpretation of $\chi^2$ from contingency tables, and the
+  calculation of $p$, {\em J. Roy. Statist. Soc.} {\bf 85}(1):~87--94.
 
-\bibitem[Kim et~al.(2016)Kim, Guntuboyina, and Samworth]{kim2016adaptation}
-Arlene~KH Kim, Adityanand Guntuboyina, and Richard~J Samworth.
-\newblock Adaptation in log-concave density estimation.
-\newblock \emph{arXiv preprint arXiv:1609.00861}, 2016.
+\harvarditem{Fisher}{1925}{Fisher1925}
+Fisher, R.~A.  \harvardyearleft 1925\harvardyearright .
+\newblock Theory of statistical estimation, {\em Mathematical Proceedings of
+  the Cambridge Philosophical Society} {\bf 22}(5):~700--725.
 
-\bibitem[Lov{\'a}sz and Vempala(2007)]{lovasz2007geometry}
-L{\'a}szl{\'o} Lov{\'a}sz and Santosh Vempala.
-\newblock The geometry of logconcave functions and sampling algorithms.
-\newblock \emph{Random Structures \& Algorithms}, 30\penalty0 (3):\penalty0
-  307--358, 2007.
+\harvarditem{Fresen}{2013}{fresen2013multivariate}
+Fresen, D.  \harvardyearleft 2013\harvardyearright .
+\newblock A multivariate {G}nedenko law of large numbers, {\em Ann. Probab.}
+  {\bf 41}:~3051--3080.
+
+\harvarditem{Gao \harvardand\ Wellner}{2007}{gao2007entropy}
+Gao, F. \harvardand\ Wellner, J.~A.  \harvardyearleft 2007\harvardyearright .
+\newblock Entropy estimate for high-dimensional monotonic functions, {\em J.
+  Mult. Anal.} {\bf 98}:~1751--1764.
+
+\harvarditem{Grenander}{1956}{grenander1956theory}
+Grenander, U.  \harvardyearleft 1956\harvardyearright .
+\newblock On the theory of mortality measurement: part ii, {\em Scand. Actuar.
+  J.} {\bf 1956}(2):~125--153.
+
+\harvarditem{Gu \harvardand\ Qiu}{1993}{gu1993smoothing}
+Gu, C. \harvardand\ Qiu, C.  \harvardyearleft 1993\harvardyearright .
+\newblock Smoothing spline density estimation: Theory, {\em Ann. Statist.}
+  pp.~217--234.
+
+\harvarditem[Han et~al.]{Han, Wang, Chatterjee \harvardand\
+  Samworth}{2017}{han2017isotonic}
+Han, Q., Wang, T., Chatterjee, S. \harvardand\ Samworth, R.~J.
+  \harvardyearleft 2017\harvardyearright .
+\newblock Isotonic regression in general dimensions, {\em Preprint
+  arXiv:1708.09468} .
+
+\harvarditem{Han \harvardand\ Wellner}{2016}{han2016approximation}
+Han, Q. \harvardand\ Wellner, J.~A.  \harvardyearleft 2016\harvardyearright .
+\newblock Approximation and estimation of $s$-concave densities via {R}\'enyi
+  divergences, {\em Ann. Statist.} {\bf 44}:~1332--1359.
+
+\harvarditem{Ibragimov \harvardand\ Khasminskii}{1983}{ibragimov1983estimation}
+Ibragimov, I.~A. \harvardand\ Khasminskii, R.  \harvardyearleft
+  1983\harvardyearright .
+\newblock Estimation of distribution density, {\em Journal of Mathematical
+  Sciences} {\bf 21}(1):~40--57.
+
+\harvarditem[Kim et~al.]{Kim, Guntuboyina \harvardand\
+  Samworth}{2017a}{kim2016adaptation}
+Kim, A. K.~H., Guntuboyina, A. \harvardand\ Samworth, R.~J.  \harvardyearleft
+  2017a\harvardyearright .
+\newblock Adaptation in log-concave density estimation, {\em Ann. Statist., to
+  appear} .
+
+\harvarditem[Kim et~al.]{Kim, Guntuboyina \harvardand\
+  Samworth}{2017b}{kim2016adaptationsupp}
+Kim, A. K.~H., Guntuboyina, A. \harvardand\ Samworth, R.~J.  \harvardyearleft
+  2017b\harvardyearright .
+\newblock Online supplement to `{A}daptation in log-concave density
+  estimation', {\em Ann. Statist., to appear} .
+
+\harvarditem{Kim \harvardand\ Samworth}{2016}{kim2016global}
+Kim, A. K.~H. \harvardand\ Samworth, R.~J.  \harvardyearleft
+  2016\harvardyearright .
+\newblock Global rates of convergence in log-concave density estimation, {\em
+  Ann. Statist.} {\bf 44}(6):~2756--2779.
+
+\harvarditem{Liebscher \harvardand\ Richter}{2016}{liebscher2016estimation}
+Liebscher, E. \harvardand\ Richter, W.-D.  \harvardyearleft
+  2016\harvardyearright .
+\newblock Estimation of star-shaped distributions, {\em Risks} {\bf 4: 44}.
+
+\harvarditem[Liu et~al.]{Liu, Xu, Gu, Gupta, Lafferty \harvardand\
+  Wasserman}{2011}{liu2011forest}
+Liu, H., Xu, M., Gu, H., Gupta, A., Lafferty, J. \harvardand\ Wasserman, L.
+  \harvardyearleft 2011\harvardyearright .
+\newblock Forest density estimation, {\em J. Mach. Learn. Res.} {\bf
+  12}:~907--951.
+
+\harvarditem{Lov{\'a}sz \harvardand\ Vempala}{2007}{lovasz2007geometry}
+Lov{\'a}sz, L. \harvardand\ Vempala, S.  \harvardyearleft 2007\harvardyearright
+  .
+\newblock The geometry of logconcave functions and sampling algorithms, {\em
+  Random Struct. \& Algor.} {\bf 30}(3):~307--358.
+
+\harvarditem{Polonik}{1995}{polonik1995density}
+Polonik, W.  \harvardyearleft 1995\harvardyearright .
+\newblock Density estimation under qualitative assumptions in higher
+  dimensions, {\em J. Mult. Anal.} {\bf 55}:~61--81.
+
+\harvarditem{Polonik}{1998}{polonik1998silhouette}
+Polonik, W.  \harvardyearleft 1998\harvardyearright .
+\newblock The silhouette, concentration functions, and {ML}-density estimation
+  under order restrictions, {\em Ann. Statist.} {\bf 26}:~1857--1877.
+
+\harvarditem{Rockafellar}{1997}{rockafellar1997convex}
+Rockafellar, R.~T.  \harvardyearleft 1997\harvardyearright .
+\newblock {\em Convex Analysis}, Princeton University Press, Princeton, NJ.
+
+\harvarditem{Rosenblatt}{1956}{rosenblatt1956remarks}
+Rosenblatt, M.  \harvardyearleft 1956\harvardyearright .
+\newblock Remarks on some nonparametric estimates of a density function, {\em
+  Ann. Math. Stat.} {\bf 27}(3):~832--837.
+
+\harvarditem{Samworth \harvardand\ Yuan}{2012}{samworth2012independent}
+Samworth, R.~J. \harvardand\ Yuan, M.  \harvardyearleft 2012\harvardyearright .
+\newblock Independent component analysis via nonparametric maximum likelihood,
+  {\em Ann. Statist.} {\bf 40}:~2973--3002.
+
+\harvarditem{van~de Geer}{2000}{vandegeer2000empirical}
+van~de Geer, S.  \harvardyearleft 2000\harvardyearright .
+\newblock {\em Empirical Processes in $M$-Estimation}, Cambridge University
+  Press, Cambridge.
+
+\harvarditem{Wand \harvardand\ Jones}{1995}{WandJones1995}
+Wand, M. \harvardand\ Jones, M.  \harvardyearleft 1995\harvardyearright .
+\newblock {\em Kernel Smoothing}, Chapman and Hall/CRC Monographs on Statistics
+  and Applied Probability, Boca-Raton, Florida.
 
 \end{thebibliography}

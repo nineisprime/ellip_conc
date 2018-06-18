@@ -1,28 +1,14 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Notation}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Elliptical Density}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{Identifiability}{section.1}% 4
-\BOOKMARK [2][-]{subsection.1.4}{Characterizations}{section.1}% 5
-\BOOKMARK [1][-]{section.2}{Log-Concavity}{}% 6
-\BOOKMARK [2][-]{subsection.2.1}{Projection Operator}{section.2}% 7
-\BOOKMARK [1][-]{section.3}{Algorithm}{}% 8
-\BOOKMARK [2][-]{subsection.3.1}{Piecewise Linear Parametrization}{section.3}% 9
-\BOOKMARK [3][-]{subsubsection.3.1.1}{Derivatives}{subsection.3.1}% 10
-\BOOKMARK [3][-]{subsubsection.3.1.2}{Active Set}{subsection.3.1}% 11
-\BOOKMARK [3][-]{subsubsection.3.1.3}{Optimization over an Active Set}{subsection.3.1}% 12
-\BOOKMARK [1][-]{section.4}{Moment Properties}{}% 13
-\BOOKMARK [2][-]{subsection.4.1}{Bounds on First Moment}{section.4}% 14
-\BOOKMARK [1][-]{section.5}{Envelope bounds}{}% 15
-\BOOKMARK [1][-]{section.6}{Rate of Convergence}{}% 16
-\BOOKMARK [2][-]{subsection.6.1}{Moment Characterizations of h0}{section.6}% 17
-\BOOKMARK [2][-]{subsection.6.2}{Differential Entropy of h0}{section.6}% 18
-\BOOKMARK [2][-]{subsection.6.3}{Moment Preservation of MLE}{section.6}% 19
-\BOOKMARK [2][-]{subsection.6.4}{Proof of Rate}{section.6}% 20
-\BOOKMARK [2][-]{subsection.6.5}{Bracketing Entropy}{section.6}% 21
-\BOOKMARK [1][-]{section.7}{Adaptation}{}% 22
-\BOOKMARK [2][-]{subsection.7.1}{Adaptive Rate of Convergence}{section.7}% 23
-\BOOKMARK [2][-]{subsection.7.2}{Local Bracketing}{section.7}% 24
-\BOOKMARK [2][-]{subsection.7.3}{A General Result on Local Brackets}{section.7}% 25
-\BOOKMARK [3][-]{subsubsection.7.3.1}{Bound Lemmas}{subsection.7.3}% 26
-\BOOKMARK [3][-]{subsubsection.7.3.2}{Technical Lemmas}{subsection.7.3}% 27
-\BOOKMARK [3][-]{subsubsection.7.3.3}{Bracketing Lemmas}{subsection.7.3}% 28
+\BOOKMARK [1][-]{section.2}{Spherically symmetric log-concave densities and projections}{}% 2
+\BOOKMARK [1][-]{section.3}{Moment preservation properties}{}% 3
+\BOOKMARK [1][-]{section.4}{Worst case and adaptive risk bounds}{}% 4
+\BOOKMARK [1][-]{section.5}{Algorithm}{}% 5
+\BOOKMARK [1][-]{section.6}{Empirical performance}{}% 6
+\BOOKMARK [1][-]{section.7}{Proofs of main results}{}% 7
+\BOOKMARK [2][-]{subsection.7.1}{Proofs from Section 2}{section.7}% 8
+\BOOKMARK [2][-]{subsection.7.2}{Proofs from Section 3}{section.7}% 9
+\BOOKMARK [2][-]{subsection.7.3}{Proofs from Section 4}{section.7}% 10
+\BOOKMARK [1][-]{section.8}{Auxiliary results}{}% 11
+\BOOKMARK [2][-]{subsection.8.1}{Lemmas used in results in Section 3}{section.8}% 12
+\BOOKMARK [2][-]{subsection.8.2}{Lemmas used in both Theorem 8 and Proposition 10}{section.8}% 13
+\BOOKMARK [2][-]{subsection.8.3}{Lemmas used in Proposition 10}{section.8}% 14

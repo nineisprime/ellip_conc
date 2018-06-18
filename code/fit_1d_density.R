@@ -17,43 +17,32 @@
 ##   phi -- (n vector) of phi-values
 ##
 
+##
+## returns phi : [0, inf) -> [-inf, inf) such that
+## 
+## int_0^inf e^phi(r) r^(p-1) dr = 1
+## 
 
-fit_1d_density <- function(Y, p, M=500000) {
+fit_1d_density <- function(Y, p, M=60000) {
 
     print("Starting ...")
     
-    eps = 5e-5
-    eps2 = 5e-4
+    EPS = 1e-4
+    EPS2 = 1
+    CONV_THRESH = 5e-6
     
     Y = sort(Y)
     n = length(Y)
 
+    mu = mean(Y)
+    sigma = sd(Y)
+    
+    Y = Y/sigma
+    ## production-TODO: check for outlier and positivity
+    mu = mean(Y)
+    
     ygap = Y[2:n] - Y[1:(n-1)]
 
-    ## create V matrix representing constraints
-    ## V'phi <= 0
-    diffmat = bandSparse(n-1, n, k=c(0,1),
-        diagonals=list( -1/ygap, 1/ygap ))
-
-    diffmat2 = bandSparse(n-2, n-1, k=c(0,1),
-        diagonals=list(rep(-1,n-2), rep(1, n-2)))
-
-    sec_diffmat = diffmat2 %*% diffmat
-    sec_diffmat = rBind(c(-1/ygap[1], 1/ygap[1], rep(0,n-2)), sec_diffmat, rep(1, n))
-    V = sec_diffmat
-
-    ## rows of B represent dual-vectors
-    ## Each V_i is a row of V
-    ## Each B_i is a row of B
-    ##
-    ## B_i'V_i = -1
-    ## B_i'V_j = 0
-    
-    B = -t(solve(V))
-    
-    V = V[1:(n-1), ]
-    ##B = B[1:(n-1), ]
-    
     
     ## precompute quantities needed for numerical integration
     num_int_res = numerical_integration_helper(Y, M)
@@ -71,30 +60,17 @@ fit_1d_density <- function(Y, p, M=500000) {
 
     print("First run ...")
 
-    ptm = proc.time()
-    if (p < 200){
-        phi = active_set_newton(Y, A, p, M=M)
-    } else {
-        phi = active_set_newton_largep(Y, A, p, M=M)
-
-    }
-    phi = expand_phi(phi, Y, A)
-
-    print(proc.time() - ptm)
     ##ptm = proc.time()
-    
-    if (p < 200) {
-        grad = compute_gradient_phi(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
-            gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
-    } else {
-        grad = compute_gradient_phi_largep(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
-            gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
-    }
+    phi = active_set_newton_largep(Y, A, p, M=M, evalpts=evalpts, bdpts=bdpts)
+    phi_n = expand_phi(phi, Y, A)
 
-    ##print(proc.time() - ptm)
+    grad = compute_gradient_phi_largep(phi_n, y_lvec=y_lvec,
+                                       y_rvec=y_rvec, ind_vec2=ind_vec2,
+                                       gap_vec=gap_vec, kepler_ls=kepler_ls,
+                                       evalpts=evalpts, ixs_ls=ixs_ls,
+                                       mu=mu, p=p)
     
-    slack = V %*% phi
-    stopifnot(slack[A] > -eps2)
+
 
     
     safety = 1
@@ -102,99 +78,118 @@ fit_1d_density <- function(Y, p, M=500000) {
         safety = safety + 1
         stopifnot(safety < 200)
 
-        dual_vec = B %*% grad
-
+        grad_bar = grad - mean(grad)
+        tmp = rev(cumsum(rev( grad_bar[2:n] )))
+        dual_vec = rev(cumsum(rev( -ygap*tmp )))
+        dual_vec = dual_vec/sqrt(seq(n-1, 1, -1))
+        
         I = setdiff(1:n, A)
 
+        ## ASSERT
+        ## by optimality, b_i' gradient = 0 for loose constraints i
         if (length(I) > 1){
-            stopifnot(abs(dual_vec[I[1:(length(I)-1)]]) < eps)
+            dual_vec_I = dual_vec[I[1:(length(I)-1)]]
+            stopifnot(max(abs(dual_vec_I)) < EPS2)
         }
-        
+
         violation_val = max(dual_vec[A])
         violation_ind = which(dual_vec == violation_val)
-
-        if (violation_val < eps) break
+        if (violation_val < CONV_THRESH) break
 
         ## diagnostics
-        print(paste("iteration: ", safety, "adding knot: ", violation_ind))
+        print(paste("iteration:", safety, "adding knot:", violation_ind,
+                    "violation:", violation_val))
 
+        
         ## add a knot (remove an active point)
-        A = A[ !(A == violation_ind) ]
-        I = setdiff(1:n, A)
+        Aprime = A[ !(A == violation_ind) ]
+        Iprime = setdiff(1:n, Aprime)
 
-        ##print(I)
-        ##ptm = proc.time()
-        if (p < 200){
-            phi_prime = active_set_newton(Y, A, p, M=M, init_phi=phi[I])
-        } else {
-            phi_prime = active_set_newton_largep(Y, A, p, M=M, init_phi=phi[I])
-        }
-        ##print(proc.time() - ptm)
-        print("Checkpoint")
         
-        phi_prime = expand_phi(phi_prime, Y, A)
+        phi_prime = active_set_newton_largep(Y, Aprime, p, M=M,
+                                             evalpts=evalpts, bdpts=bdpts,
+                                             init_phi=phi_n[Iprime])
 
-        slack_prime = V %*% phi_prime
+        YIprime = Y[Iprime]
+        nIprime = length(Iprime)
+        Vprime = createV(YIprime[2:nIprime] - YIprime[1:(nIprime-1)], nIprime)
+
+        slack_prime = Vprime %*% phi_prime
+
+        newix = which(Iprime == violation_ind)
+        phi_tmp = rep(0, nIprime)
+        phi_tmp[setdiff(1:nIprime, c(newix))] = phi
+        if (newix == 1)
+            phi_tmp[newix] = phi[1]
+        else
+            phi_tmp[newix] = ( (YIprime[newix+1] - YIprime[newix])*phi_tmp[newix-1] +
+                                (YIprime[newix] - YIprime[newix-1])*phi_tmp[newix+1] )/
+                               (YIprime[newix+1] - YIprime[newix-1]) 
         
-        ##diagnostic
+        
+        slack = Vprime %*% phi_tmp
+
+        ## ASSERT
         ## for any i in A, V_i * phi_prime should be 0
-        stopifnot(slack_prime[A] > -eps2)
+        if (slack_prime[newix] > EPS){
+            print("Secondary finish")
+            return(phi_n - (p-1)*log(mu) - p*log(sigma))
+        }
         
-        ## remove knots until phi_prime satisfy all constraints
-        safety2 = 1
-        while ( any(slack_prime > eps2) ){
-            safety2 = safety2 + 1
-            stopifnot(safety2 < 200)
-            
-            slack_violate = slack[slack_prime > eps2]
-            slack_prime_violate = slack_prime[slack_prime > eps2]
+      
+        ## remove knots (add tight constraints A)
+        ## until phi_prime satisfy all constraints
+        while ( any(slack_prime > EPS) ){
 
-            t_coef = max(-slack_prime_violate/(slack_violate - slack_prime_violate))
-            
-            phi = t_coef*phi + (1-t_coef)*phi_prime
+            ## LOOP invariant:
+            ##           phi_prime
+            ##           Iprime
+            ##   slack,  slack_prime
+            ##
+            ## all on the Iprime space
 
-            slack = V %*% phi
-            
-            A_new = which(slack > -eps2)
+            slack_violate = slack[which(slack_prime > EPS)]
+            slack_prime_violate = slack_prime[which(slack_prime > EPS)]
 
-            ## diagnostics
-            ## by removing knot, the active set should be larger
-            stopifnot( all(A %in% A_new) )
-            stopifnot(length(A_new) > length(A))
-            
-            rm_knot_ix = setdiff(A_new, A)
+            tmp = (-slack_prime_violate/(slack_violate - slack_prime_violate))
+            t_coef = max(tmp)
+
+            rm_knot_ix_Iprime = which(slack_prime == slack_prime_violate[which.max(tmp)])
+            keep_ixs = which(slack_prime != slack_prime_violate[which.max(tmp)])
+
+            rm_knot_ix = Iprime[rm_knot_ix_Iprime]
             print(paste("  remove knot: ", rm_knot_ix))
+            I_new = c(Iprime[keep_ixs], n)
+            A_new = setdiff(1:n, I_new)
 
-            A = A_new
+            slack = t_coef*slack + (1-t_coef)*slack_prime
+            slack = slack[keep_ixs]
+
+            phi_prime = active_set_newton_largep(Y, A_new, p, M=M,
+                                                 evalpts=evalpts, bdpts=bdpts,
+                                                 init_phi=phi_n[I_new])
+            Iprime = I_new
+            nIprime = length(Iprime)
+            YIprime = Y[Iprime]
+
+            if (nIprime == 1) break
             
-            I = setdiff(1:n, A)
-            if (p < 200){
-                phi_prime = active_set_newton(Y, A, p, M=M, init_phi=phi[I])
-            } else {
-                phi_prime = active_set_newton_largep(Y, A, p, M=M, init_phi=phi[I])
-            }
-            
-            phi_prime = expand_phi(phi_prime, Y, A)
-            slack_prime = V %*% phi_prime
-            
+            Vprime = createV(YIprime[2:nIprime] - YIprime[1:(nIprime-1)], nIprime)
+            slack_prime = Vprime %*% phi_prime
         }
+        ## Loop outputs phi_prime, dimension Iprime
 
-    
         phi = phi_prime
-        slack = slack_prime
+        A = setdiff(1:n, Iprime)
+        phi_n = expand_phi(phi, Y, A)
+        grad = compute_gradient_phi_largep(phi_n, y_lvec=y_lvec,
+                                           y_rvec=y_rvec, ind_vec2=ind_vec2,
+                                           gap_vec=gap_vec, kepler_ls=kepler_ls,
+                                           evalpts=evalpts, ixs_ls=ixs_ls,
+                                           mu=mu, p=p)
         
-        A = which(slack > -eps2)
-        
-        if (p < 200){
-            grad = compute_gradient_phi(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
-                gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
-        } else {
-          grad = compute_gradient_phi_largep(phi, y_lvec=y_lvec, y_rvec=y_rvec, ind_vec2=ind_vec2,
-                gap_vec=gap_vec, kepler_ls=kepler_ls, evalpts=evalpts, ixs_ls=ixs_ls, p=p)
-        }
-
     }
-    return(phi)
+    return(phi_n - (p-1)*log(mu) - p*log(sigma))
 }
 
 ## INPUT:
@@ -237,28 +232,88 @@ compute_gradient_phi <- function(phi, y_lvec, y_rvec, gap_vec, kepler_ls, ind_ve
 
 ## Same as before but for p large
 compute_gradient_phi_largep <- function(phi, y_lvec, y_rvec, gap_vec, kepler_ls, ind_vec2,
-                                 evalpts, ixs_ls, p){
+                                 evalpts, ixs_ls, mu, p){
   
     n = length(phi)
 
     phi_lvec = rep2(ind_vec2, phi[1:(n-1)])
     phi_rvec = rep2(ind_vec2, phi[2:n])
     
-    fnpts = hx_eval(phi_lvec, phi_rvec, evalpts, y_lvec, y_rvec, gap_vec, p)
+    fnpts = hx_eval(phi_lvec, phi_rvec, evalpts, y_lvec, y_rvec, gap_vec, mu, p)
 
     grad = rep(1/n, n)
-    grad[1] = grad[1] - hx1_int(phi[1], y_lvec[1], p)
+    grad[1] = grad[1] - hx1_int(phi[1], y_lvec[1], mu, p)
+    
+    ## for (i in 1:(n-1)){
+    ##     ixs = ixs_ls[[i]]
 
-    for (i in 1:(n-1)){
+    ##     v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 
+    ##     v1 = (y_rvec[ixs] - evalpts[ixs])/gap_vec[ixs]
+
+    ##     grad[i] = grad[i] - sum(v1 * kepler_ls[[i]] * fnpts[ixs])
+    ##     grad[i+1] = grad[i+1] - sum(v2 * kepler_ls[[i]] * fnpts[ixs])
+    ## }
+    
+    a_vec = rep(0, n-1)
+    b_vec = rep(0, n-1)
+
+    K = 300
+    lengths = sapply(ixs_ls, FUN=length)
+    sm_gaps = which(lengths <= K)
+    big_gaps = which(lengths > K)
+    
+    ixs_sm_gaps =  lapply(ixs_ls[sm_gaps],
+                            function(x){length(x) = K; return(x)})
+    ixs = do.call("cbind", ixs_sm_gaps)
+    ixs[is.na(ixs)] = 1
+
+    kepler_sm_gaps = lapply(kepler_ls[sm_gaps],
+                            function(x){length(x) = K; return(x)})
+    kepler_mat = do.call("cbind", kepler_sm_gaps)
+    kepler_mat[is.na(kepler_mat)] = 0
+    
+    v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 
+    v1 = (y_rvec[ixs] - evalpts[ixs])/gap_vec[ixs]
+
+    v2_mat = matrix(v2, nrow(ixs), ncol(ixs))
+    v1_mat = matrix(v1, nrow(ixs), ncol(ixs))
+
+    fn_mat = matrix(fnpts[ixs], nrow(ixs), ncol(ixs))
+
+    a_vec[sm_gaps] = apply(- v1_mat * kepler_mat * fn_mat, MARGIN=2, FUN=sum)
+    b_vec[sm_gaps] = apply(- v2_mat * kepler_mat * fn_mat, MARGIN=2, FUN=sum)
+    
+    for (i in big_gaps){
         ixs = ixs_ls[[i]]
 
         v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs] 
         v1 = (y_rvec[ixs] - evalpts[ixs])/gap_vec[ixs]
 
-        grad[i] = grad[i] - sum(v1 * kepler_ls[[i]] * fnpts[ixs])
-        grad[i+1] = grad[i+1] - sum(v2 * kepler_ls[[i]] * fnpts[ixs])
+        a_vec[i] = - sum(v1 * kepler_ls[[i]] * fnpts[ixs])
+        b_vec[i] = - sum(v2 * kepler_ls[[i]] * fnpts[ixs])
     }
 
+    grad[1:(n-1)] = grad[1:(n-1)] + a_vec
+    grad[2:n] = grad[2:n] + b_vec
+    
+    ## afn <- function(i){
+    ##     ixs = ixs_ls[[i]]
+    ##     v1 = (y_rvec[ixs] - evalpts[ixs])/gap_vec[ixs]
+    ##     return(- sum(v1 * kepler_ls[[i]] * fnpts[ixs]))
+    ## }
+    
+    ## bfn <- function(i){
+    ##     ixs = ixs_ls[[i]]
+    ##     v2 = (evalpts[ixs] - y_lvec[ixs])/gap_vec[ixs]
+    ##     return(- sum(v2 * kepler_ls[[i]] * fnpts[ixs]))
+    ## }
+        
+    ## a_coefs = sapply(1:(n-1), afn)
+    ## b_coefs = sapply(1:(n-1), bfn)
+
+    ## grad[1:(n-1)] = grad[1:(n-1)] + a_coefs
+    ## grad[2:n] = grad[2:n] + b_coefs
+    
     return(grad)
 }
 
@@ -313,3 +368,25 @@ expand_phi <- function(phi, Y, A){
 }
 
     
+## create V matrix
+
+createV <- function(gaps, nI) {
+
+    if (nI == 2){
+        V = matrix(c(-1, 1), 1, 2)
+        return(V)
+    }
+    
+    
+    diffmat = bandSparse(nI-1, nI, k=c(0,1),
+                         diagonals=list( -1/gaps, 1/gaps ))
+
+    diffmat2 = bandSparse(nI-2, nI-1, k=c(0,1),
+                          diagonals=list(rep(-1,nI-2), rep(1, nI-2)))
+
+    sec_diffmat = diffmat2 %*% diffmat
+    sec_diffmat = rBind(c(-1/gaps[1], 1/gaps[1], rep(0,nI-2)), sec_diffmat)
+    V = sec_diffmat
+
+    return(V)
+}

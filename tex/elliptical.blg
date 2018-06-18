@@ -1,46 +1,46 @@
-This is BibTeX, Version 0.99d (TeX Live 2016)
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: elliptical.aux
-The style file: plainnat.bst
+The style file: dcu.bst
 Database file #1: refs.bib
-You've used 6 entries,
-            2773 wiz_defined-function locations,
-            632 strings with 5893 characters,
-and the built_in function-call counts, 2931 in all, are:
-= -- 278
-> -- 133
-< -- 6
-+ -- 45
-- -- 39
-* -- 222
-:= -- 434
-add.period$ -- 19
-call.type$ -- 6
-change.case$ -- 31
-chr.to.int$ -- 6
-cite$ -- 12
-duplicate$ -- 141
-empty$ -- 252
-format.name$ -- 51
-if$ -- 628
-int.to.chr$ -- 1
-int.to.str$ -- 1
-missing$ -- 6
-newline$ -- 38
-num.names$ -- 24
-pop$ -- 60
+You've used 33 entries,
+            2921 wiz_defined-function locations,
+            824 strings with 9461 characters,
+and the built_in function-call counts, 121533 in all, are:
+= -- 19720
+> -- 1587
+< -- 0
++ -- 9200
+- -- 476
+* -- 10328
+:= -- 24734
+add.period$ -- 66
+call.type$ -- 33
+change.case$ -- 457
+chr.to.int$ -- 32
+cite$ -- 33
+duplicate$ -- 469
+empty$ -- 1033
+format.name$ -- 606
+if$ -- 21780
+int.to.chr$ -- 6
+int.to.str$ -- 0
+missing$ -- 38
+newline$ -- 135
+num.names$ -- 338
+pop$ -- 101
 preamble$ -- 1
-purify$ -- 25
+purify$ -- 495
 quote$ -- 0
-skip$ -- 112
+skip$ -- 432
 stack$ -- 0
-substring$ -- 155
-swap$ -- 22
-text.length$ -- 2
+substring$ -- 27601
+swap$ -- 63
+text.length$ -- 462
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 66
+type$ -- 122
 warning$ -- 0
-while$ -- 30
+while$ -- 738
 width$ -- 0
-write$ -- 85
+write$ -- 447

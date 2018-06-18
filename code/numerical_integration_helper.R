@@ -30,39 +30,48 @@
 
 ## evalpts[ixs_ls[i]] contains all the evaluation points in [Y_i, Y_{i+1}]
 
+## ASSUMPTION: min(Y) = min(evalpts), max(Y) = max
 
+numerical_integration_helper <- function(Y, M, evalpts=NULL, bdpts=NULL){
 
-
-numerical_integration_helper <- function(Y, M){
-
+    EPS = 1e-8
     Y = sort(Y)
-    nI = length(Y)
+    m = length(Y)
     
-    grid_width = (max(Y) - min(Y))/(M-1)
-    grid = seq(min(Y), max(Y), length.out=M)
-
-    evalpts = c(grid, Y)
-    evalpts = unique(evalpts)
-    evalpts = sort(evalpts)
-    
-    nn = length(evalpts)
-    midpts = (evalpts[2:nn] + evalpts[1:(nn-1)])/2
-    bdpts = evalpts
-    evalpts = sort(c(midpts, evalpts))
+    if (is.null(evalpts)){
+        grid_width = (max(Y) - min(Y))/(M-1)
+        grid = seq(min(Y), max(Y), length.out=M)        
+        
+        evalpts = c(grid, Y)
+        evalpts = unique(evalpts)
+        evalpts = sort(evalpts)
+        
+        nn = length(evalpts)
+        midpts = (evalpts[2:nn] + evalpts[1:(nn-1)])/2
+        bdpts = evalpts
+        evalpts = sort(c(midpts, evalpts))
+    } else {
+        ## ERROR CHECK
+        if ( Y[m] != max(evalpts)  || Y[1] != min(evalpts)){
+            print(Y[1])
+            print(min(evalpts))
+            stop("ERROR! numerical integration helper input error.")
+        }
+    }
 
     ## ind_vec[i] is the number of boundary-evaluation points in [Y_1, Y_i]
     ## both right and left inclusive
-    ind_vec = which(bdpts %in% Y)[2:nI]
-    ##ind_vec = ceiling( (Y[2:nI] - min(Y))/grid_width - 1) + 2
+    ind_vec = which(bdpts %in% Y)[2:m]
+    ##ind_vec = ceiling( (Y[2:m] - min(Y))/grid_width - 1) + 2
 
-    stopifnot(ind_vec[nI-1] == length(bdpts))
+    stopifnot(ind_vec[m-1] == length(bdpts))
     
     ## for i=1, ind_vec2[1] is the number of eval points in [Y_1, Y_2]
     ## for i > 1, ind_vec2[i] is number of evaluation points in the (Y_{i-1}, Y_i]
     ## interval, right-inclusive
-    ## there are (nI-1) such intervals, ind_vec2 has length (nI-1)
-    if (nI > 2){
-        ind_vec2 = c(ind_vec[1], ind_vec[2:(nI-1)] - ind_vec[1:(nI-2)] ) 
+    ## there are (m-1) such intervals, ind_vec2 has length (m-1)
+    if (m > 2){
+        ind_vec2 = c(ind_vec[1], ind_vec[2:(m-1)] - ind_vec[1:(m-2)] ) 
     } else {
         ind_vec2 = c(ind_vec[1]) 
     }
@@ -72,9 +81,9 @@ numerical_integration_helper <- function(Y, M){
 
     
     ## y_rvec repeats each Y_i by ind_vec2[i] times
-    y_rvec = rep2(ind_vec2, Y[2:nI])
-    y_lvec = rep2(ind_vec2, Y[1:(nI-1)])
-    gap_vec = rep2(ind_vec2, Y[2:nI] - Y[1:(nI-1)])
+    y_rvec = rep2(ind_vec2, Y[2:m])
+    y_lvec = rep2(ind_vec2, Y[1:(m-1)])
+    gap_vec = rep2(ind_vec2, Y[2:m] - Y[1:(m-1)])
 
 
     ## precompute kepler_global_wts
@@ -92,7 +101,7 @@ numerical_integration_helper <- function(Y, M){
     ix1 = 1
     bd_ix1 = 1
     
-    for (i in 1:(nI-1)){
+    for (i in 1:(m-1)){
         if (i==1) {
             ixs = ix1:(ix1 + ind_vec2[i]-1)
             ix1 = ind_vec2[i] 
