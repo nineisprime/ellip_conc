@@ -16,13 +16,11 @@
 ## phi -- ( length(I)-vector ) of function values
 ##
 
-
-
 active_set_newton_largep <- function(Y, A, p, M=500000, evalpts, bdpts,
                                      init_phi=NULL, diagnostic=FALSE){
 
-    CONV_THRESH = 1e-8
-    EPS = 1e-6
+    CONV_THRESH = 1e-15
+    EPS = 1e-7
     
     n = length(Y)
     I = setdiff(1:n, A)
@@ -41,14 +39,6 @@ active_set_newton_largep <- function(Y, A, p, M=500000, evalpts, bdpts,
     ## precompute grad_ypart
     grad_ypart = rep(0, nI)
     grad_ypart[1] = I[1] 
-
-    ## if (!(1 %in% I)){
-    ##     ixs = 1:I[1]
-    ##     y_lvec = rep(min(Y), length(ixs))
-    ##     y_rvec = rep(YI_sorted[1], length(ixs))
-    ##     ygap = YI_sorted[1] - min(Y)
-
-    ##     grad_ypart[1] = ...
     
     for (i in 1:(nI-1)){
         if (nI == 1) break

@@ -39,7 +39,7 @@ numerical_integration_helper <- function(Y, M, evalpts=NULL, bdpts=NULL){
     m = length(Y)
     
     if (is.null(evalpts)){
-        grid_width = (max(Y) - min(Y))/(M-1)
+        #grid_width = (max(Y) - min(Y))/(M-1)
         grid = seq(min(Y), max(Y), length.out=M)        
         
         evalpts = c(grid, Y)

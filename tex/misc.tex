@@ -1,11 +1,33 @@
 
 \documentclass{article}
 \usepackage{minx_math}
+\usepackage{bbm}
 
 \title{Miscellaneous Notes for Elliptical Log-Concave Density}
 
 \begin{document}
 \maketitle
+
+
+Define $K_n := K \backslash (1 - \frac{1}{n}) K$. Let $Z \sim \mathrm{Unif}(K)$, then we have that
+\[
+  Z = Z_n W + Z_n' (1 - W)
+\]
+
+where $W := \mathbbm{I}\{Z \in K_n\}$, $Z_n \sim \mathrm{Unif}(K_n)$, $Z_n' \sim \mathrm{Unif}((1 - \frac{1}{n}) K)$, and $W, Z_n, Z'_n$ are independent. If $W = 1$, then $Z/\|Z\|_K = Z_n / \| Z_n \|_K$ and if $W = 0$, then $Z/\|Z\|_K = Z'_n / \| Z'_n \|_K$. Thus,
+\[
+  \frac{Z}{\|Z\|_K} = \frac{Z_n}{\|Z_n\|_K} W + \frac{Z_n'}{\| Z'_n \|_K} (1 - W).
+\]
+Note that $\frac{Z_n'}{\| Z'_n \|_K}$ is identically distributed as $\frac{Z}{\|Z\|_K}$ since $Z_n'$ is identically distributed as $(1 - \frac{1}{n}) Z$. Then,
+
+\[
+  \phi_{\frac{Z}{\|Z\|_K}}(t) = \lambda \phi_{\frac{Z}{\|Z\|_K}}(t) + (1 - \lambda) \phi_{\frac{Z_n}{\|Z_n\|_K}}(t),
+\]
+where $\lambda = \mathbb{P}(W = 1)$. Thus, we have that $\frac{Z_n}{\| Z_n \|_K}$ is identically distributed as $\frac{Z}{\|Z\|_K}$.
+
+Since $\| Z_n - \frac{Z_n}{\|Z_n\|_K} \| \leq \frac{1}{\|Z_n \|_K} - 1 \leq \frac{1}{1 - \frac{1}{n}} - 1 \rightarrow 0$, we have that $Z_n$ converges weakly to $\frac{Z}{\|Z\|_K}$. 
+
+
 
 \section{Envelope Search}
 

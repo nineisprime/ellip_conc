@@ -23,13 +23,13 @@
 ## int_0^inf e^phi(r) r^(p-1) dr = 1
 ## 
 
-fit_1d_density <- function(Y, p, M=60000) {
+fit_1d_density <- function(Y, p, M=1000000) {
 
     print("Starting ...")
     
-    EPS = 1e-4
+    EPS = 1e-7
     EPS2 = 1
-    CONV_THRESH = 5e-6
+    CONV_THRESH = 1e-10
     
     Y = sort(Y)
     n = length(Y)

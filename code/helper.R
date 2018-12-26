@@ -1,4 +1,22 @@
 
+## Sample N points uniformly at random
+## from surface of a ball in p dimensions
+
+runifBall <- function(N, p){
+    X = matrix(rnorm(p*N), N, p)
+    X = diag(1/apply(X, 1, norm, '2')) %*% X
+    #X = diag(runif(N)^(1/p)) %*% X
+}
+
+## Sample N points uniformly at random from
+## surface of a cube in p dimensions
+
+runifSquare <- function(N, p){
+    X = matrix(2*runif(p*N)-1, N, p)
+    coord_max = apply(X, 1, function(x){max(abs(x))})
+    X = diag(1/coord_max) %*% X
+}
+
 
 ## various helper functions
 
@@ -28,16 +46,6 @@ hx_eval <- function(phi_lvec, phi_rvec, evalpts, y_lvec, y_rvec, gap_vec, mu, p)
             (1/6)*(evalpts - mu)^6 / mu^5))
     }
     
-    ## out = exp(
-    ##     ((y_rvec-evalpts)*phi_lvec + (evalpts-y_lvec)*phi_rvec )/gap_vec +
-    ##     sqrt(p)*(
-    ##         ((p-1)/p) * (evalpts - sqrt(p)) -
-    ##         ((p-1)/p^(3/2)) * (evalpts - sqrt(p))^2 * 1/2 +
-    ##         ((p-1)/p^(4/2)) * (evalpts - sqrt(p))^3 * 1/3 -
-    ##         ((p-1)/p^(5/2)) * (evalpts - sqrt(p))^4 * 1/4 +
-    ##         ((p-1)/p^(6/2)) * (evalpts - sqrt(p))^5 * 1/5 -
-    ##         ((p-1)/p^(7/2)) * (evalpts - sqrt(p))^6 * 1/6 +
-    ##         ((p-1)/p^(8/2)) * (evalpts - sqrt(p))^7 * 1/7))
     
     return(out)
 }
@@ -59,17 +67,6 @@ hx1_int <- function(phi1, minY, mu, p){
                   + log(mu/p))
     }
     
-    ## out = exp(
-    ##     phi1 + 
-    ##     sqrt(p) * (
-    ##         (minY - sqrt(p)) -
-    ##         p^(-1/2) * (minY - sqrt(p))^2 * 1/2 +
-    ##         p^(-2/2) * (minY - sqrt(p))^3 * 1/3 -
-    ##         p^(-3/2) * (minY - sqrt(p))^4 * 1/4 +
-    ##         p^(-4/2) * (minY - sqrt(p))^5 * 1/5 -
-    ##         p^(-5/2) * (minY - sqrt(p))^6 * 1/6 +
-    ##         p^(-6/2) * (minY - sqrt(p))^7 * 1/7 ) -
-    ##     log(sqrt(p)) ) 
     return(out)
 }
     

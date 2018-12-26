@@ -822,7 +822,7 @@ which completes the proof.
 \end{proof}
 
 \begin{proof}[Proof of Proposition~\ref{Prop:AdaptiveRateAffine}]
-By the scale equivariance described in Proposition~\ref{Prop:ProjectionBasicProperties}(i), we may assume without loss of generality that $\sigma_{h_0} = 1$.  Define $\nu := \inf \bigl\{ d_{\mathrm{H}}(h_0, h) \,:\, h \in \mathcal{H}_{a}^{(1)}, h_0 \ll h \bigr\} \in [0,2^{1/2}]$. By Lemma~\ref{Prop:LocalBracketing}, if $\delta \in (0, 2^{-9}-\nu)$, then for every $\epsilon > 0$, it holds that 
+By the scale equivariance described in Proposition~\ref{Prop:ProjectionBasicProperties}(i), we may assume without loss of generality that $\sigma_{h_0} = 1$.  Define $\nu := \inf \bigl\{ d_{\mathrm{H}}(h_0, h) \,:\, h \in \mathcal{H}_{a}^{(1)}, h_0 \ll h \bigr\} \in [0,2^{1/2}]$. By Lemma~\ref{Lem:LocalBracketing}, if $\delta \in (0, 2^{-9}-\nu)$, then for every $\epsilon > 0$, it holds that 
 \begin{align*}
   H_{[]}\bigl(\epsilon, \mathcal{H}(h_0, C_\mu, C_\sigma) \cap \mathcal{H}(h_0, \delta), d_{\mathrm{H}}\bigr) 
   \leq  H_{[]}(\epsilon, \mathcal{H}(h_0, \delta), d_{\mathrm{H}}) \lesssim \frac{(\delta + \nu)^{1/2}}{\epsilon^{1/2}} \log^{5/4} \frac{1}{\delta}.
@@ -883,7 +883,7 @@ as required.
 
 The mean $\mu_h$ of any $h \in \mathcal{H}_a$ is constrained because $h(r) = r^{p-1}e^{\phi(r)}$ and $\phi$ is decreasing. The next lemma formalises this notion.
 \begin{lemma}
-  \label{Prop:UnitVarianceMeanBound}
+  \label{Lem:UnitVarianceMeanBound}
   Let $a \geq 0$ and let $h \in \mathcal{H}_{a}$ with $\sigma_h = 1$.  For $s \in (0,\infty)$, let $\rho(s) := \frac{(a + s)^{p-1} p s}{(a + s)^p - a^p}$.  Then, writing $s^* := \sup \{ s \in (0,\infty) : \frac{\rho(s)}{s} \geq 2^{-7} \}$, we have
 \[
 a \leq \mu_h \leq a + 2^{12} \rho(s^*+1).
@@ -1078,13 +1078,7 @@ Let $a \geq 0$ and let $Z_1,\ldots, Z_n \stackrel{\mathrm{iid}}{\sim} h_0 \in \m
 \end{lemma}
 \begin{proof}
   Let $\mathbb{Q}_n$ denote the empirical distribution of $Z_1,\ldots,Z_n$.  Let $E_{1}$ be the event that $\mathbb{Q}_n(A) \leq 1/2$ for every interval $A$ of length at most $6n^{-t/2}$.  Since $\|h_0\|_\infty \leq 2^9$ \citep[][Theorem~5.14(b) and (d)]{lovasz2007geometry}, we have that
-%\begin{align*}
-%\mathbb{P}(E_1^c) &= \mathbb{P}\biggl(\bigcup_{i=1}^n \sum_{j \neq i} \mathbbm{1}_{\{Z_j \in [Z_i,Z_i+6n^{-t/2}]\}} \geq \frac{n}{2}\biggr) \\
-%&\leq n \int_a^\infty \mathbb{P}\biggl(\sum_{j=2}^n \mathbbm{1}_{\{Z_j \in [Z_1,Z_1+6n^{-t/2}]\}} \geq \frac{n}{2} \biggm| Z_1= r \biggr) h_0(r) \, dr \\
-%&\leq n \exp\biggl\{-\frac{(n-1)}{2}\log \frac{1}{2p} + \frac{n-1}{2}\biggr\} \leq n\Bigl(\frac{2^{13}e}{n^{t/2}}\Bigr)^{(n-1)/2}. \\
-%&\blue{\sout{\leq n(2^9 12 n^{-t/2} )^{n/2} \binom{n}{n/2+1} \leq \Bigl(\frac{2^{15/2}e}{n^{t/4}}\Bigr)^n. }}
-%\end{align*}
-%\red{
+
 \begin{align*}
   \mathbb{P}(E_1^c) &= \mathbb{P}\Biggl(\bigcup_{i=1}^n \, \bigcup_{\substack{ A \subset \{1,\ldots,n\} \setminus \{i\} \\ |A| = \lfloor n /2 \rfloor} } \, \bigcap_{j \in A} \{Z_j \in [Z_i,Z_i+6n^{-t/2}]\} \Biggr)  \\
                     &\leq n \binom{n-1}{ \lfloor n/2 \rfloor } \mathbb{P} \biggl( \bigcap_{j=2}^{ \lfloor n/2\rfloor + 1} \{ Z_j \in [Z_1, Z_1 + 6 n^{-t/2}] \} \biggr) \\
@@ -1101,13 +1095,9 @@ But on $E_1 \cap E_2$, and applying Proposition~\ref{Prop:MLEVarPreservation} wi
 \sup_{r \geq a} \log \hat{h}_n(r) \leq \max \biggl\{ - 2 \log \Bigl( \frac{\delta_{\mathbb{Q}_n}}{6} \Bigr),\, - 2 \ell_{\hat{h}_n} \, , \, 3\biggr\} \leq t \log n.
 \]
 The result follows.
-%Hence
-%\[
-%\mathbb{P}\biggl(\sup_{r \geq a} \log \hat{h}_n(r) > t\log n\biggr) \leq \mathbb{P}(E_1^c) + \mathbb{P}(E_2^c) \leq \Bigl(\frac{2^{13/2}e}{n^{t/4}}\Bigr)^n + 2n^{-t n^{1/2}/128},
-%\]
-%as required.
+
 \end{proof}
-%The next lemma is from \cite{kim2016adaptation} and it controls the probability that $\min_i \log h_0(Z_i) \leq -t \log n$ for $t > 8$. It is a counterpart to lemma~\ref{Lem:ExtremeEventControl}.
+
 \begin{lemma} 
   \label{Lem:ExtremeEventControl2}
 Let $a \geq 0$, let $h_0 \in \mathcal{H}_{a}$ with $\sigma_{h_0}=1$, and suppose that $Z_1,\ldots,Z_n \stackrel{\mathrm{iid}}{\sim} h_0$. Then there exists a universal constant $C > 0$ such that for any $n \geq 2$ and $t \geq 4$,
@@ -1128,7 +1118,7 @@ For $h_0 \in \mathcal{H}_a$ and $\delta > 0$, let
   \mathcal{H}(h_0, \delta) := \bigl\{ h \in \mathcal{H}_a : h \ll h_0, d_{\mathrm{H}}(h,h_0) \leq \delta \bigr\}.
 \]
 \begin{lemma}
-  \label{Prop:LocalBracketing}
+  \label{Lem:LocalBracketing}
   Fix $a \geq 0$ and let $h_0 \in \mathcal{H}_{a}$. Assume that $\nu := \inf \{ d_{\mathrm{H}}(h_0, h) \,:\, h \in \mathcal{H}_{a}^{(1)}, h_0 \ll h \} < 2^{-9}$. Then there exists a universal constant $C > 0$ such that, for all $\delta \in (0, 2^{-9} - \nu)$ and all $\epsilon > 0$,
   \[
     H_{[]}\bigl(\epsilon, \mathcal{H}(h_0, \delta), d_{\mathrm{H}}\bigr) \leq
