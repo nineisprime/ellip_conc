@@ -1,11 +1,62 @@
 
+###
+##
+##
+##
+
+sqrtm <- function(Sigma){
+    tmp = eigen(Sigma)
+    return(tmp$vectors %*% diag(tmp$values^(1/2)) %*% t(tmp$vectors))
+}
+
+neg_sqrtm <- function(Sigma){
+    tmp = eigen(Sigma)
+    return(tmp$vectors %*% diag(tmp$values^(-1/2)) %*% t(tmp$vectors))
+}
+
+
+###########
+## Uniform simulation
+
+##
+## Draws samples from the density
+##
+## 1/Z * r^{p-1} * I( r < p )
+## 
+
+rSSLCUnif <- function(n, p){
+    M = 10*n;
+
+    ## draw random points from a triangle with rejection sampling
+    while (TRUE){
+        init_pts = cbind(runif(M), runif(M))*sqrt(2)
+        rtriangle = init_pts[ init_pts[, 1] > init_pts[, 2], 1]
+
+        if (length(rtriangle) > n) break
+    }
+    
+    ## samples from a density h(r) = r^(p-1) Id(r < 2^(1/p)) p/2
+    rdens = rtriangle^(2/p)
+    
+    rdens = rdens*(p/2^(1/p))
+    
+    return(rdens[1:n])
+}
+
+
 ## Sample N points uniformly at random
 ## from surface of a ball in p dimensions
 
 runifBall <- function(N, p){
     X = matrix(rnorm(p*N), N, p)
-    X = diag(1/apply(X, 1, norm, '2')) %*% X
-    #X = diag(runif(N)^(1/p)) %*% X
+
+    xnorms = apply(X, 1, norm, '2')
+
+    for (ii in 1:N)
+        X[ii, ] = X[ii, ]/xnorms[ii]
+    
+    ##X = diag(runif(N)^(1/p)) %*% X
+    return(X)
 }
 
 ## Sample N points uniformly at random from
@@ -14,7 +65,10 @@ runifBall <- function(N, p){
 runifSquare <- function(N, p){
     X = matrix(2*runif(p*N)-1, N, p)
     coord_max = apply(X, 1, function(x){max(abs(x))})
-    X = diag(1/coord_max) %*% X
+
+    for (ii in 1:N)
+        X[ii, ] = X[ii, ]/coord_max[ii]
+    return(X)
 }
 
 

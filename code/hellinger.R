@@ -1,5 +1,100 @@
 
 
+
+## Z must be sorted
+## 
+compute_Phi <- function(phi, Z, Z2, p){
+
+    ## Sanity check
+    stopifnot(length(Z) == length(unique(Z)))
+
+    
+    Z2ord = order(Z2)
+    Z2 = sort(Z2)
+    
+    if (min(Z) > 0){
+        Z = c(0, Z)
+        phi = c(phi[1], phi)
+    }
+
+    overflow = which(Z2 > max(Z))
+    inbound = which(Z2 <= max(Z))
+    Z2 = Z2[inbound]
+    
+    allpts = sort(c(Z, Z2))
+    tmp1 = (allpts %in% Z) & (!duplicated(allpts))
+    tmp2 = !tmp1
+    ZI = which(tmp1)
+    Z2I = which(tmp2)
+
+    n1 = length(Z)
+
+    ind_vec = ZI[2:n1] - ZI[1:(n1-1)]
+    ind_vec[1] = ind_vec[1]+1
+
+    z_lvec = rep2(ind_vec, Z[1:(n1-1)])
+    z_rvec = rep2(ind_vec, Z[2:n1])
+
+    gap_vec = z_rvec - z_lvec
+    
+    phi_lvec = rep2(ind_vec, phi[1:(n1-1)])
+    phi_rvec = rep2(ind_vec, phi[2:n1])
+
+    
+    phi_all = (z_rvec - allpts)/gap_vec * phi_lvec + (allpts - z_lvec)/gap_vec * phi_rvec
+
+    res = c(phi_all[Z2I], rep(-Inf, length(overflow)))
+    res2 = rep(0, length(Z2))
+    res2[Z2ord] = res
+    
+    return(res2)
+}
+
+
+##
+##
+
+compute_Phi_lc <- function(phi, Z, Z2){
+
+    Z2ord = order(Z2)
+    Z2 = sort(Z2)
+    
+
+    overflow2 = which(Z2 > max(Z))
+    overflow1 = which(Z2 < min(Z))
+    inbound = c(which(Z2 >= min(Z) & Z2 <= max(Z)))
+    Z2 = Z2[inbound]
+    
+    
+    allpts = sort(c(Z, Z2))
+    ZI = which(allpts %in% Z)
+    Z2I = which(allpts %in% Z2)
+
+    n1 = length(Z)
+
+    ind_vec = ZI[2:n1] - ZI[1:(n1-1)]
+    ind_vec[1] = ind_vec[1]+1
+
+    z_lvec = rep2(ind_vec, Z[1:(n1-1)])
+    z_rvec = rep2(ind_vec, Z[2:n1])
+
+    gap_vec = z_rvec - z_lvec
+    
+    phi_lvec = rep2(ind_vec, phi[1:(n1-1)])
+    phi_rvec = rep2(ind_vec, phi[2:n1])
+
+    
+    phi_all = (z_rvec - allpts)/gap_vec * phi_lvec + (allpts - z_lvec)/gap_vec * phi_rvec
+
+    res = c(rep(-Inf, length(overflow1)), phi_all[Z2I], rep(-Inf, length(overflow2)))
+    res2 = rep(0, length(Z2))
+    res2[Z2ord] = res
+    
+    return(res2)
+}
+
+
+
 ## INPUT:
 ##   Y -- of length n, of samples
 ##  phi -- of same length as Y, output of elliptical log-concave MLE 
@@ -210,3 +305,17 @@ compute_KL_ker <- function(xs, p, hhats, logh0){
     return(out)
 }
     
+
+compute_hellinger_ker <- function(xs, hhats, true_loglike){
+
+    M = length(xs)
+    gaps = xs[2:M] - xs[1:(M-1)]
+
+    hhats = hhats[2:M]
+    out = sum( gaps *
+               (sqrt(hhats) - sqrt(exp(true_loglike[2:M])))^2)
+    return(out)
+}
+    
+
+

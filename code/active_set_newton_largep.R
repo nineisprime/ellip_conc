@@ -16,10 +16,15 @@
 ## phi -- ( length(I)-vector ) of function values
 ##
 
+## Given Y1, ..., Yn
+## and I = A^c
+##
+
+
 active_set_newton_largep <- function(Y, A, p, M=500000, evalpts, bdpts,
                                      init_phi=NULL, diagnostic=FALSE){
 
-    CONV_THRESH = 1e-15
+    CONV_THRESH = 1e-10
     EPS = 1e-7
     
     n = length(Y)
